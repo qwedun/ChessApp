@@ -1,3 +1,4 @@
+
 .wrapper {
   max-width: 1280px;
   position: relative;
@@ -8,12 +9,11 @@
   flex-direction: column;
   justify-content: space-between;
 }
-
 .main {
   display: flex;
+  align-items: center;
   justify-content: space-around;
 }
-
 .logoWrapper {
   vertical-align: center;
   display: flex;
@@ -37,7 +37,6 @@
   top: -75px;
   left: 200px;
 }
-
 .bigCircle {
   background-color: #81B34A;
   position: absolute;
@@ -46,11 +45,11 @@
   z-index: -1;
   border-radius: 50%;
   top: 200px;
-  left: -100px;
+  left: -100px
 }
-
 .container {
   position: relative;
 }
-
-/*# sourceMappingURL=MainPage.module.css.map */
+.right {
+  background-color: #222222;
+}

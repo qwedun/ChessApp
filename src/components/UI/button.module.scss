@@ -1,0 +1,23 @@
+.button {
+  background-color: #81B34A;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px;
+  color: white;
+  transition: box-shadow 200ms;
+  position: relative;
+  display: block;
+  &:enabled {
+    &:hover {
+      box-shadow: 0 0 20px #81B34A;
+    }
+    &:active {
+      background-color: #E1E1E1;
+    }
+
+  }
+  &:disabled {
+    background-color: grey;
+    opacity: 0.4;
+  }
+}

@@ -1,4 +1,4 @@
-import styles from "../MainPage/MainPage.module.scss";
+import styles from "./Layout.module.scss";
 import {Outlet} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -15,10 +15,8 @@ const Layout = () => {
                         <div className={styles.smallCircle}></div>
                         <div className={styles.bigCircle}></div>
                         <img alt ="ChessboardImage" src={require("../../assets/chessboard.png")} />
-                    </div>  
-                    <div>
-                        <Outlet/>
                     </div>
+                    <Outlet/>
                 </div>
                 <footer>FOOTER</footer>
             </div>
