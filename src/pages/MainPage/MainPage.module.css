@@ -1,0 +1,56 @@
+.wrapper {
+  max-width: 1280px;
+  position: relative;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main {
+  display: flex;
+  justify-content: space-around;
+}
+
+.logoWrapper {
+  vertical-align: center;
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.title {
+  margin-left: 15px;
+  color: #81B34A;
+  font-size: 30px;
+}
+
+.smallCircle {
+  background-color: #81B34A;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  z-index: -1;
+  border-radius: 50%;
+  top: -75px;
+  left: 200px;
+}
+
+.bigCircle {
+  background-color: #81B34A;
+  position: absolute;
+  height: 330px;
+  width: 330px;
+  z-index: -1;
+  border-radius: 50%;
+  top: 200px;
+  left: -100px;
+}
+
+.container {
+  position: relative;
+}
+
+/*# sourceMappingURL=MainPage.module.css.map */
