@@ -1,15 +1,16 @@
 .wrapper {
-  background-color: #616161;
+  background-color: #E1E1E1;
   width: 25%;
   border-radius: 40px;
-  height: 60%;
+  height: 70%;
+  box-shadow: 0 0 20px #A0A0A0;
 }
 
 .title {
   display: inline-block;
   margin: 0 auto;
-  color: #E1E1E1;
-  font-size: 40px;
+  color: #81B34A;
+  font-size: 30px;
   border-radius: 15px;
 }
 
@@ -23,14 +24,20 @@
 
 .inputWrapper {
   display: flex;
-  justify-content: center;
-  margin: 10px 0;
+  justify-content: space-between;
+  width: 83%;
+  margin: 0 auto;
+  align-items: center;
 }
 
 .register {
+  color: #81B34A;
   display: flex;
   justify-content: center;
-  color: #E1E1E1;
+}
+
+.buttonWrapper {
+  margin-left: 7%;
 }
 
 /*# sourceMappingURL=loginForm.module.css.map */
