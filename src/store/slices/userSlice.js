@@ -1,0 +1,50 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { authService } from "../../services/authService";
+
+const initialState = {
+    email: null,
+    isAuth: false,
+    username: null,
+}
+
+
+export const login = createAsyncThunk(
+    'user/login',
+    async ({email, password}) => {
+        return await authService.login(email, password);
+    }
+)
+export const register = createAsyncThunk(
+    'user/register',
+    async ({username, email, password}) => {
+        return await authService.register(username, email, password)
+    }
+)
+
+const userSlice = createSlice({
+    name: 'user',
+    initialState: initialState,
+    reducers: {
+        setEmail(state, action) {
+            state.email = action.payload.email;
+        },
+        setUsername(state, action) {
+            state.username = action.payload.username;
+        },
+        setIsAuth(state, action) {
+            state.isAuth = action.payload.isAuth;
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.fulfilled, (state, action) => {
+                state.isAuth = true;
+                localStorage.setItem('token', action.payload)
+            })
+            .addCase(login.rejected, (state, action) => {
+            })
+    }
+})
+
+export const {setEmail, setUsername, setIsAuth} = userSlice.actions
+export default userSlice.reducer;

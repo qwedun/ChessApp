@@ -66,6 +66,7 @@ const LoginForm = () => {
                         onChange={(e) => handleChange(e, email, setEmail, validateEmail)}
                         onBlur={() => handleBlur(email, setEmail)}
                         onFocus={() => handleFocus(email, setEmail)}
+                        autoComplete = "false"
                     >Input your email
                     </Input>
 
@@ -79,6 +80,7 @@ const LoginForm = () => {
                         onChange={(e) => handleChange(e, password, setPassword, checkPassword)}
                         onBlur={() => handleBlur(password, setPassword)}
                         onFocus={() => handleFocus(password, setPassword)}
+                        autoComplete = "false"
                     >Create your password
                     </Input>
 

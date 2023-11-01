@@ -6,7 +6,8 @@ import App from './app.jsx'
 import {configureStore} from "@reduxjs/toolkit";
 import postsReducer from "./pages/MainPage/postsSlice";
 import { Provider } from "react-redux";
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { store } from "./store/store";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,12 +20,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
 ); */
-
-const store = configureStore({
-    reducer: {
-        items: postsReducer,
-    }
-})
 
 root.render(
     <Provider store={store}>
