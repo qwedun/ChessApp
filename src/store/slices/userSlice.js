@@ -5,6 +5,7 @@ const initialState = {
     email: null,
     isAuth: false,
     username: null,
+    error: 0,
 }
 
 
@@ -33,6 +34,12 @@ const userSlice = createSlice({
         },
         setIsAuth(state, action) {
             state.isAuth = action.payload.isAuth;
+        },
+        setError(state) {
+            state.error = 'ERROR';
+        },
+        removeError(state) {
+            state.error = null;
         }
     },
     extraReducers: (builder) => {
@@ -46,5 +53,5 @@ const userSlice = createSlice({
     }
 })
 
-export const {setEmail, setUsername, setIsAuth} = userSlice.actions
+export const {removeError, setError, setEmail, setUsername, setIsAuth} = userSlice.actions
 export default userSlice.reducer;

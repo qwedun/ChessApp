@@ -9,6 +9,15 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.rightWrapper {
+  background-color: #E1E1E1;
+  width: 28%;
+  border-radius: 40px;
+  height: 80%;
+  box-shadow: 0 0 20px #A0A0A0  ;
+}
+
 .main {
   display: flex;
   align-items: center;

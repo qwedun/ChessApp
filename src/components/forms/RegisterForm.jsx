@@ -55,51 +55,49 @@ const LoginForm = () => {
 
 
     return (
-        <div className={styles.wrapper}>
-            <form className={styles.form}>
+        <form className={styles.form}>
 
-                <span className={styles.title}>Register</span>
+            <span className={styles.title}>Register</span>
 
-                <div className={styles.inputWrapper}>Email:
-                    <Input
-                        type = 'email'
-                        onChange={(e) => handleChange(e, email, setEmail, validateEmail)}
-                        onBlur={() => handleBlur(email, setEmail)}
-                        onFocus={() => handleFocus(email, setEmail)}
-                        autoComplete = "false"
-                    >Input your email
-                    </Input>
+            <div className={styles.inputWrapper}>Email:
+                <Input
+                    type = 'email'
+                    onChange={(e) => handleChange(e, email, setEmail, validateEmail)}
+                    onBlur={() => handleBlur(email, setEmail)}
+                    onFocus={() => handleFocus(email, setEmail)}
+                    autoComplete = "false"
+                >Input your email
+                </Input>
 
-                    {email.isError && <span className={styles.popUp}>Email is not valid!</span>}
+                {email.isError && <span className={styles.popUp}>Email is not valid!</span>}
 
-                </div>
+            </div>
 
-                <div className={styles.inputWrapper}>Password:
-                    <Input
-                        type='password'
-                        onChange={(e) => handleChange(e, password, setPassword, checkPassword)}
-                        onBlur={() => handleBlur(password, setPassword)}
-                        onFocus={() => handleFocus(password, setPassword)}
-                        autoComplete = "false"
-                    >Create your password
-                    </Input>
+            <div className={styles.inputWrapper}>Password:
+                <Input
+                    type='password'
+                    onChange={(e) => handleChange(e, password, setPassword, checkPassword)}
+                    onBlur={() => handleBlur(password, setPassword)}
+                    onFocus={() => handleFocus(password, setPassword)}
+                    autoComplete = "false"
+                >Create your password
+                </Input>
 
-                    {password.isError && <span className={styles.popUp}>Password is not valid!</span>}
-                </div>
+                {password.isError && <span className={styles.popUp}>Password is not valid!</span>}
+            </div>
 
-                <div className={styles.buttonWrapper}>
-                    <Button disabled={!(email.isValid && password.isValid)}>Register</Button>
-                    <ul className={styles.list}>
-                        Password must
-                        <li>contain lowercase, uppercase letters and numbers</li>
-                        <li>contain special characters</li>
-                        <li>be at least 8 characters long</li>
-                    </ul>
+            <div className={styles.buttonWrapper}>
+                <Button disabled={!(email.isValid && password.isValid)}>Register</Button>
+                <ul className={styles.list}>
+                    Password must
+                    <li>contain lowercase, uppercase letters and numbers</li>
+                    <li>contain special characters</li>
+                    <li>be at least 8 characters long</li>
+                </ul>
 
-                </div>
-                <span className={styles.register}>Already have an account?&nbsp; <Link to={'/login'}>Login</Link></span>
-            </form>
-        </div>
+            </div>
+            <span className={styles.register}>Already have an account?&nbsp; <Link to={'/login'}>Login</Link></span>
+        </form>
     );
 };
 

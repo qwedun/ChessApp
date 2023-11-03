@@ -1,0 +1,28 @@
+.wrapper {
+  background-color: #222222;
+  width: 200px;
+  border-right: 3px solid #81B34A;
+}
+.top {
+  color: #81B34A;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 5px;
+}
+.profile {
+  display: flex;
+  margin-left: 3px;
+  color: #E1E1E1;
+  font-size: 14px;
+  font-weight: bold;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.info {
+  padding: 3px;
+}
