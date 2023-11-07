@@ -32,7 +32,7 @@ const LoginForm = () => {
 
     return (
         <form
-            className={styles.form}
+                className={styles.form}
             onSubmit={handleSubmit}>
             <span className={styles.title}>Login</span>
             <div className={styles.inputWrapper}>

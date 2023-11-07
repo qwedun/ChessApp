@@ -2,6 +2,7 @@ import styles from "./Layout.module.scss";
 import {Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {ErrorPopUp} from "../../../components/UI/ErrorPopUp";
+import {Suspense} from "react";
 
 export const WelcomeLayout = () => {
 
@@ -20,7 +21,9 @@ export const WelcomeLayout = () => {
                     <img alt ="ChessboardImage" src={require("../../../assets/chessboard.png")} />
                 </div>
                 <div className={styles.rightWrapper}>
-                    <Outlet/>
+                    <Suspense fallback={<p>LOADING</p>}>
+                        <Outlet/>
+                    </Suspense>
                 </div>
             </div>
             <footer>FOOTER</footer>
