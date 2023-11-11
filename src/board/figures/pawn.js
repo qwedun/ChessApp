@@ -1,11 +1,11 @@
 import Figure from './figure.js'
 class   Pawn {
-    constructor(x, y, color) {
+    constructor({x, y, color, firstMove}) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.src = './assets/' + color + 'Pawn.svg'
-        this.firstMove = 'true'
+        this.firstMove = firstMove
         this.name = 'pawn'
     }
 
@@ -13,26 +13,18 @@ class   Pawn {
         Figure.pawnTitles(board, x, y, color).forEach(title => {
             if (title.name || checkForAttack) {
 
-                if (!title.name && !isKingChecked) {
-                    if (isRender)
-                        title.underAttack = true;
-                    title.canBeAttacked = true;
-                }
+                if (!title.name && !isKingChecked)
+                    Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                 else if (title.color !== color) {
 
                     if (title.isAttackingKing && isKingChecked)
-                        title.underAttack = true;
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                    else if (!isKingChecked) {
-                        if (isRender)
-                            title.underAttack = true;
-                        title.canBeAttacked = true;
-                    }
-                    return false
+                    else if (!isKingChecked)
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
                 } else {
                     title.underFriendlyAttack = true;
-                    return false
                 }
             }
         })

@@ -6,7 +6,9 @@ import {Suspense} from "react";
 export const MainPageLayout = () => {
     return (
         <div className={styles.wrapper}>
-            <Aside/>
+            <div className={styles.left}>
+                <Aside/>
+            </div>
             <div className={styles.right}>
                 <Suspense fallback={<p>LOADING</p>}>
                     <Outlet/>

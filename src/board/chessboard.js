@@ -4,46 +4,33 @@ import Board from './board'
 import Cell from './cell.js'
 function Chessboard(){
 
-    const [board, setBoard] = useState(Board.createBoard())
+    const [board, setBoard] = useState(Board.createBoard('white'))
     const [currentFigure, setCurrentFigure] = useState()
     const [currentTurn, setCurrentTurn] = useState('white')
+    const [currentPlayer, setCurrentPlayer] = useState('black')
 
-        return board.map((value, yIndex) => (
-            <div
-                key={Math.random()}
-                style={{display: 'flex'}}>
-                {value.map((item, xIndex) => {
-
-                    if ((xIndex + yIndex) % 2 === 1) return (
-                        <Cell
-                            currentTurn={currentTurn}
-                            setCurrentTurn = {setCurrentTurn}
-                            currentFigure={currentFigure}
-                            changeCurrentFigure = {setCurrentFigure}
-                            setBoard={setBoard}
-                            figure = {item}
-                            board = {board}
-                            cellColor = "DimGray"
-                            src={item.src}>
-                        </Cell>
-                    )
-                        return (
-                            <Cell
-                                currentTurn={currentTurn}
-                                setCurrentTurn = {setCurrentTurn}
-                                currentFigure={currentFigure}
-                                changeCurrentFigure = {setCurrentFigure}
-                                setBoard={setBoard}
-                                figure = {item}
-                                board = {board}
-                                cellColor = "white"
-                                src={item.src}>
-
-                            </Cell>
-                        )
-                    })}
-             </div>
-        ))
+    return board.map((value, yIndex) => (
+        <div
+            key={Math.random()}
+            style={{display: 'flex'}}>
+            {value.map((item, xIndex) => {
+                return (
+                    <Cell
+                        currentTurn={currentTurn}
+                        setCurrentTurn = {setCurrentTurn}
+                        currentFigure={currentFigure}
+                        changeCurrentFigure = {setCurrentFigure}
+                        setBoard={setBoard}
+                        figure = {item}
+                        board = {board}
+                        cellColor = {((xIndex + yIndex) % 2) ? 'DimGray' : 'white'}
+                        currentPlayer = {currentPlayer}
+                        src={item.src}>
+                    </Cell>
+                )
+            })}
+        </div>
+    ))
 }
 
 export default Chessboard

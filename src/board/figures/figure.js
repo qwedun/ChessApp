@@ -8,45 +8,56 @@ import Title from './title.js';
 
 
 class Figure {
-    static addFigures(x, y) {
+    static addFigures(x, y, color) {
+        const colors = {
+            white: 'black',
+            black: 'white'
+        }
+
         if (y === 1)
-            return new Pawn(x, y, 'black')
+            return new Pawn({x: x, y: y, color: colors[color], firstMove: true})
 
         if (y === 6)
-            return new Pawn(x, y, 'white')
+            return new Pawn({x: x, y: y, color: color, firstMove: true})
 
         if ((x === 2 && y === 0) || (x === 5 && y === 0))
-            return new Bishop(x, y, 'black')
+            return new Bishop({x: x, y: y, color: colors[color]})
 
         if ((x === 2 && y === 7) || (x === 5 && y === 7))
-            return new Bishop(x, y, 'white')
+            return new Bishop({x: x, y: y, color: color})
 
         if ((x === 0 && y === 0) || (x === 7 && y === 0))
-            return new Rook(x, y, 'black')
+            return new Rook({x: x, y: y, color: colors[color], firstMove: true})
 
         if ((x === 7 && y === 7) || (x === 0 && y === 7))
-            return new Rook(x, y, 'white')
+            return new Rook({x: x, y: y, color: color, firstMove: true})
 
         if ((x === 1 && y === 0) || (x === 6 && y === 0))
-            return new Knight(x, y, 'black')
+            return new Knight({x: x, y: y, color: colors[color]})
 
         if ((x === 1 && y === 7) || (x === 6 && y === 7))
-            return new Knight(x, y, 'white')
+            return new Knight({x: x, y: y, color: color})
 
         if ((x === 3 && y === 0))
-            return new Queen(x, y, 'black')
+            return new Queen({x: x, y: y, color: colors[color]})
 
         if (x === 3 && y === 7)
-            return new Queen(x, y, 'white')
+            return new Queen({x: x, y: y, color: color})
 
         if (x === 4 && y === 0)
-            return new King(x, y, 'black')
+            return new King({x: x, y: y, color: colors[color], firstMove: true})
 
         if (x === 4 && y === 7)
-            return new King(x, y, 'white')
+            return new King({x: x, y: y, color: color, firstMove: true})
 
 
-        return new Title(x, y)
+        return new Title({x, y})
+    }
+
+    static setProperty(title, property, canBeProperty, isRender) {
+        if (isRender)
+            title[property] = true
+        title[canBeProperty] = true;
     }
 
     static horizontalAndVerticalTitles (board, x, y) {
@@ -55,33 +66,33 @@ class Figure {
 
         if (board[y][x].isDiagonal) return [[]]
 
-
         if (board[y][x].kingDefender) {
             if (board[y][x].kingDirection === 0 || board[y][x].kingDirection === 2)
-                directions = [[], , [],]
+                directions = [[], null, [], null]
 
             if (board[y][x].kingDirection === 1 || board[y][x].kingDirection === 3)
-                directions = [, [], , []]
+                directions = [null, [], null, []]
         }
 
 
+
         return directions.map((direction, index) => {
-            if (index === 0)
+            if (index === 0 && direction) {
                 for (let i = x - 1; i >= 0; i--)
                     direction.push(board[y][i])
+            }
 
-            else if (index === 1)
+            else if (index === 1 && direction)
                 for (let i = y - 1; i >= 0; i--)
                     direction.push(board[i][x])
 
-            else if (index === 2)
+            else if (index === 2 && direction)
                 for (let i = x + 1; i <= 7; i++)
                     direction.push(board[y][i])
 
-            else
+            else if (index === 3 && direction)
                 for (let i = y + 1; i <= 7; i++)
                     direction.push(board[i][x])
-
             return direction
         })
     }
@@ -93,27 +104,25 @@ class Figure {
 
         if (board[y][x].kingDefender) {
             if (board[y][x].kingDirection === 0 || board[y][x].kingDirection === 2)
-                directions = [[], , [],  ]
+                directions = [[], null, [], null]
 
             if (board[y][x].kingDirection === 1 || board[y][x].kingDirection === 3)
-                directions = [  ,[], , []]
+                directions = [null, [], null, []]
         }
-
         return directions.map((direction, index) => {
-            if (index === 0)
+            if (index === 0 && direction)
                 for (let i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--)
                     direction.push(board[j][i])
 
-            else if (index === 1)
+            else if (index === 1 && direction)
                 for (let i = x - 1, j = y + 1; i >= 0 && j <= 7; i--, j++)
                     direction.push(board[j][i])
 
-
-            else if (index === 2)
+            else if (index === 2  && direction)
                 for (let i = x + 1, j = y + 1; i <= 7 && j <= 7; i++, j++)
                     direction.push(board[j][i])
 
-            else
+            else if (index === 3 && direction)
                 for (let i = x + 1, j = y - 1; i <= 7 && j >= 0; i++, j--)
                     direction.push(board[j][i])
 
@@ -145,7 +154,7 @@ class Figure {
         if (currentFigure.name === 'pawn') currentFigure.firstMove = false;
 
         board[figure.y][figure.x] = board[currentFigure.y][currentFigure.x];
-        board[currentFigure.y][currentFigure.x] = new Title(currentFigure.x, currentFigure.y);
+        board[currentFigure.y][currentFigure.x] = new Title({x: currentFigure.x, y: currentFigure.y});
 
         currentFigure.y = figure.y;
         currentFigure.x = figure.x;
@@ -153,29 +162,21 @@ class Figure {
 
     static checkTitles(titles, color, board, checkForAttack, isKingUnderCheck, isPawn, isRender) {
         titles.forEach(direction => {
+            if (!direction) return false
             direction.every(title => {
                 if (title.name || checkForAttack) {
                     if (isPawn) return false
 
-                    if (!title.name && !isKingUnderCheck) {
-                        if (isRender)
-                            title.underAttack = true
-                        title.canBeAttacked = true;
-                    }
+                    if (!title.name && !isKingUnderCheck)
+                        this.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                     else if (title.color !== color) {
 
-                        if (title.isAttackingKing && isKingUnderCheck) {
-                            if (isRender)
-                                title.underAttack = true;
-                            title.canBeAttacked = true;
-                        }
+                        if (title.isAttackingKing && isKingUnderCheck)
+                            this.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                        else if (!isKingUnderCheck) {
-                            if (isRender)
-                                title.underAttack = true;
-                            title.canBeAttacked = true;
-                        }
+                        else if (!isKingUnderCheck)
+                            this.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                         return false
                     } else {
@@ -184,17 +185,12 @@ class Figure {
                     }
                 }
 
-                else if (title.canDefend && isKingUnderCheck) {
-                    if (isRender)
-                        title.canMove = true;
-                    else title.canBeMoved = true;
-                }
+                else if (title.canDefend && isKingUnderCheck)
+                    this.setProperty(title, 'canMove', 'canBeMoved', isRender)
 
-                else if (!isKingUnderCheck && !checkForAttack) {
-                    if (isRender)
-                        title.canMove = true;
-                    title.canBeMoved = true;
-                }
+                else if (!isKingUnderCheck && !checkForAttack)
+                    this.setProperty(title, 'canMove', 'canBeMoved', isRender)
+
                 return true
             })
         })

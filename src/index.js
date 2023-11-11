@@ -1,6 +1,5 @@
 import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom/client';
-import Game from './board/game.js'
 import styles from './index.module.scss'
 import App from './app.jsx'
 import {configureStore} from "@reduxjs/toolkit";

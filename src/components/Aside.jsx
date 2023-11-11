@@ -36,35 +36,36 @@ export const Aside = () => {
     }
 
     return (
-
-        <div className={ isHide ? styles.hideWrapper : styles.wrapper}>
-            <div>
-                {isHide && <img alt='logo' src={logo} />}
-                {!isHide && <div className={styles.top}>Chess</div>}
-                {!isHide && <div className={styles.profile}>
-                    <Avatar/>
-                    <div className={styles.container}>
-                        <div className={styles.info}>USERNAME</div>
-                        <div className={styles.info}> ELO</div>
+        <div className={isHide ? styles.hideContainer : styles.showContainer}>
+            <div className={ isHide ? styles.hideWrapper : styles.wrapper}>
+                <div>
+                    {isHide && <img alt='logo' src={logo} />}
+                    {!isHide && <div className={styles.top}>Chess</div>}
+                    {!isHide && <div className={styles.profile}>
+                        <Avatar/>
+                        <div className={styles.container}>
+                            <div className={styles.info}>USERNAME</div>
+                            <div className={styles.info}> ELO</div>
+                        </div>
+                    </div>}
+                    {!isHide && <div className={styles.play}>Play</div>}
+                    <PlayButton isHide={isHide}/>
+                </div>
+                <div>
+                    <NavigationLink to='/home' url={home} isHide={isHide}>Home</NavigationLink>
+                    <NavigationLink to='/socials' url={socials} isHide={isHide}>Socials</NavigationLink>
+                    <NavigationLink to='/board' url={title} isHide={isHide}>Board</NavigationLink>
+                    <NavigationLink to='/archive' url={archive} isHide={isHide}>Archive</NavigationLink>
+                    <NavigationLink to='/news' url={book} isHide={isHide}>News</NavigationLink>
+                </div>
+                <div>
+                    <NavigationLink to='/settings' url={settings} isHide={isHide}>Settings</NavigationLink>
+                    <div className={styles.collapse}
+                         onClick={() => handleClick(playButton.barStatus)}>
+                        {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}
+                        {isHide && <img className={styles.img} alt='collapse' src={rightArrow}/>}
+                        {!isHide && <span>Hide</span>}
                     </div>
-                </div>}
-                {!isHide && <div className={styles.play}>Play</div>}
-                <PlayButton isHide={isHide}/>
-            </div>
-            <div>
-                <NavigationLink to='/home' url={home} isHide={isHide}>Home</NavigationLink>
-                <NavigationLink to='/socials' url={socials} isHide={isHide}>Socials</NavigationLink>
-                <NavigationLink to='/board' url={title} isHide={isHide}>Board</NavigationLink>
-                <NavigationLink to='/archive' url={archive} isHide={isHide}>Archive</NavigationLink>
-                <NavigationLink to='/news' url={book} isHide={isHide}>News</NavigationLink>
-            </div>
-            <div>
-                <NavigationLink to='/settings' url={settings} isHide={isHide}>Settings</NavigationLink>
-                <div className={styles.collapse}
-                     onClick={() => handleClick(playButton.barStatus)}>
-                    {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}
-                    {isHide && <img className={styles.img} alt='collapse' src={rightArrow}/>}
-                    {!isHide && <span>Hide</span>}
                 </div>
             </div>
         </div>

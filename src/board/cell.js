@@ -1,19 +1,19 @@
 import React from 'react';
 import Board from './board.js'
 import styles from './cell.module.scss'
-import Title from './figures/title.js'
 import Figure from "./figures/figure.js";
-import King from './figures/king.js'
+import {isCheckMate, isStalemate} from "./gameRules";
 
 
-
-function Cell({src, cellColor, setBoard, figure, board, currentFigure, changeCurrentFigure, setCurrentTurn, currentTurn}) {
+function Cell({src, cellColor, setBoard, figure, board, currentFigure, changeCurrentFigure, setCurrentTurn, currentPlayer, currentTurn}) {
     const style = {
         backgroundColor: cellColor,
         width: "80px",
         height: "80px",
         position: 'relative'
     }
+
+
     function handleClick(e) {
         const currentKing   = Board.findKing(board, currentTurn)
 
@@ -22,30 +22,17 @@ function Cell({src, cellColor, setBoard, figure, board, currentFigure, changeCur
             Board.changeTurn(currentTurn, setCurrentTurn);
         }
 
+        setBoard(Board.updateBoard(board, currentTurn, currentPlayer));
+        console.log(Board.prepareForSending(board).reverse())
 
-        setBoard(Board.updateBoard(board, currentTurn));
-        // setBoard(Board.updateStateBoard(board,
-        //    currentTurn === 'black' ? 'white' : 'black', boardState, false))
+        isCheckMate(currentKing, board)
+        isStalemate(board, currentTurn)
 
-        console.log(board)
 
-        if (currentKing.underCheck) {
-            if (board.attackingFiguresCount > 1) {
-                if (King.isKingCantMove(board, currentKing))
-                    alert("LOSE")
-            }
-            else {
-                if (King.isKingCantMove(board, currentKing) && King.isKingCantBeDefended(board, currentKing))
-                    alert("LOSE")
-            }
-            console.log(King.isKingCantMove(board, currentKing), King.isKingCantBeDefended(board, currentKing))
-        }
 
         changeCurrentFigure(figure)
 
         if (figure.name && figure.color !== currentTurn) return
-
-
 
         if (board.attackingFiguresCount > 1) {
             if (figure.name === 'king') figure.checkMoves?.(board, false, currentKing.underCheck, true);

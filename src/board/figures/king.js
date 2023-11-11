@@ -1,13 +1,12 @@
-import Knight from './knight.js'
 import Figure from './figure.js'
 class King {
-    constructor(x, y, color) {
+    constructor({x, y, color, firstMove}) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.src = './assets/' + color + 'King.svg';
         this.name = 'king';
-        this.firstMove = true;
+        this.firstMove = firstMove;
     }
 
 
@@ -20,36 +19,30 @@ class King {
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
                 if (board[this.y][this.x] === board[i][j]) continue;
+                const title = board[i][j]
 
-                if (board[i][j].name || checkForAttack) {
+                if (title.name || checkForAttack) {
 
-                    if (!board[i][j].name) {
-                        board[i][j].canBeAttacked = true;
+                    if (!title.name) {
+                        title.canBeAttacked = true;
                     }
 
-                    else if (board[i][j].color !== this.color &&
-                        !board[i][j].underFriendlyAttack) {
-                        if (isRender)
-                            board[i][j].underAttack = true;
-                        board[i][j].canBeAttacked = true;
-                    }
+                    else if (title.color !== this.color && !title.underFriendlyAttack)
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                    else if (board[i][j].color === this.color) {
-                        board[i][j].underFriendlyAttack = true;
+                    else if (title.color === this.color) {
+                        title.underFriendlyAttack = true;
                     }
                 }
-                else if (!board[i][j].canBeAttacked) {
-                    if (isRender)
-                        board[i][j].canMove = true;
-                    board[i][j].kingCanMove = true;
-                }
+                else if (!title.canBeAttacked)
+                    Figure.setProperty(title, 'canMove', 'kingCanMove', isRender)
             }
         }
         King.checkForKing(board[this.y][this.x], board)
     }
 
 
-    static isKingCantMove(board, king) {
+    static isKingCanMove(board, king) {
         const yMin = (king.y === 0) ? 0 : king.y - 1;
         const yMax = (king.y === 7) ? 7 : king.y + 1;
         const xMin = (king.x === 0) ? 0 : king.x - 1;
@@ -58,29 +51,32 @@ class King {
 
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
-                if (board[king.y][king.x] === board[i][j]) continue;
-                if (board[i][j].kingCanMove)
-                    return false;
-                if (board[i][j].name && board[i][j].color !== king.color && !board[i][j].underFriendlyAttack)
-                    return false
+                const title = board[i][j]
+                if (king === title) continue;
+
+                if (title.kingCanMove)
+                    return true;
+
+                if (title.name && title.color !== king.color && !title.underFriendlyAttack)
+                    return true
             }
         }
-        return true;
+        return false;
     }
 
-    static isKingCantBeDefended(board) {
-        let canAttackFigure, canDefend;
+    static isKingCanBeDefended(board) {
 
         for (let row of board) {
             for (let figure of row) {
+
                 if (figure.canDefend && figure.canBeMoved)
-                    canDefend = true;
+                    return true;
+
                 if (figure.isAttackingKing && figure.canBeAttacked)
-                    canAttackFigure = true;
+                    return true;
             }
         }
-        return !(canAttackFigure || canDefend);
-
+        return false;
     }
     static setAttack(king, attackingFigures, title) {
         king.underCheck = true;
@@ -103,10 +99,14 @@ class King {
         })
     }
 
-    static setFigure(board, y, x) {
+    static setTitleBehindKing(board, y, x, color) {
+
+        if (!(!board[y][x].name || !(board[y][x].color === color))) return
+
         board[y][x].canMove = false;
         board[y][x].kingCanMove = false;
         board[y][x].canBeAttacked = false;
+
         if (!board[y][x].isAttackingKing) board[y][x].underAttack = false;
     }
 
@@ -128,89 +128,73 @@ class King {
                 if (!title.name)
                     currentTitles.push(title)
 
-                else if (title.color === king.color && currentFigure) {
+                else if (title.color === king.color && currentFigure)
                     return false
-                } else if (title.color !== king.color) {
+
+                else if (title.color !== king.color) {
                     if (currentFigure) {
-                        if (isDiagonal)
-                            if (title.name === 'bishop' ||
-                                title.name === 'queen') {
+                        if (isDiagonal) {
+                            if (title.name !== 'bishop' && title.name !== 'queen') return false
 
-                                currentFigure.kingDefender = true;
-                                currentFigure.kingDirection = index;
+                            currentFigure.kingDefender = true;
+                            currentFigure.kingDirection = index;
+                            currentFigure.isDiagonal = true;
+                            return false;
+                        } else {
+                            if (title.name !== 'rook' && title.name !== 'queen') return false
 
-
-                                currentFigure.isDiagonal = true;
-
-                                return false;
-                            } else return false;
-                        else
-                            if (title.name === 'rook' ||
-                                title.name === 'queen') {
-
-                                currentFigure.kingDefender = true;
-                                currentFigure.kingDirection = index;
-
-                                currentFigure.isVertical = true;
-
-                                return false;
-                            } else return false;
+                            currentFigure.kingDefender = true;
+                            currentFigure.kingDirection = index;
+                            currentFigure.isVertical = true;
+                            return false;
+                        }
                     } else {
-                        if (isDiagonal)
-                            if (title.name === 'bishop' ||
-                                title.name === 'queen') {
+                        if (isDiagonal) {
+                            if (title.name !== 'bishop' && title.name !== 'queen') return false
 
-                                this.setAttack(king, attackingFigures, title)
+                            this.setAttack(king, attackingFigures, title)
 
-                                if (index === 0) {
-                                    if (y + 1 <= 7 && x + 1 <= 7)
-                                        if (!board[y + 1][x + 1].name || !(board[y + 1][x + 1].color === color))
-                                            this.setFigure(board, y + 1, x + 1)
-                                } else if (index === 1) {
-                                    if (y - 1 >= 0 && x + 1 <= 7)
-                                        if (!board[y - 1][x + 1].name || !(board[y - 1][x + 1].color === color))
-                                            this.setFigure(board, y - 1, x + 1)
+                            if (index === 0)
+                                if (y + 1 <= 7 && x + 1 <= 7)
+                                    this.setTitleBehindKing(board, y + 1, x + 1, color)
 
-                                } else if (index === 2) {
-                                    if (y - 1 >= 0 && x - 1 >= 0)
-                                        if (!board[y - 1][x - 1].name || !(board[y - 1][x - 1].color === color))
-                                            this.setFigure(board, y - 1, x - 1)
-                                } else {
-                                    if (y + 1 <= 7 && x - 1 >= 0)
-                                        if (!board[y + 1][x + 1].name || !(board[y + 1][x - 1].color === color))
-                                            this.setFigure(board, y + 1, x - 1)
-                                }
+                            else if (index === 1)
+                                if (y - 1 >= 0 && x + 1 <= 7)
+                                    this.setTitleBehindKing(board, y - 1, x + 1, color)
 
-                                currentTitles.forEach(title => title.canDefend = true)
-                                return false;
-                            } else return false
-                        else {
-                            if (title.name === 'rook' ||
-                                title.name === 'queen') {
+                            else if (index === 2)
+                                if (y - 1 >= 0 && x - 1 >= 0)
+                                    this.setTitleBehindKing(board, y - 1, x - 1, color)
 
-                                this.setAttack(king, attackingFigures, title)
+                            else
+                                if (y + 1 <= 7 && x - 1 >= 0)
+                                    this.setTitleBehindKing(board, y + 1, x - 1, color)
 
-                                if (index === 0) {
-                                    if (x + 1 <= 7)
-                                        if (!board[y][x + 1].name || !(board[y][x + 1].color === color))
-                                            this.setFigure(board, y, x + 1)
-                                } else if (index === 1) {
-                                    if (y + 1 <= 7)
-                                        if (!board[y + 1][x].name || !(board[y + 1][x].color === color))
-                                            this.setFigure(board, y + 1, x)
-                                } else if (index === 2) {
-                                    if (x - 1 >= 0)
-                                        if (!board[y][x - 1].name || !(board[y][x - 1].color === color))
-                                            this.setFigure(board, y, x - 1)
-                                } else {
-                                    if (y - 1 >= 0)
-                                        if (!board[y - 1][x].name || !(board[y - 1][x].color === color))
-                                            this.setFigure(board, y - 1, x)
-                                }
+                            currentTitles.forEach(title => title.canDefend = true)
+                            return false;
+                        } else {
+                            if (title.name !== 'rook' && title.name !== 'queen') return false
 
-                                currentTitles.forEach(title => title.canDefend = true)
-                                return false
-                            } else return false
+                            this.setAttack(king, attackingFigures, title)
+
+                            if (index === 0)
+                                if (x + 1 <= 7)
+                                    this.setTitleBehindKing(board, y, x + 1, color)
+
+                            else if (index === 1)
+                                if (y + 1 <= 7)
+                                    this.setTitleBehindKing(board, y + 1, x, color)
+
+                            else if (index === 2)
+                                if (x - 1 >= 0)
+                                    this.setTitleBehindKing(board, y, x - 1, color)
+
+                            else
+                                if (y - 1 >= 0)
+                                    this.setTitleBehindKing(board, y - 1, x, color  )
+
+                            currentTitles.forEach(title => title.canDefend = true)
+                            return false
                         }
                     }
                 }

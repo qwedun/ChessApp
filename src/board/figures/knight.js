@@ -1,6 +1,6 @@
 import Figure from './figure.js'
 class Knight {
-    constructor(x, y, color) {
+    constructor({x, y, color}) {
         this.x = x;
         this.y = y;
         this.color = color;
@@ -10,46 +10,33 @@ class Knight {
 
     checkMoves(board, checkForAttack, isKingChecked, isRender) {
         const color = this.color
-        if (this.kingDefender) return
+
+        if (this.kingDefender && !checkForAttack) return
 
         Figure.knightTitles(board, this.x, this.y).forEach(title => {
             if (title.name || checkForAttack) {
 
-                if (!title.name && !isKingChecked) {
-                    if (isRender)
-                        title.underAttack = true
-                    title.canBeAttacked = true;
-                }
+                if (!title.name && !isKingChecked)
+                    Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                 else if (title.color !== color) {
 
-                    if (title.isAttackingKing && isKingChecked) {
-                        if (isRender)
-                            title.underAttack = true;
-                        title.canBeAttacked = true;
-                    }
+                    if (title.isAttackingKing && isKingChecked)
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                    else if (!isKingChecked && !checkForAttack) {
-                        if (isRender)
-                            title.underAttack = true;
-                        title.canBeAttacked = true;
-                    }
+                    else if (!isKingChecked && !checkForAttack)
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                 } else {
                     title.underFriendlyAttack = true;
                 }
             }
 
-            else if (title.canDefend && isKingChecked) {
-                if (isRender)
-                    title.canMove = true;
-                else title.canBeMoved = true;
-            }
+            else if (title.canDefend && isKingChecked)
+                Figure.setProperty(title, 'canMove', 'canBeMoved', isRender)
 
             else if (!isKingChecked && !checkForAttack) {
-                if (isRender)
-                    title.canMove = true;
-                title.canBeMoved = true;
+                Figure.setProperty(title, 'canMove', 'canBeMoved', isRender)
             }
         })
     }

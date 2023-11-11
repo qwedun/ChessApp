@@ -1,12 +1,12 @@
 import Figure from './figure.js'
 class Rook {
-    constructor(x, y, color) {
+    constructor({x, y, color, firstMove}) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.name = 'rook'
         this.src = './assets/' + color + 'Rook.svg';
-        this.firstMove = true;
+        this.firstMove = firstMove;
     }
 
     checkMoves(board, checkForAttack, isKingChecked, isRender) {
