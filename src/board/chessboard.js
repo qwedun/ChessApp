@@ -1,36 +1,37 @@
-import React from 'react';
+import {memo} from 'react';
 import { useState } from 'react'
-import Board from './board'
 import Cell from './cell.js'
-function Chessboard(){
+export default memo(function Chessboard({board, setBoard}) {
 
-    const [board, setBoard] = useState(Board.createBoard('white'))
     const [currentFigure, setCurrentFigure] = useState()
     const [currentTurn, setCurrentTurn] = useState('white')
-    const [currentPlayer, setCurrentPlayer] = useState('black')
+    const [currentPlayer, setCurrentPlayer] = useState('white')
+    console.log(32123)
 
-    return board.map((value, yIndex) => (
-        <div
-            key={Math.random()}
-            style={{display: 'flex'}}>
-            {value.map((item, xIndex) => {
-                return (
-                    <Cell
-                        currentTurn={currentTurn}
-                        setCurrentTurn = {setCurrentTurn}
-                        currentFigure={currentFigure}
-                        changeCurrentFigure = {setCurrentFigure}
-                        setBoard={setBoard}
-                        figure = {item}
-                        board = {board}
-                        cellColor = {((xIndex + yIndex) % 2) ? 'DimGray' : 'white'}
-                        currentPlayer = {currentPlayer}
-                        src={item.src}>
-                    </Cell>
-                )
-            })}
+
+    return (
+        <div style={{display: 'flex', width: '640px', flexWrap: 'wrap', height: '640px'}}>
+            {board?.map((value, yIndex) => (
+                value.map((item, xIndex) => {
+                    return (
+                        <Cell
+                            currentTurn={currentTurn}
+                            setCurrentTurn = {setCurrentTurn}
+                            currentFigure={currentFigure}
+                            setCurrentFigure = {setCurrentFigure}
+                            setBoard={setBoard}
+                            figure = {item}
+                            board = {board}
+                            cellColor = {((xIndex + yIndex) % 2) ? 'DimGray' : 'white'}
+                            currentPlayer = {currentPlayer}
+                            src={item.src}>
+                        </Cell>
+                    )
+                })
+            ))}
         </div>
-    ))
-}
+    )
+}, (prevProps, nextProps) => {
 
-export default Chessboard
+})
+

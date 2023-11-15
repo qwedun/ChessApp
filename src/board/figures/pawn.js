@@ -9,19 +9,22 @@ class   Pawn {
         this.name = 'pawn'
     }
 
-     static setAttack(y, x, board, color, checkForAttack, isKingChecked, isRender) {
-        Figure.pawnTitles(board, x, y, color).forEach(title => {
+     static setAttack(y, x, board, color, checkForAttack, isKingChecked, isRender, currentPlayer) {
+         const pawn = board[y][x];
+         Figure.pawnTitles(board, x, y, color, currentPlayer).forEach(title => {
             if (title.name || checkForAttack) {
 
                 if (!title.name && !isKingChecked)
                     Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
                 else if (title.color !== color) {
-
-                    if (title.isAttackingKing && isKingChecked)
+                    if (pawn.kingDefender && title.canAttackKing && !checkForAttack)
                         Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                    else if (!isKingChecked)
+                    if (title.isAttackingKing && isKingChecked && (!pawn.kingDefender || checkForAttack))
+                        Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
+
+                    else if (!isKingChecked && (!pawn.kingDefender || checkForAttack))
                         Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
                 } else {
                     title.underFriendlyAttack = true;
@@ -30,34 +33,25 @@ class   Pawn {
         })
     }
 
-    checkMoves(board, checkForAttack, isKingChecked, isRender) {
+    checkMoves(board, checkForAttack, isKingChecked, isRender, currentPlayer) {
         const x = this.x;
         const y = this.y;
+        const color = this.color
 
         if (y === 0 || y === 7) return
-        if (this.isDiagonal || this.kingDirection === 2 || this.kingDirection === 0) return;
 
-        if (this.color === 'white') {
-            if (this.firstMove) {
-                const titles = [[board[y - 1][x], board[y - 2][x]]];
-                Figure.checkTitles(titles, 'white', board, checkForAttack, isKingChecked, true, isRender)
-            }
-            else {
-                const titles = [[board[y - 1][x]]]
-                Figure.checkTitles(titles, 'white', board, checkForAttack, isKingChecked, true, isRender)
-            }
-            Pawn.setAttack(y, x, board, 'white', checkForAttack, isKingChecked, isRender)
+        if (this.color === currentPlayer) {
+            const titles = (this.firstMove) ? [[board[y - 1][x], board[y - 2][x]]] : [[board[y - 1][x]]];
 
+            Pawn.setAttack(y, x, board, color, checkForAttack, isKingChecked, isRender, currentPlayer);
+            if (this.isDiagonal || this.kingDirection === 2 || this.kingDirection === 0) return;
+            Figure.checkTitles(titles, color, board, checkForAttack, isKingChecked, true, isRender);
         } else {
-            if (this.firstMove) {
-                const titles = [[board[y + 1][x], board[y + 2][x]]];
-                Figure.checkTitles(titles, 'black', board, checkForAttack, isKingChecked, true, isRender)
-            }
-            else {
-                const titles = [[board[y + 1][x]]]
-                Figure.checkTitles(titles, 'black', board, checkForAttack, isKingChecked, true, isRender)
-            }
-            Pawn.setAttack(y, x, board, 'black', checkForAttack, isKingChecked, isRender)
+            const titles = (this.firstMove) ? [[board[y + 1][x], board[y + 2][x]]] : [[board[y + 1][x]]];
+
+            Pawn.setAttack(y, x, board, color, checkForAttack, isKingChecked, isRender, currentPlayer);
+            if (this.isDiagonal || this.kingDirection === 2 || this.kingDirection === 0) return;
+            Figure.checkTitles(titles, color, board, checkForAttack, isKingChecked, true, isRender);
         }
     }
 }

@@ -54,6 +54,10 @@ class Figure {
         return new Title({x, y})
     }
 
+
+
+
+
     static setProperty(title, property, canBeProperty, isRender) {
         if (isRender)
             title[property] = true
@@ -129,8 +133,8 @@ class Figure {
             return direction
         })
     }
-    static pawnTitles(board, x, y, color) {
-        if (color === 'white')
+    static pawnTitles(board, x, y, color, currentPlayer) {
+        if (color === currentPlayer)
              return [[y - 1, x + 1], [y - 1, x - 1]].filter(cords => {
                 const [y, x] = cords;
                 return !(y < 0 || x < 0 || x > 7)

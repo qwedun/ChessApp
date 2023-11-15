@@ -10,7 +10,7 @@ class King {
     }
 
 
-    checkMoves(board, checkForAttack, isKingChecked, isRender) {
+    checkMoves(board, checkForAttack, isKingChecked, isRender, currentPlayer) {
         const yMin = (this.y === 0) ? 0 : this.y - 1;
         const yMax = (this.y === 7) ? 7 : this.y + 1;
         const xMin = (this.x === 0) ? 0 : this.x - 1;
@@ -38,7 +38,7 @@ class King {
                     Figure.setProperty(title, 'canMove', 'kingCanMove', isRender)
             }
         }
-        King.checkForKing(board[this.y][this.x], board)
+        King.checkForKing(board[this.y][this.x], board, currentPlayer)
     }
 
 
@@ -83,8 +83,8 @@ class King {
         attackingFigures.push(title);
         title.isAttackingKing = true;
     }
-    static isPawnAttacking(king, board, color, attackingFigures) { 
-        Figure.pawnTitles(board, king.x, king.y, color).forEach(title => {
+    static isPawnAttacking(king, board, color, attackingFigures, currentPlayer) {
+        Figure.pawnTitles(board, king.x, king.y, color, currentPlayer).forEach(title => {
             if (title.name === 'pawn' && title.color !== color) {
                 this.setAttack(king, attackingFigures, title)
             }
@@ -100,7 +100,6 @@ class King {
     }
 
     static setTitleBehindKing(board, y, x, color) {
-
         if (!(!board[y][x].name || !(board[y][x].color === color))) return
 
         board[y][x].canMove = false;
@@ -139,6 +138,7 @@ class King {
                             currentFigure.kingDefender = true;
                             currentFigure.kingDirection = index;
                             currentFigure.isDiagonal = true;
+                            title.canAttackKing = true;
                             return false;
                         } else {
                             if (title.name !== 'rook' && title.name !== 'queen') return false
@@ -158,15 +158,15 @@ class King {
                                 if (y + 1 <= 7 && x + 1 <= 7)
                                     this.setTitleBehindKing(board, y + 1, x + 1, color)
 
-                            else if (index === 1)
+                            if (index === 1)
                                 if (y - 1 >= 0 && x + 1 <= 7)
                                     this.setTitleBehindKing(board, y - 1, x + 1, color)
 
-                            else if (index === 2)
+                            if (index === 2)
                                 if (y - 1 >= 0 && x - 1 >= 0)
                                     this.setTitleBehindKing(board, y - 1, x - 1, color)
 
-                            else
+                            if (index === 3)
                                 if (y + 1 <= 7 && x - 1 >= 0)
                                     this.setTitleBehindKing(board, y + 1, x - 1, color)
 
@@ -181,15 +181,15 @@ class King {
                                 if (x + 1 <= 7)
                                     this.setTitleBehindKing(board, y, x + 1, color)
 
-                            else if (index === 1)
+                            if (index === 1)
                                 if (y + 1 <= 7)
                                     this.setTitleBehindKing(board, y + 1, x, color)
 
-                            else if (index === 2)
+                            if (index === 2)
                                 if (x - 1 >= 0)
                                     this.setTitleBehindKing(board, y, x - 1, color)
 
-                            else
+                            if (index === 3)
                                 if (y - 1 >= 0)
                                     this.setTitleBehindKing(board, y - 1, x, color  )
 
@@ -202,7 +202,7 @@ class King {
             })
         })
     }
-    static checkForKing(king, board) {
+    static checkForKing(king, board, currentPlayer) {
         const attackingFigures = [];
         const  x = king.x;
         const y = king.y;
@@ -214,7 +214,7 @@ class King {
         this.checkTitles(diagonalTitles, king, board, attackingFigures, true);
 
         this.isKnightAttacking(king, board, king.color, attackingFigures)
-        this.isPawnAttacking(king, board, king.color, attackingFigures)
+        this.isPawnAttacking(king, board, king.color, attackingFigures, currentPlayer)
 
         if (attackingFigures.length > 1)
             attackingFigures.forEach(figure => figure.isAttackingKing = false)

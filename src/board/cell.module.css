@@ -11,6 +11,10 @@
   opacity: 80%;
 }
 
+.yellow {
+  outline: #81B34A 5px solid;
+}
+
 .underAttack {
   background-color: darkred;
   position: absolute;

@@ -17,38 +17,15 @@ class Board {
         }
     }
 
-    static prepareForSending(board) {
-        const copy = JSON.parse(JSON.stringify(board));
-        const newBoard = [];
-
-        for (let j = 0; j < 8; j++) {
-            newBoard.push([])
-            for (let i = 0; i < 8; i++) {
-                const {x, y, firstMove, src, color, name} = {...copy[j][i]}
-                const title = copy[j][i]
-
-                if (title.hasOwnProperty('firstMove')) {
-                    newBoard[j][i] = {
-                        x: x,
-                        y: y,
-                        firstMove: firstMove,
-                        src: src,
-                        color: color,
-                        name: name
-                    }
-                } else if (title.name)
-                    newBoard[j][i] = {
-                        x: x,
-                        y: y,
-                        src: src,
-                        color: color,
-                        name: name
-                    }
-                else
-                    newBoard[j][i] = {x: x, y:y}
-            }
-        }
-        return newBoard
+    static prepareForSending(figure) {
+        const {name, color, x, y, firstMove} = JSON.parse(JSON.stringify(figure));
+        return JSON.stringify({
+            name: name,
+            color: color,
+            x: x,
+            y: y,
+            firstMove: firstMove
+        })
     }
 
     static createBoardFromJSON(json) {
@@ -89,7 +66,6 @@ class Board {
             board.push([]);
             for (let i = 0; i < 8; i++) {
                 board[j].push(Figure.addFigures(i, j, color))
-
             }
         }
         return board
@@ -114,6 +90,7 @@ class Board {
                 if (figure.kingDirection) figure.kingDirection = null;
                 if (figure.isVertical) figure.isVertical = false;
                 if (figure.isDiagonal) figure.isDiagonal = false;
+                if (figure.canAttacKing) figure.canAttacKing = false;
             }
         }
 
@@ -127,7 +104,7 @@ class Board {
             }
         }
 
-        King.checkForKing(Board.findKing(newBoard, color), newBoard)
+        King.checkForKing(Board.findKing(newBoard, color), newBoard, currentPlayer)
 
 
         for (let j = 0; j < 8; j++) {
@@ -136,7 +113,6 @@ class Board {
                 if (figure.color === color) figure.checkMoves?.(board, false, false, false, currentPlayer)
             }
         }
-
         return newBoard
     }
     static cloneBoard(board) {
