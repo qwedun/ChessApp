@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 
 export class GameRules {
     static isCheckMate(currentKing, board) {
+        console.log(currentKing)
         if (!currentKing.underCheck) return
 
         if (board.attackingFiguresCount > 1) {
@@ -18,6 +19,7 @@ export class GameRules {
             if (!King.isKingCanMove(board, currentKing) && !King.isKingCanBeDefended(board, currentKing))
                 alert("LOSE")
         }
+        return console.log(13123)
     }
     static isStalemate(board, color) {
 

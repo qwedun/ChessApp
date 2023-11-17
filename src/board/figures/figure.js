@@ -54,7 +54,28 @@ class Figure {
         return new Title({x, y})
     }
 
+    static createFigure(figure) {
+        if (figure instanceof Title)
+            return new Title({...figure})
 
+        if (figure instanceof King)
+            return new King({...figure})
+
+        if (figure instanceof Queen)
+            return new Queen({...figure})
+
+        if (figure instanceof Rook)
+            return new Rook({...figure})
+
+        if (figure instanceof Pawn)
+            return new Pawn({...figure})
+
+        if (figure instanceof Knight)
+            return new Knight({...figure})
+
+        if (figure instanceof Bishop)
+            return new Bishop({...figure})
+    }
 
 
 
@@ -100,6 +121,11 @@ class Figure {
             return direction
         })
     }
+    static pushNewFigure(direction, board, y, x) {
+        const newFigure = this.createFigure(board[y][x])
+        board[y][x] = newFigure;
+        direction.push(newFigure)
+    }
     static diagonalTitles(board, x, y) {
 
         let directions = [[], [], [], []];
@@ -115,8 +141,9 @@ class Figure {
         }
         return directions.map((direction, index) => {
             if (index === 0 && direction)
-                for (let i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--)
+                for (let i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--) {
                     direction.push(board[j][i])
+                }
 
             else if (index === 1 && direction)
                 for (let i = x - 1, j = y + 1; i >= 0 && j <= 7; i--, j++)

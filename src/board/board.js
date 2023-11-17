@@ -77,20 +77,6 @@ class Board {
         for (let j = 0; j < 8; j++) {
             for (let i = 0; i < 8; i++) {
                 const figure = newBoard[j][i]
-                if (figure.canMove) figure.canMove = false;
-                if (figure.kingCanMove) figure.kingCanMove = false;
-                if (figure.canBeMoved) figure.canBeMoved = false;
-                if (figure.underAttack) figure.underAttack = false;
-                if (figure.canBeAttacked) figure.canBeAttacked = false;
-                if (figure.isAttackingKing) figure.isAttackingKing = false;
-                if (figure.underFriendlyAttack) figure.underFriendlyAttack = false;
-                if (figure.underCheck) figure.underCheck = false;
-                if (figure.canDefend) figure.canDefend = false;
-                if (figure.kingDefender) figure.kingDefender = false;
-                if (figure.kingDirection) figure.kingDirection = null;
-                if (figure.isVertical) figure.isVertical = false;
-                if (figure.isDiagonal) figure.isDiagonal = false;
-                if (figure.canAttacKing) figure.canAttacKing = false;
             }
         }
 
@@ -100,7 +86,7 @@ class Board {
                 if (!figure.name) continue
 
                 if (figure.color !== color)
-                    figure.checkMoves(board, true, false, false, currentPlayer)
+                    figure.checkMoves(newBoard, true, false, false, currentPlayer)
             }
         }
 
@@ -110,17 +96,25 @@ class Board {
         for (let j = 0; j < 8; j++) {
             for (let i = 0; i < 8; i++) {
                 const figure = newBoard[j][i];
-                if (figure.color === color) figure.checkMoves?.(board, false, false, false, currentPlayer)
+                if (figure.color === color) figure.checkMoves?.(newBoard, false, false, false, currentPlayer)
             }
         }
         return newBoard
+    }
+    static removeTitles(board) {
+        for (let row of board)
+            for (let figure of row) {
+                figure.canMove = false;
+                figure.underAttack = false;
+            }
+        return board
     }
     static cloneBoard(board) {
         const newBoard = [];
         for (let j = 0; j < 8; j++) {
             newBoard.push([])
             for (let i = 0; i < 8; i++) {
-                newBoard[j][i] = board[j][i]
+                newBoard[j][i] = Figure.createFigure(board[j][i])
             }
         }
         return newBoard

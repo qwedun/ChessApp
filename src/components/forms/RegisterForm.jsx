@@ -1,12 +1,15 @@
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import styles from './registerForm.module.scss'
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import {checkPassword, validateEmail} from "../../helpers/helpers";
+import { checkPassword, validateEmail } from "../../helpers/helpers";
+import { useDispatch } from "react-redux";
+import { authService } from "../../services/authService";
+import axios from "axios";
 
 const LoginForm = () => {
-
+    const dispatch = useDispatch()
     const [email, setEmail] = useState({
         value: null,
         isValid: false,
@@ -53,9 +56,27 @@ const LoginForm = () => {
         })
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+
+
+        axios.post('https://api-jmjs.vercel.app/api/v1/createuser', {
+            email: email.value,
+            password: password.value,
+        }).then(res => console.log(res)).catch(e => console.log(e))
+
+        /*dispatch(register({
+            password: password.value,
+            email: email.value,
+        }))*/
+
+        //authService.register(email.value, password.value).then(e => console.log(e))
+    }
 
     return (
-        <form className={styles.form}>
+        <form
+            onSubmit={handleSubmit}
+            className={styles.form}>
 
             <span className={styles.title}>Register</span>
 
@@ -87,7 +108,9 @@ const LoginForm = () => {
             </div>
 
             <div className={styles.buttonWrapper}>
-                <Button disabled={!(email.isValid && password.isValid)}>Register</Button>
+                <Button
+                    type='submit'
+                    disabled={!(email.isValid && password.isValid)}>Register</Button>
                 <ul className={styles.list}>
                     Password must
                     <li>contain lowercase, uppercase letters and numbers</li>

@@ -17,8 +17,8 @@ export const login = createAsyncThunk(
 )
 export const register = createAsyncThunk(
     'user/register',
-    async ({username, email, password}) => {
-        return await authService.register(username, email, password)
+    async ({email, password}) => {
+        return await authService.register(email, password)
     }
 )
 
@@ -46,10 +46,12 @@ const userSlice = createSlice({
         builder
             .addCase(login.fulfilled, (state, action) => {
                 state.isAuth = true;
+                console.log(action)
                 localStorage.setItem('token', action.payload)
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = true;
+                console.log(action)
             })
     }
 })

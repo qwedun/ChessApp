@@ -8,7 +8,7 @@ export class authService {
         return await api.post('/login', {email:email, password:password})
     }
     static async register(email, password) {
-        return await api.post('/register', {email:email, password: password});
+        return await api.post('/api/v1/createuser', {email:email, password: password});
     }
     static async logout() {
         return await api.post('/logout')

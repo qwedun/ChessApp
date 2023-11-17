@@ -11,10 +11,6 @@
   opacity: 80%;
 }
 
-.yellow {
-  outline: #81B34A 5px solid;
-}
-
 .underAttack {
   background-color: darkred;
   position: absolute;
@@ -26,6 +22,40 @@
   margin-top: -15px;
   border-radius: 50%;
   opacity: 80%;
+  z-index: 5;
+}
+
+.title {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.black {
+  background-color: dimgray;
+}
+
+.white {
+  background-color: white;
+}
+
+.img {
+  padding: 5px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -40px;
+  margin-top: -40px;
+  z-index: 2;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+.isOver {
+  border: solid 4px #81B34A;
 }
 
 /*# sourceMappingURL=cell.module.css.map */
