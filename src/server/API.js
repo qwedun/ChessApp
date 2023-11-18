@@ -26,4 +26,4 @@ api.interceptors.response.use(config => {
             console.log(e)
         }
     }
-}
+})
