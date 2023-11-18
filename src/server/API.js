@@ -15,7 +15,7 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(config => {
     return config
 }, async res => {
-    console.log(res)
+    console.log(res, res.response.status)
     if (res.response.status === 401) {
         try {
             await api.post('/api/token/refresh', {
