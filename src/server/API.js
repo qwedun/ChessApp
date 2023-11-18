@@ -19,7 +19,7 @@ api.interceptors.response.use(config => {
     if (res.response.status === 401) {
         try {
             await api.post('/api/token/refresh', {
-                access: localStorage.getItem('token');
+                access: localStorage.getItem('token'),
             })
         } catch(err) {
             console.log(err)
