@@ -46,8 +46,7 @@ const userSlice = createSlice({
         builder
             .addCase(login.fulfilled, (state, action) => {
                 state.isAuth = true;
-                console.log(action)
-                localStorage.setItem('token', action.payload)
+                localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = true;

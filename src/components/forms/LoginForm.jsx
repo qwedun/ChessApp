@@ -1,12 +1,11 @@
-import Button from "../UI/Button";
-import Input from "../UI/Input";
+import Button from "../UI/Button/Button";
+import Input from "../UI/Input/Input";
 import styles from './loginForm.module.scss'
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeError, setError } from "../../store/slices/userSlice";
-import { URL } from '../../server/API'
-import { login } from '../../store/slices/userSlice'
+import { login } from "../../store/slices/userSlice";
 import axios from "axios";
 
 
@@ -20,7 +19,12 @@ const LoginForm = () => {
     const [isEntered, setEnter] = useState({email: false, password:false})
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const [emailFocus, setEmailFocus] = useState(false)
+    const [passwordFocus, setPasswordFocus] = useState(false)
+    const navigate = useNavigate()
 
+    if (user.isAuth)
+        navigate('/archive')
     function handleChange(e, state, setState) {
         setState({
             ...state,
@@ -33,10 +37,13 @@ const LoginForm = () => {
     function handleSubmit(e) {
         e.preventDefault();
 
-        axios.post('https://api-jmjs.vercel.app/api/check_user', {
+        dispatch(login({password: password, email: email}))
+
+
+        /*axios.post('https://api-jmjs.vercel.app/api/check_user', {
             email: email,
             password: password
-        }).then(e => console.log(e))
+        }).then(e => console.log(e))*/
     }
 
     return (
@@ -44,24 +51,28 @@ const LoginForm = () => {
             className={styles.form}
             onSubmit={handleSubmit}>
             <span className={styles.title}>Login</span>
-            <div className={styles.inputWrapper}>
-                Email:
-                <Input
-                    type = 'email'
-                    autoComplete
-                    onChange={(e) => setEmail(e.target.value)}
-                >Input your email
-                </Input>
-            </div>
-            <div className={styles.inputWrapper}>
-                Password:
-                <Input
-                    onChange={(e) => setPassword(e.target.value)}
-                    type='password'
-                    autoComplete
-                >Input your password
-                </Input>
-            </div>
+            <Input
+                type = 'email'
+                autoComplete
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setEmailFocus(true)}
+                onBlur={() => {setEmailFocus(false)}}
+                focus={emailFocus}
+                value={email}
+            >Input your email
+            </Input>
+
+            <Input
+                type='password'
+                autoComplete
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPasswordFocus(true)}
+                onBlur={() => setPasswordFocus(false)}
+                focus={passwordFocus}
+                value={password}
+            >Input your password
+            </Input>
+
             <div className={styles.buttonWrapper}>
                 <Button>Login</Button>
             </div>

@@ -10,6 +10,7 @@ const GamePage = lazy(() => import('./pages/GamePage/GamePage'))
 const LoginForm = lazy(() => import('./components/forms/LoginForm'))
 const RegisterForm = lazy(() => import('./components/forms/RegisterForm'))
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'))
+const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 
 export default function App () {
 
@@ -29,7 +30,7 @@ export default function App () {
                 <Route path='settings' element={<MainPage/>}/>
                 <Route path='archive' element={<MainPage/>}/>
                 <Route path='news' element={<MainPage/>}/>
-                <Route path='play' element={<MainPage/>}/>
+                <Route path='play' element={<PlayPage/>}/>
             </Route>
         </Routes>
     )

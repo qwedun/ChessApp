@@ -1,5 +1,5 @@
 import styles from './mainPage.module.scss'
-import {Aside} from "../../../components/Aside";
+import {Aside} from "../../../components/Aside/Aside";
 import {Outlet} from "react-router-dom";
 import {Suspense} from "react";
 

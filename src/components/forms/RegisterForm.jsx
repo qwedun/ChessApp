@@ -1,5 +1,5 @@
-import Button from "../UI/Button";
-import Input from "../UI/Input";
+import Button from "../UI/Button/Button";
+import Input from "../UI/Input/Input";
 import styles from './registerForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -22,6 +22,9 @@ const LoginForm = () => {
         isError: false,
     });
 
+    const [emailFocus, setEmailFocus] = useState(false)
+    const [passwordFocus, setPasswordFocus] = useState(false)
+
     function handleChange(e, state, setState, validateFunction) {
         if (validateFunction(e.target.value))
             setState({
@@ -31,25 +34,27 @@ const LoginForm = () => {
             })
         else setState({
             ...state,
+            value: e.target.value,
             isValid: false,
-            value: null,
         })
     }
 
 
-    function handleBlur(state, setState) {
-        if (!state.value)
+    function handleBlur(state, setState, setFocus) {
+        setFocus(false)
+        if (state.isValid)
             setState({
                 ...state,
-                isError: true,
+                isError: false,
             })
         else setState({
             ...state,
-            isError: false,
+            isError: true,
         })
     }
 
-    function handleFocus(state, setState) {
+    function handleFocus(state, setState, setFocus) {
+        setFocus(true)
         setState({
             ...state,
             isError:false,
@@ -80,45 +85,47 @@ const LoginForm = () => {
 
             <span className={styles.title}>Register</span>
 
-            <div className={styles.inputWrapper}>Email:
+            <div style={{position: "relative"}}>
                 <Input
+                    value={email.value}
+                    focus={emailFocus}
                     type = 'email'
                     onChange={(e) => handleChange(e, email, setEmail, validateEmail)}
-                    onBlur={() => handleBlur(email, setEmail)}
-                    onFocus={() => handleFocus(email, setEmail)}
+                    onBlur={() => handleBlur(email, setEmail, setEmailFocus)}
+                    onFocus={() => handleFocus(email, setEmail, setEmailFocus)}
                     autoComplete = "false"
                 >Input your email
                 </Input>
-
-                {email.isError && <span className={styles.popUp}>Email is not valid!</span>}
-
+                {email.isError && <div className={styles.popUp}>Email is not valid!</div>}
             </div>
 
-            <div className={styles.inputWrapper}>Password:
-                <Input
-                    type='password'
-                    onChange={(e) => handleChange(e, password, setPassword, checkPassword)}
-                    onBlur={() => handleBlur(password, setPassword)}
-                    onFocus={() => handleFocus(password, setPassword)}
-                    autoComplete = "false"
-                >Create your password
-                </Input>
-
-                {password.isError && <span className={styles.popUp}>Password is not valid!</span>}
+            <div style={{position: "relative"}}>
+            <Input
+                value={password.value}
+                focus={passwordFocus}
+                type='password'
+                onChange={(e) => handleChange(e, password, setPassword, checkPassword)}
+                onBlur={() => handleBlur(password, setPassword, setPasswordFocus)}
+                onFocus={() => handleFocus(password, setPassword, setPasswordFocus)}
+                autoComplete = "false"
+            >Create your password
+            </Input>
+            {password.isError && <div className={styles.popUp}>Password is not valid!</div>}
             </div>
 
-            <div className={styles.buttonWrapper}>
-                <Button
-                    type='submit'
-                    disabled={!(email.isValid && password.isValid)}>Register</Button>
-                <ul className={styles.list}>
-                    Password must
-                    <li>contain lowercase, uppercase letters and numbers</li>
-                    <li>contain special characters</li>
-                    <li>be at least 8 characters long</li>
-                </ul>
+            <ul className={styles.list}>
+                Password must
+                <li>Contain lowercase, uppercase letters and numbers</li>
+                <li>Contain special characters</li>
+                <li>Be at least 8 characters long</li>
+                <div className={styles.buttonWrapper}>
+                    <Button
+                        type='submit'
+                        disabled={!(email.isValid && password.isValid)}>Register
+                    </Button>
+                </div>
+            </ul>
 
-            </div>
             <span className={styles.register}>Already have an account?&nbsp; <Link to={'/login'}>Login</Link></span>
         </form>
     );

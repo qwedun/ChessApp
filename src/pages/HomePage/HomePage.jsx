@@ -1,6 +1,6 @@
 import styles from './homePage.module.scss'
-import {RatingChart} from "../../components/UI/RatingChart";
-import {PartiesChart} from "../../components/UI/PartiesChart";
+import {RatingChart} from "../../components/UI/Charts/RatingChart";
+import {PartiesChart} from "../../components/UI/Charts/PartiesChart";
 
 const HomePage = () => {
     return (

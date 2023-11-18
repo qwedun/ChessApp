@@ -1,38 +1,24 @@
 import styles from './aside.module.scss'
-import {NavigationLink} from "./UI/NavigationLink";
-import {Avatar} from "./UI/Avatar";
-import home from '../assets/home.svg'
-import socials from '../assets/users-alt.svg'
-import title from '../assets/board.svg'
-import settings from '../assets/settings-sliders.svg'
-import archive from '../assets/archive.svg'
-import leftArrow from '../assets/angle-small-left.svg'
-import rightArrow from '../assets/angle-small-right.svg'
-import logo from '../assets/logo.png'
-import book from '../assets/book.svg'
-import {PlayButton} from "./UI/PlayButton";
+import {NavigationLink} from "../UI/NavigationLink/NavigationLink";
+import {Avatar} from "../UI/Avatar/Avatar";
+import home from '../../assets/home.svg'
+import socials from '../../assets/users-alt.svg'
+import title from '../../assets/board.svg'
+import settings from '../../assets/settings-sliders.svg'
+import archive from '../../assets/archive.svg'
+import leftArrow from '../../assets/angle-small-left.svg'
+import rightArrow from '../../assets/angle-small-right.svg'
+import logo from '../../assets/logo.png'
+import book from '../../assets/book.svg'
 import {useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
-import {setCircleStatus, setBarStatus} from "../store/slices/playButtonSlice";
+import { Link } from "react-router-dom";
 
 export const Aside = () => {
 
     const [isHide, setIsHide] = useState(false);
-    const playButton = useSelector(state => state.playButtonStatus)
-    const dispatch = useDispatch()
 
     function handleClick(state) {
         isHide ? setIsHide(false) : setIsHide(true)
-
-        if (!isHide) return
-
-        if (state === 'showBarOpening' || state === 'showBarActive') {
-            dispatch(setBarStatus('showBarActive'))
-            dispatch(setCircleStatus('showCircleActive'))
-        } else {
-            dispatch(setBarStatus('showBarStatic'))
-            dispatch(setCircleStatus('showCircleStatic'))
-        }
     }
 
     return (
@@ -48,8 +34,7 @@ export const Aside = () => {
                             <div className={styles.info}> ELO</div>
                         </div>
                     </div>}
-                    {!isHide && <div className={styles.play}>Play</div>}
-                    <PlayButton isHide={isHide}/>
+                    {!isHide && <Link className={styles.play} to='/play'>Play</Link>}
                 </div>
                 <div>
                     <NavigationLink to='/home' url={home} isHide={isHide}>Home</NavigationLink>
@@ -61,7 +46,7 @@ export const Aside = () => {
                 <div>
                     <NavigationLink to='/settings' url={settings} isHide={isHide}>Settings</NavigationLink>
                     <div className={styles.collapse}
-                         onClick={() => handleClick(playButton.barStatus)}>
+                         onClick={() => handleClick(isHide)}>
                         {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}
                         {isHide && <img className={styles.img} alt='collapse' src={rightArrow}/>}
                         {!isHide && <span>Hide</span>}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const URL = 'https://api-jmjs.vercel.app/'
+export const URL = 'https://api-jmjs.vercel.app'
 
 export const api = axios.create({
     withCredentials: true,
@@ -14,8 +14,4 @@ api.interceptors.request.use(config => {
 
 api.interceptors.response.use(config => {
     return config
-}, error => {
-    if (error.response.status === 401) {
-        console.log(error.response.status)
-    }
-})
+}, error => console.log(error))

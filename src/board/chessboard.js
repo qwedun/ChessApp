@@ -36,6 +36,7 @@ export default function Chessboard({board, setBoard}) {
             setBoard(Board.updateBoard(board, colors[currentTurn], currentPlayer))
         }
         Board.removeTitles(board)
+        console.log(board)
         setCurrentFigure(figure)
 
         if (figure.name && figure.color !== currentTurn) return
