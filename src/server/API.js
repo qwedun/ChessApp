@@ -15,14 +15,15 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(config => {
     return config
 }, async e => {
+    console.log(e)
     if (e.response.status === 401) {
         try {
             const response = await api.post('/api/token/refresh', {
                 access: localStorage.getItem('token')
             })
             console.log(response)
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.log(err)
         }
     }
 })
