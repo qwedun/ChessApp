@@ -13,7 +13,7 @@ export const ErrorPopUp = () => {
 
     return (
         <div className={state}>
-            error
+            {user.error}
         </div>
     );
 };

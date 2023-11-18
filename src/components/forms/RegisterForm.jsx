@@ -4,12 +4,14 @@ import styles from './registerForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { checkPassword, validateEmail } from "../../helpers/helpers";
-import { useDispatch } from "react-redux";
-import { authService } from "../../services/authService";
+import {useDispatch, useSelector} from "react-redux";
+import {register, setError} from "../../store/slices/userSlice";
 import axios from "axios";
+import {ErrorPopUp} from "../UI/ErrorPopUp/ErrorPopUp";
 
 const LoginForm = () => {
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     const [email, setEmail] = useState({
         value: null,
         isValid: false,
@@ -64,18 +66,7 @@ const LoginForm = () => {
     function handleSubmit(e) {
         e.preventDefault();
 
-
-        axios.post('https://api-jmjs.vercel.app/api/v1/createuser', {
-            email: email.value,
-            password: password.value,
-        }).then(res => console.log(res)).catch(e => console.log(e))
-
-        /*dispatch(register({
-            password: password.value,
-            email: email.value,
-        }))*/
-
-        //authService.register(email.value, password.value).then(e => console.log(e))
+        dispatch(register({password: password.value, email: email.value}))
     }
 
     return (
@@ -84,6 +75,7 @@ const LoginForm = () => {
             className={styles.form}>
 
             <span className={styles.title}>Register</span>
+            <ErrorPopUp/>
 
             <div style={{position: "relative"}}>
                 <Input
@@ -121,12 +113,15 @@ const LoginForm = () => {
                 <div className={styles.buttonWrapper}>
                     <Button
                         type='submit'
-                        disabled={!(email.isValid && password.isValid)}>Register
+                        disabled={(!(email.isValid && password.isValid) || user.isLoading) }>Register
                     </Button>
                 </div>
             </ul>
 
-            <span className={styles.register}>Already have an account?&nbsp; <Link to={'/login'}>Login</Link></span>
+            <span className={styles.register}>Already have an account?&nbsp;
+                <Link
+                    onClick={() => dispatch(setError(0))}
+                    to={'/login'}>Login</Link></span>
         </form>
     );
 };

@@ -5,7 +5,7 @@ const initialState = {
     email: null,
     isAuth: false,
     username: null,
-    error: 0,
+        error: 0,
 }
 
 
@@ -17,8 +17,14 @@ export const login = createAsyncThunk(
 )
 export const register = createAsyncThunk(
     'user/register',
-    async ({email, password}) => {
-        return await authService.register(email, password)
+    async ({email, password}, {rejectWithValue}) => {
+        try {
+            const response = await authService.register(email, password);
+            console.log(response)
+            return response.payload;
+        } catch (e) {
+            return rejectWithValue(e)
+        }
     }
 )
 
@@ -35,8 +41,8 @@ const userSlice = createSlice({
         setIsAuth(state) {
             state.isAuth = true;
         },
-        setError(state) {
-            state.error = 'ERROR';
+        setError(state, action) {
+            state.error = action.payload;
         },
         removeError(state) {
             state.error = null;
@@ -49,8 +55,20 @@ const userSlice = createSlice({
                 localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(login.rejected, (state, action) => {
-                state.isLoading = true;
+                state.isLoading = false;
                 console.log(action)
+            })
+            .addCase(register.pending, (state, action) => {
+                state.isLoading = true;
+                state.error = state.error ? false : 0
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.error = action.payload.response.data.email?.[0]
+                state.isLoading = false;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = state.error ? false : 0
             })
     }
 })

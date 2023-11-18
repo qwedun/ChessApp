@@ -20,7 +20,6 @@ export class authService {
             setIsAuth();
             return response;
         } catch(e) {
-
         }
     }
 }
