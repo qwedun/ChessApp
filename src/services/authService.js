@@ -4,10 +4,10 @@ import {setIsAuth} from "../store/slices/userSlice";
 
 export class authService {
     static async login(email, password) {
-        return await axios.post(`${URL}/api/check_user`, {email:email, password:password}, {withCredentials: true})
+        return await axios.post(`${URL}/api/v1/login`, {email:email, password:password}, {withCredentials: true})
     }
     static async register(email, password) {
-        return await axios.post(`${URL}/api/v1/createuser`, {email:email, password: password});
+        return await axios.post(`${URL}/api/v1/register`, {email:email, password: password});
     }
     static async logout() {
         return await api.post('/logout')
