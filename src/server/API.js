@@ -14,7 +14,15 @@ api.interceptors.request.use(config => {
 
 api.interceptors.response.use(config => {
     return config
-}, e => {
-    console.log(e)
+}, async res => {
+    console.log(res)
+    if (res.response.status === 401) {
+        try {
+            await api.post('/api/token/refresh', {
+                access: localStorage.getItem('token');
+            })
+        } catch(err) {
+            console.log(err)
+        }
     }
-)
+})
