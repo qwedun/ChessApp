@@ -1,9 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import {lazy} from "react";
 import {LayoutRouter} from "./pages/LayoutRouter/LayoutRouter";
-import {RequiredAuth} from "./hoc/RequiredAuth";
 import {useEffect} from "react";
-import { login } from "./store/slices/userSlice";
 
 const MainPage = lazy(() => import('./pages/MainPage/MainPage'))
 const GamePage = lazy(() => import('./pages/GamePage/GamePage'))
@@ -15,7 +13,7 @@ const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 export default function App () {
 
     useEffect(() => {
-
+        console.log('effect')
     }, [])
 
     return (
