@@ -18,9 +18,11 @@ api.interceptors.response.use(config => {
     console.log(res, res.response.status)
     if (res.response.status === 401) {
         try {
-            await api.post('refresh-access-token', {
+            const response = await api.post('refresh-access-token', {
                 access: localStorage.getItem('token'),
             })
+            console.log(response)
+            localStorage.setItem('token', response.data.access_token)
         } catch(err) {
             console.log(err)
         }
