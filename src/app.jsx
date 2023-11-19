@@ -1,7 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
-import {lazy} from "react";
-import {LayoutRouter} from "./pages/LayoutRouter/LayoutRouter";
-import {useEffect} from "react";
+import { lazy } from "react";
+import { LayoutRouter } from "./pages/LayoutRouter/LayoutRouter";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAuth, setIsAuthFalse } from "./store/slices/userSlice";
+import { Private } from "./hoc/Private";
+import { checkAuth } from "./store/slices/userSlice";
 
 const MainPage = lazy(() => import('./pages/MainPage/MainPage'))
 const GamePage = lazy(() => import('./pages/GamePage/GamePage'))
@@ -12,13 +15,14 @@ const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 
 export default function App () {
 
-    useEffect(() => {
-        console.log('effect')
-    }, [])
+    const dispatch = useDispatch()
+
+    dispatch(checkAuth())
 
     return (
         <Routes>
             <Route path='/' element={<LayoutRouter/>}>
+                <Route index element={<HomePage/>}/>
                 <Route path='register' element={<RegisterForm/>}/>
                 <Route path='login' element={<LoginForm/>}/>
                 <Route path='home' element={<HomePage/>}/>

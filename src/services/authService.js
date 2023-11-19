@@ -13,13 +13,7 @@ export class authService {
         return await api.post('/logout')
     }
 
-    static async isAuth() {
-        try {
-            const response = await axios.get(URL + '/refresh', {withCredentials: true})
-            localStorage.setItem('token', response.data.accessToken);
-            setIsAuth();
-            return response;
-        } catch(e) {
-        }
+    static async checkAuth() {
+        return await api.post('/authuser')
     }
 }

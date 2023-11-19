@@ -1,7 +1,7 @@
 import Button from "../UI/Button/Button";
 import Input from "../UI/Input/Input";
 import styles from './loginForm.module.scss'
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeError, setError } from "../../store/slices/userSlice";
@@ -21,10 +21,8 @@ const LoginForm = () => {
     const [password, setPassword] = useState(null);
     const [emailFocus, setEmailFocus] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
-    const navigate = useNavigate()
 
-    if (user.isAuth)
-        navigate('/archive')
+
     function handleChange(e, state, setState) {
         setState({
             ...state,

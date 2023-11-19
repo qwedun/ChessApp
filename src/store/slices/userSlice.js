@@ -4,8 +4,9 @@ import { authService } from "../../services/authService";
 const initialState = {
     email: null,
     isAuth: false,
-    username: null,
-        error: 0,
+    error: 0,
+    isLoading: false,
+    isAuthLoading: false,
 }
 
 
@@ -28,6 +29,18 @@ export const register = createAsyncThunk(
     }
 )
 
+export const checkAuth = createAsyncThunk(
+    'user/checkAuth',
+    async (_, {rejectedWithValue}) => {
+        try {
+            const response = await authService.checkAuth();
+            return response.payload
+        } catch (e) {
+            return rejectedWithValue(e)
+        }
+    }
+)
+
 const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
@@ -39,7 +52,10 @@ const userSlice = createSlice({
             state.username = action.payload.username;
         },
         setIsAuth(state) {
-            state.isAuth = true;
+            state.isAuthLoading = true;
+        },
+        setIsAuthFalse(state) {
+            state.isAuthLoading = false;
         },
         setError(state, action) {
             state.error = action.payload;
@@ -52,6 +68,7 @@ const userSlice = createSlice({
         builder
             .addCase(login.fulfilled, (state, action) => {
                 state.isAuth = true;
+                state.isLoading = false;
                 localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(login.rejected, (state, action) => {
@@ -63,15 +80,26 @@ const userSlice = createSlice({
                 state.error = state.error ? false : 0
             })
             .addCase(register.rejected, (state, action) => {
-                state.error = action.payload.response.data.email?.[0]
                 state.isLoading = false;
+                state.error = action.payload.response.data.email?.[0]
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.error = state.error ? false : 0
             })
+            .addCase(checkAuth.fulfilled, (state, action) => {
+                state.isAuthLoading = false;
+                state.isAuth = true;
+            })
+            .addCase(checkAuth.pending, (state, action) => {
+                state.isAuthLoading = true;
+            })
+            .addCase(checkAuth.rejected, (state, action) => {
+                state.isAuthLoading = false;
+                console.log(action)
+            })
     }
 })
 
-export const {removeError, setError, setEmail, setUsername, setIsAuth} = userSlice.actions
+export const {setIsAuthFalse, removeError, setError, setEmail, setUsername, setIsAuth} = userSlice.actions
 export default userSlice.reducer;

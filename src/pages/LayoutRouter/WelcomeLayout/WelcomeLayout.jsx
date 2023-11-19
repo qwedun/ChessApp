@@ -1,11 +1,8 @@
 import styles from "./Layout.module.scss";
-import {Outlet} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {Suspense, useEffect} from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import {Suspense} from "react";
 
 export const WelcomeLayout = () => {
-
-
 
     return (
         <div className={styles.wrapper}>
