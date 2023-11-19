@@ -6,10 +6,16 @@ function handleClick() {
         .then(res => console.log(res))
 }
 
+async function handleLogout() {
+    const res = await api.post('/api/v1/logout')
+    console.log(res)
+}
+
 export function MainPage() {
     return (
         <div onClick={handleClick}>
             HELLO
+            <div onClick={handleLogout}>LOGOUT</div>
         </div>
     )
 }
