@@ -7,11 +7,11 @@ function handleClick() {
 }
 
 async function handleLogout() {
-    const res = await axios.post(URL + '/api/v1/logout', {
+    const res = await axios.post(URL + '/api/v1/logout', {}, {
+        withCredentials: true,
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
-        },
-        withCredentials: true,
+        }
     })
     localStorage.removeItem('token')
     console.log(res)
