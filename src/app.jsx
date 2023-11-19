@@ -14,7 +14,9 @@ const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 
 export default function App () {
 
+    useEffect(() => {
 
+    }, [])
 
     return (
         <Routes>

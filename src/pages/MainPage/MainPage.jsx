@@ -13,6 +13,7 @@ async function handleLogout() {
         },
         withCredentials: true,
     })
+    localStorage.removeItem('token')
     console.log(res)
 }
 
