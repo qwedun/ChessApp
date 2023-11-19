@@ -7,7 +7,7 @@ function handleClick() {
 }
 
 async function handleLogout() {
-    const res = await axios.get('/api/v1/logout', {
+    const res = await axios.get(URL + '/api/v1/logout', {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
         },
