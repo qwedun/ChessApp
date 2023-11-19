@@ -17,11 +17,12 @@ async function handleLogout() {
 }
 
 export function MainPage() {
-    return (
+    return (<>
         <div onClick={handleClick}>
             HELLO
-            <div onClick={handleLogout}>LOGOUT</div>
         </div>
+        <div onClick={handleLogout}>LOGOUT</div>
+        </>
     )
 }
 export default MainPage
