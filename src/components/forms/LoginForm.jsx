@@ -1,12 +1,13 @@
 import Button from "../UI/Button/Button";
 import Input from "../UI/Input/Input";
 import styles from './loginForm.module.scss'
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeError, setError } from "../../store/slices/userSlice";
+import { setError } from "../../store/slices/userSlice";
 import { login } from "../../store/slices/userSlice";
 import axios from "axios";
+import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp";
 
 
 
@@ -14,40 +15,22 @@ import axios from "axios";
 
 const LoginForm = () => {
 
-    const user = useSelector(state => state.user);
     const dispatch = useDispatch()
-    const [isEntered, setEnter] = useState({email: false, password:false})
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [emailFocus, setEmailFocus] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
-
-
-    function handleChange(e, state, setState) {
-        setState({
-            ...state,
-            [e.target.type]: e.target.value,
-        });
-        if (user.error && user.error !==0)
-            dispatch(removeError(user))
-    }
-
+    const user = useSelector(state => state.user)
     function handleSubmit(e) {
         e.preventDefault();
-
         dispatch(login({password: password, email: email}))
-
-
-        /*axios.post('https://api-jmjs.vercel.app/api/check_user', {
-            email: email,
-            password: password
-        }).then(e => console.log(e))*/
     }
 
     return (
         <form
             className={styles.form}
             onSubmit={handleSubmit}>
+            <ErrorPopUp/>
             <span className={styles.title}>Login</span>
             <Input
                 type = 'email'
@@ -72,9 +55,12 @@ const LoginForm = () => {
             </Input>
 
             <div className={styles.buttonWrapper}>
-                <Button>Login</Button>
+                <Button disabled={(!(email && password) || user.isLoading)}>Login</Button>
             </div>
-            <div className={styles.register}>Dont have an account?&nbsp; <Link to={'/register'}>Register</Link></div>
+            <div className={styles.register}>Dont have an account?&nbsp;
+                <Link
+                    onClick={() => dispatch(setError(0))}
+                    to={'/register'}>Register</Link></div>
         </form>
     );
 };

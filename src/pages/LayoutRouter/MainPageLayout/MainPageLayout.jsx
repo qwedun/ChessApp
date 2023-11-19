@@ -10,7 +10,7 @@ export const MainPageLayout = () => {
                 <Aside/>
             </div>
             <div className={styles.right}>
-                <Suspense fallback={<p>LOADING</p>}>
+                <Suspense>
                     <Outlet/>
                 </Suspense>
             </div>

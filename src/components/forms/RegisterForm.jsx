@@ -4,10 +4,9 @@ import styles from './registerForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { checkPassword, validateEmail } from "../../helpers/helpers";
-import {useDispatch, useSelector} from "react-redux";
-import {register, setError} from "../../store/slices/userSlice";
-import axios from "axios";
-import {ErrorPopUp} from "../UI/ErrorPopUp/ErrorPopUp";
+import { useDispatch, useSelector } from "react-redux";
+import { register, setError } from "../../store/slices/userSlice";
+import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp";
 
 const LoginForm = () => {
     const dispatch = useDispatch()

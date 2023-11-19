@@ -12,8 +12,12 @@ const initialState = {
 
 export const login = createAsyncThunk(
     'user/login',
-    async ({email, password}) => {
-        return await authService.login(email, password);
+    async ({email, password}, {rejectWithValue}) => {
+        try {
+            return await authService.login(email, password);
+        } catch (e) {
+            return rejectWithValue(e);
+        }
     }
 )
 export const register = createAsyncThunk(
@@ -31,12 +35,12 @@ export const register = createAsyncThunk(
 
 export const checkAuth = createAsyncThunk(
     'user/checkAuth',
-    async (_, {rejectedWithValue}) => {
+    async (_, {rejectWithValue}) => {
         try {
             const response = await authService.checkAuth();
             return response.payload
         } catch (e) {
-            return rejectedWithValue(e)
+            return rejectWithValue(e)
         }
     }
 )
@@ -66,16 +70,24 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(login.pending, (state) => {
+                state.isLoading = true;
+                state.error = state.error ? false : 0
+            })
             .addCase(login.fulfilled, (state, action) => {
                 state.isAuth = true;
                 state.isLoading = false;
+                console.log(action)
                 localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
+                state.error = action.payload.response.data.message
                 console.log(action)
             })
-            .addCase(register.pending, (state, action) => {
+
+
+            .addCase(register.pending, (state) => {
                 state.isLoading = true;
                 state.error = state.error ? false : 0
             })
@@ -85,14 +97,17 @@ const userSlice = createSlice({
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.error = state.error ? false : 0
+            })
+
+
+            .addCase(checkAuth.pending, (state) => {
+                state.isAuthLoading = true;
             })
             .addCase(checkAuth.fulfilled, (state, action) => {
                 state.isAuthLoading = false;
                 state.isAuth = true;
-            })
-            .addCase(checkAuth.pending, (state, action) => {
-                state.isAuthLoading = true;
+                console.log(action)
+                localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(checkAuth.rejected, (state, action) => {
                 state.isAuthLoading = false;

@@ -13,10 +13,10 @@ export const WelcomeLayout = () => {
                 <div className={styles.container}>
                     <div className={styles.smallCircle}></div>
                     <div className={styles.bigCircle}></div>
-                    <img alt ="ChessboardImage" src={require("../../../assets/chessboard.png")} />
+                    <img width='390px' height='390px' alt ="ChessboardImage" src={require("../../../assets/chessboard.png")} />
                 </div>
                 <div className={styles.rightWrapper}>
-                    <Suspense fallback={<p>LOADING</p>}>
+                    <Suspense>
                         <Outlet/>
                     </Suspense>
                 </div>

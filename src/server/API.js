@@ -21,6 +21,7 @@ api.interceptors.response.use(config => {
             const response = await api.post('refresh-access-token', {
                 access: localStorage.getItem('token'),
             })
+            console.log(response)
             localStorage.setItem('token', response.data.access_token)
             return api.request(origin)
         } catch(err) {
