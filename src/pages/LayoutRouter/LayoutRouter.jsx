@@ -8,7 +8,7 @@ export const LayoutRouter = () => {
     const user = useSelector(state => state.user)
 
 
-    const location = useLocation()
+    const location = useLocation();
 
     if (user.isAuthLoading)
         return <Preloader/>
