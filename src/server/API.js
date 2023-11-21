@@ -26,7 +26,6 @@ api.interceptors.response.use(config => {
         }
         return await api.request(origin);
     }
-    if (res.response.status === 400) {
-        return Promise.reject(res)
-    }
+    return Promise.reject(res)
+
 })
