@@ -118,7 +118,6 @@ const userSlice = createSlice({
 
             .addCase(checkAuth.pending, (state, action) => {
                 state.isAuthLoading = true;
-
             })
             .addCase(checkAuth.fulfilled, (state, action) => {
                 if (action.payload.data.login) {
@@ -130,6 +129,7 @@ const userSlice = createSlice({
                 localStorage.setItem('token', action.payload.data.access_token)
             })
             .addCase(checkAuth.rejected, (state, action) => {
+                console.log(action)
                 state.isAuthLoading = false;
             })
 
@@ -147,7 +147,6 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload.data.message
             })
-
             .addCase(logout.pending, (state, action) => {
                 state.isLoading = true;
             })
