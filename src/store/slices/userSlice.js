@@ -90,6 +90,7 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 if (action.payload.data.login) {
                     state.isAuth = true;
+                    state.login = action.payload.data.login
                     state.elo = 9999999;
                 }
                 else
