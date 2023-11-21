@@ -16,17 +16,17 @@ api.interceptors.response.use(config => {
     return config
 }, async res => {
     const origin = res.config;
-    if (res.response.status === 401 && !origin.isRetry) {
-        origin.isRetry = true;
+    if (res.response.status === 401 && !origin.retrying) {
+        origin.retrying = true;
         try {
-            const response = await api.post('refresh-access-token', {
-                access: localStorage.getItem('token'),
-            })
-            if (!response) return Promise.reject()
-            localStorage.setItem('token', response.payload.data.access_token)
-            return api.request(origin)
-        } catch(err) {
-            console.log(err)
+            const response = await api.post('refresh-access-token');
+            localStorage.setItem('token', response.response.payload.data.access_token)
+        } catch(e) {
+            return Promise.reject(e)
         }
+        return await api.request(origin);
+    }
+    if (res.response.status === 400) {
+        return Promise.reject(res)
     }
 })
