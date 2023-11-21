@@ -7,6 +7,7 @@ const initialState = {
     error: 0,
     isLoading: false,
     isAuthLoading: false,
+    canConfirmLogin: false,
 }
 
 
@@ -37,8 +38,29 @@ export const checkAuth = createAsyncThunk(
     'user/checkAuth',
     async (_, {rejectWithValue}) => {
         try {
-            const response = await authService.checkAuth();
-            return response.payload
+            return await authService.checkAuth();
+        } catch (e) {
+            return rejectWithValue(e)
+        }
+    }
+)
+
+export const confirmLogin = createAsyncThunk(
+    'user/confirmLogin',
+    async ({login}, {rejectWithValue}) => {
+        try {
+            return await authService.confirmLogin(login);
+        } catch (e) {
+            return rejectWithValue(e)
+        }
+    }
+)
+
+export const logout = createAsyncThunk(
+    'user/logout',
+    async (_, {rejectWithValue}) => {
+        try {
+            return await authService.logout();
         } catch (e) {
             return rejectWithValue(e)
         }
@@ -49,12 +71,6 @@ const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
     reducers: {
-        setEmail(state, action) {
-            state.email = action.payload.email;
-        },
-        setUsername(state, action) {
-            state.username = action.payload.username;
-        },
         setIsAuth(state) {
             state.isAuthLoading = true;
         },
@@ -64,9 +80,6 @@ const userSlice = createSlice({
         setError(state, action) {
             state.error = action.payload;
         },
-        removeError(state) {
-            state.error = null;
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -75,15 +88,18 @@ const userSlice = createSlice({
                 state.error = state.error ? false : 0
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.isAuth = true;
+                if (action.payload.data.login) {
+                    state.isAuth = true;
+                    state.elo = 9999999;
+                }
+                else
+                    state.canConfirmLogin = true;
                 state.isLoading = false;
-                console.log(action)
                 localStorage.setItem('token', action.payload.data.access_token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload.response.data.message
-                console.log(action)
             })
 
 
@@ -100,21 +116,51 @@ const userSlice = createSlice({
             })
 
 
-            .addCase(checkAuth.pending, (state) => {
+            .addCase(checkAuth.pending, (state, action) => {
                 state.isAuthLoading = true;
+
             })
             .addCase(checkAuth.fulfilled, (state, action) => {
+                if (action.payload.data.login) {
+                    state.isAuth = true;
+                    state.login = action.payload.data.login;
+                    state.elo = 999999;
+                }
                 state.isAuthLoading = false;
-                state.isAuth = true;
-                console.log(action)
-                localStorage.setItem('token', action.payload.data.access_token);
+                localStorage.setItem('token', action.payload.data.access_token)
             })
             .addCase(checkAuth.rejected, (state, action) => {
                 state.isAuthLoading = false;
-                console.log(action)
+            })
+
+            .addCase(confirmLogin.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(confirmLogin.fulfilled, (state, action) => {
+                state.isAuth = true;
+                state.isLoading = false;
+                state.canConfirmLogin = false;
+                state.login = action.payload.data.login;
+                state.elo = 9999999;
+            })
+            .addCase(confirmLogin.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload.data.message
+            })
+
+            .addCase(logout.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                localStorage.removeItem('token')
+                state.isAuth = false;
+                state.isLoading = false;
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.isLoading = false;
             })
     }
 })
 
-export const {setIsAuthFalse, removeError, setError, setEmail, setUsername, setIsAuth} = userSlice.actions
+export const {setIsAuthFalse, setError, setIsAuth} = userSlice.actions
 export default userSlice.reducer;

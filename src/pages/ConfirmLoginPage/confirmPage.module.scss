@@ -1,0 +1,44 @@
+.title {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto;
+    color: #81B34A;
+    font-size: 30px;
+    border-radius: 15px;
+}
+.levelWrapper {
+    cursor: pointer;
+    margin: 10px auto;
+    border-radius: 3px;
+    background-color: white;
+    width: 90%;
+    height: 12%;
+    color: #222222;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    border: none;
+
+    &:focus {
+        border: 1px solid transparent;
+        outline: 3px solid #749654;
+    }
+}
+.green {
+    font-size: 14px;
+    color: #749654;
+}
+.level {
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.buttonWrapper {
+    display: flex;
+    justify-content: center;
+}

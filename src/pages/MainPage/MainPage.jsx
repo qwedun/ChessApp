@@ -1,5 +1,7 @@
 import axios from "axios";
 import { URL, api } from "../../server/API";
+import { logout } from '../../store/slices/userSlice'
+import { useDispatch } from "react-redux";
 
 function handleClick() {
 
@@ -7,18 +9,14 @@ function handleClick() {
         .then(res => console.log(res))
 }
 
-async function handleLogout() {
-    const res = await axios.post(URL + '/api/v1/logout', {}, {
-        withCredentials: true,
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token')
-        }
-    })
-    localStorage.removeItem('token')
-    console.log(res)
-}
 
 export function MainPage() {
+    const dispatch = useDispatch()
+
+    async function handleLogout() {
+        dispatch(logout())
+    }
+
     return (<>
         <div onClick={handleClick}>
             HELLO

@@ -10,9 +10,11 @@ export class authService {
         return await axios.post(`${URL}/api/v1/register`, {email:email, password: password});
     }
     static async logout() {
-        return await api.post('/logout')
+        return await api.post('/api/v1/logout')
     }
-
+    static async confirmLogin(login) {
+        return await api.put('/userlogin', {login: login})
+    }
     static async checkAuth() {
         return await api.post('/authuser')
     }

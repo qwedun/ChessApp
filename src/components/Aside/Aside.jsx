@@ -12,10 +12,12 @@ import logo from '../../assets/logo.png'
 import book from '../../assets/book.svg'
 import {useState} from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const Aside = () => {
 
     const [isHide, setIsHide] = useState(false);
+    const user = useSelector(state => state.user)
 
     function handleClick(state) {
         isHide ? setIsHide(false) : setIsHide(true)
@@ -30,8 +32,8 @@ export const Aside = () => {
                     {!isHide && <div className={styles.profile}>
                         <Avatar/>
                         <div className={styles.container}>
-                            <div className={styles.info}>USERNAME</div>
-                            <div className={styles.info}> ELO</div>
+                            <div className={styles.info}>{user.login}</div>
+                            <div className={styles.info}>{user.elo}</div>
                         </div>
                     </div>}
                     {!isHide && <Link className={styles.play} to='/play'>Play</Link>}

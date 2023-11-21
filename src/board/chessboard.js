@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { useState } from 'react'
+import { playSound } from "../helpers/helpers";
+import {useEffect, useState, useRef} from 'react'
 import Cell from './cell.js'
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -7,6 +7,9 @@ import Board from "./board";
 import {GameRules} from "./gameRules";
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
+import capture from "../assets/sounds/capture.mp3";
+import move from '../assets/sounds/move-self.mp3'
+import check from '../assets/sounds/move-check.mp3'
 
 export default function Chessboard({board, setBoard}) {
 
@@ -21,31 +24,34 @@ export default function Chessboard({board, setBoard}) {
 
     const dispatch = useDispatch()
 
-    function handleClick(figure) {
-        const currentKing   = Board.findKing(board, currentTurn)
+    const king = useRef(Board.findKing(board, currentTurn))
 
-        if (currentKing.underCheck) {
-            GameRules.isCheckMate(currentKing, board)
+    useEffect(() => {
+        king.current = Board.findKing(board, currentTurn)
+        if (king.current.underCheck) {
+            GameRules.isCheckMate(king.current, board)
             GameRules.isStalemate(board, currentTurn)
         }
+    }, [board, currentTurn]);
 
+    function handleClick(figure) {
         if (figure.underAttack || figure.canMove) {
-            GameRules.moveFigures(board, currentFigure, figure)
+            GameRules.moveFigures(board, currentFigure, figure, king.current)
             dispatch(setArray(board.slice()))
-            Board.changeTurn(currentTurn, setCurrentTurn);
+            Board.changeTurn(currentTurn, setCurrentTurn)
             setBoard(Board.updateBoard(board, colors[currentTurn], currentPlayer))
         }
         Board.removeTitles(board)
-        console.log(board)
+
         setCurrentFigure(figure)
 
         if (figure.name && figure.color !== currentTurn) return
 
         if (board.attackingFiguresCount > 1) {
-            if (figure.name === 'king') figure.checkMoves?.(board, false, currentKing.underCheck, true);
+            if (figure.name === 'king') figure.checkMoves?.(board, false, king.current.underCheck, true);
             else return;
         }
-        else figure.checkMoves?.(board, false, currentKing.underCheck, true, currentPlayer);
+        else figure.checkMoves?.(board, false, king.current.underCheck, true, currentPlayer);
     }
 
     return (
@@ -69,4 +75,3 @@ export default function Chessboard({board, setBoard}) {
         </DndProvider>
     )
 }
-

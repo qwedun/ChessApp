@@ -12,6 +12,7 @@ const LoginForm = lazy(() => import('./components/forms/LoginForm'))
 const RegisterForm = lazy(() => import('./components/forms/RegisterForm'))
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'))
 const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
+const ConfirmLoginPage = lazy(() => import('./pages/ConfirmLoginPage/ConfirmLoginPage'))
 
 export default function App () {
 
@@ -25,6 +26,7 @@ export default function App () {
                 <Route index element={<HomePage/>}/>
                 <Route path='register' element={<RegisterForm/>}/>
                 <Route path='login' element={<LoginForm/>}/>
+                <Route path='login/confirm' element={<ConfirmLoginPage/>}/>
                 <Route path='home' element={<HomePage/>}/>
                 <Route path='board' element={<GamePage/>}/>
                 <Route path='socials' element={<MainPage/>}/>
