@@ -20,7 +20,7 @@ api.interceptors.response.use(config => {
         origin.retrying = true;
         try {
             const response = await api.post('refresh-access-token');
-            localStorage.setItem('token', response.response.payload.data.access_token)
+            localStorage.setItem('token', response.data.access_token)
         } catch(e) {
             return Promise.reject(e)
         }
