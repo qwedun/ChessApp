@@ -6,12 +6,27 @@ import Board from "./board";
 import {GameRules} from "./gameRules";
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
+import { db } from "../server/firestore";
+import { addDoc, collection, onSnapshot, query, limit, orderBy, where} from 'firebase/firestore'
 
 export default function Chessboard({board, setBoard, isOnline}) {
 
     const [currentFigure, setCurrentFigure] = useState()
     const [currentTurn, setCurrentTurn] = useState('white')
     const [currentPlayer] = useState('white')
+    let [turn, setTurn] = useState(0)
+
+    const posRefs = collection(db, 'session')
+
+    const handleSubmit = async(figure) => {
+        setTurn(++turn)
+        await addDoc(posRefs, {
+            startPos: JSON.stringify(currentFigure),
+            endPos: JSON.stringify(figure),
+            room: 'qwedun',
+            turn: turn,
+        })
+    }
 
     const colors = {
         black: 'white',
@@ -28,10 +43,27 @@ export default function Chessboard({board, setBoard, isOnline}) {
             GameRules.isCheckMate(king.current, board)
             GameRules.isStalemate(board, currentTurn)
         }
-    }, [board, currentTurn]);
-
+        const queryPos = query(posRefs, where('turn', '>', turn))
+        onSnapshot(queryPos, (snapshot) => {
+            setTurn(++turn)
+            setCurrentTurn(colors[currentTurn])
+            const figures = [];
+            snapshot.forEach(doc => {
+                figures.push({...doc.data()})
+            })
+            if (figures.length === 0) return
+            console.log(figures, turn)
+            const startPOS = Board.createFigureFromJson(JSON.parse(figures[0].endPos))
+            const endPOS = Board.createFigureFromJson(JSON.parse(figures[0].startPos))
+            const copy = Board.cloneBoard(board)
+            copy[startPOS.y][startPOS.x] = endPOS;
+            copy[endPOS.y][endPOS.x] = startPOS;
+            setBoard(Board.updateBoard(copy, colors[currentTurn], currentPlayer))
+        })
+    }, [currentTurn]);
     function handleClick(figure) {
         if (figure.underAttack || figure.canMove) {
+            handleSubmit(figure).then(res => console.log(res))
             GameRules.moveFigures(board, currentFigure, figure, king.current)
             dispatch(setArray(board.slice()))
             Board.changeTurn(currentTurn, setCurrentTurn)

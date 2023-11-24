@@ -27,7 +27,22 @@ class Board {
             firstMove: firstMove
         })
     }
-
+    static createFigureFromJson(json) {
+        if (!json.name)
+            return new Title({...json})
+        if (json.name === 'knight')
+            return new Knight({...json})
+        if (json.name === 'queen')
+            return new Queen({...json})
+        if (json.name === 'bishop')
+            return new Bishop({...json})
+        if (json.name === 'rook')
+            return new Rook({...json})
+        if (json.name === 'pawn')
+            return new Pawn({...json})
+        if (json.name === 'King')
+            return new King({...json})
+    }
     static createBoardFromJSON(json) {
         const newBoard = [];
         for (let j = 0; j < 8; j++) {
