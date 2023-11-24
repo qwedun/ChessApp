@@ -61,8 +61,8 @@
 }
 .collapse {
   background-color: #222222;
-  border-radius: 10px;
-  margin: 0 auto;
+  border-radius: 5px;
+  margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
   cursor: pointer;
@@ -70,13 +70,26 @@
   &:hover {
     background-color: #515151;
   }
-  display:block;
-  width: 55%;
-  vertical-align: center;
+  display:flex;
+  justify-content: center;
+  width: 70%;
 }
 .img {
   position: relative;
-  margin-right: 15px;
-  left: -1px;
-  top: 2px;
+}
+.logout {
+  background-color: #222222;
+  border-radius: 5px;
+  margin: 5px auto;
+  padding: 7px;
+  color: #E1E1E1;
+  cursor: pointer;
+
+  &:hover {
+    background-color: red;
+    opacity: 0.8;
+  }
+  display:flex;
+  justify-content: space-around;
+  width: 70%;
 }

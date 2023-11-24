@@ -2,8 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import { lazy } from "react";
 import { LayoutRouter } from "./pages/LayoutRouter/LayoutRouter";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsAuth, setIsAuthFalse } from "./store/slices/userSlice";
-import { Private } from "./hoc/Private";
 import { checkAuth } from "./store/slices/userSlice";
 
 const MainPage = lazy(() => import('./pages/MainPage/MainPage'))
@@ -28,7 +26,7 @@ export default function App () {
                 <Route path='login' element={<LoginForm/>}/>
                 <Route path='login/confirm' element={<ConfirmLoginPage/>}/>
                 <Route path='home' element={<HomePage/>}/>
-                <Route path='board' element={<GamePage/>}/>
+                <Route path='board' element={<GamePage isOnline={false}/>}/>
                 <Route path='socials' element={<MainPage/>}/>
                 <Route path='settings' element={<MainPage/>}/>
                 <Route path='archive' element={<MainPage/>}/>

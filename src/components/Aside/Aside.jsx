@@ -10,17 +10,20 @@ import leftArrow from '../../assets/angle-small-left.svg'
 import rightArrow from '../../assets/angle-small-right.svg'
 import logo from '../../assets/logo.png'
 import book from '../../assets/book.svg'
+import logoutImg from '../../assets/logout.svg'
 import {useState} from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from '../../store/slices/userSlice'
 
 export const Aside = () => {
 
     const [isHide, setIsHide] = useState(false);
-    const user = useSelector(state => state.user)
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     function handleClick(state) {
-        isHide ? setIsHide(false) : setIsHide(true)
+        isHide ? setIsHide(false) : setIsHide(true);
     }
 
     return (
@@ -47,6 +50,12 @@ export const Aside = () => {
                 </div>
                 <div>
                     <NavigationLink to='/settings' url={settings} isHide={isHide}>Settings</NavigationLink>
+                    <div
+                        onClick={() => dispatch(logout())}
+                        className={styles.logout}>
+                        <img alt='logout' src={logoutImg} />
+                        {!isHide && 'Logout'}
+                    </div>
                     <div className={styles.collapse}
                          onClick={() => handleClick(isHide)}>
                         {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}

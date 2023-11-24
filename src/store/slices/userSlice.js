@@ -71,15 +71,9 @@ const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
     reducers: {
-        setIsAuth(state) {
-            state.isAuthLoading = true;
-        },
-        setIsAuthFalse(state) {
-            state.isAuthLoading = false;
-        },
-        setError(state, action) {
-            state.error = action.payload;
-        },
+      setError(state, action) {
+          state.error = action.payload;
+      }
     },
     extraReducers: (builder) => {
         builder
@@ -136,6 +130,7 @@ const userSlice = createSlice({
             })
 
             .addCase(confirmLogin.pending, (state, action) => {
+                console.log(action)
                 state.isLoading = true;
             })
             .addCase(confirmLogin.fulfilled, (state, action) => {
@@ -146,8 +141,9 @@ const userSlice = createSlice({
                 state.elo = 9999999;
             })
             .addCase(confirmLogin.rejected, (state, action) => {
+                console.log(action)
                 state.isLoading = false;
-                state.error = action.payload.data.message
+                state.error = action.payload.response.data.error
             })
             .addCase(logout.pending, (state, action) => {
                 state.isLoading = true;

@@ -1,4 +1,3 @@
-import { playSound } from "../helpers/helpers";
 import {useEffect, useState, useRef} from 'react'
 import Cell from './cell.js'
 import { DndProvider } from "react-dnd";
@@ -7,11 +6,8 @@ import Board from "./board";
 import {GameRules} from "./gameRules";
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
-import capture from "../assets/sounds/capture.mp3";
-import move from '../assets/sounds/move-self.mp3'
-import check from '../assets/sounds/move-check.mp3'
 
-export default function Chessboard({board, setBoard}) {
+export default function Chessboard({board, setBoard, isOnline}) {
 
     const [currentFigure, setCurrentFigure] = useState()
     const [currentTurn, setCurrentTurn] = useState('white')
@@ -45,13 +41,18 @@ export default function Chessboard({board, setBoard}) {
 
         setCurrentFigure(figure)
 
-        if (figure.name && figure.color !== currentTurn) return
+        if (isOnline)
+            if (figure.color !== currentPlayer || currentTurn !== currentPlayer)
+                return
+
+        if (!isOnline)
+            if (figure.color !== currentTurn) return
 
         if (board.attackingFiguresCount > 1) {
-            if (figure.name === 'king') figure.checkMoves?.(board, false, king.current.underCheck, true);
+            if (figure.name === 'king') figure.checkMoves(board, false, king.current.underCheck, true);
             else return;
         }
-        else figure.checkMoves?.(board, false, king.current.underCheck, true, currentPlayer);
+        else figure.checkMoves(board, false, king.current.underCheck, true, currentPlayer);
     }
 
     return (
