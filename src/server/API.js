@@ -3,7 +3,7 @@ import axios from "axios";
 export const URL = 'https://api-jmjs.vercel.app'
 
 export const api = axios.create({
-    withCredentials: true,
+        withCredentials: true,
     baseURL: URL
 })
 

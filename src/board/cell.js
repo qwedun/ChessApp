@@ -1,10 +1,8 @@
 import styles from './cell.module.scss'
 import { useDrag, useDrop } from "react-dnd";
-import {memo, useEffect} from "react";
-import {limit, onSnapshot, orderBy, query} from "firebase/firestore";
-import Board from "./board";
 
 export default function Cell({cellColor, figure, currentFigure, currentTurn, handleClick}) {
+
     const [, drag] = useDrag(() => ({
         type: 'title',
     }))
@@ -17,6 +15,7 @@ export default function Cell({cellColor, figure, currentFigure, currentTurn, han
             isOver: !!monitor.isOver()
         })
     }), [currentFigure])
+
     return (
         <div key={Math.random()}
              className={`${styles.title} ${cellColor === 'black' ? styles.black : styles.white} ${isOver ? styles.isOver : null}`}
@@ -26,7 +25,7 @@ export default function Cell({cellColor, figure, currentFigure, currentTurn, han
             {figure.underAttack && <div className = {styles.underAttack}></div>}
             {figure.src && <img
                 ref={drag}
-                className={`${styles.img} ${figure.color === currentTurn ? styles.draggable : null}`}
+                    className={`${styles.img}`}
                 src={require("" + figure.src)}
                 alt="piece"/>}
         </div>

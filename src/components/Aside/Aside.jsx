@@ -1,6 +1,6 @@
 import styles from './aside.module.scss'
-import {NavigationLink} from "../UI/NavigationLink/NavigationLink";
-import {Avatar} from "../UI/Avatar/Avatar";
+import { NavigationLink } from "../UI/NavigationLink/NavigationLink";
+import Avatar from "../UI/Avatar/Avatar";
 import home from '../../assets/home.svg'
 import socials from '../../assets/users-alt.svg'
 import title from '../../assets/board.svg'
@@ -11,7 +11,7 @@ import rightArrow from '../../assets/angle-small-right.svg'
 import logo from '../../assets/logo.png'
 import book from '../../assets/book.svg'
 import logoutImg from '../../assets/logout.svg'
-import {useState} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from '../../store/slices/userSlice'
@@ -33,7 +33,7 @@ export const Aside = () => {
                     {isHide && <img alt='logo' src={logo} />}
                     {!isHide && <div className={styles.top}>Chess</div>}
                     {!isHide && <div className={styles.profile}>
-                        <Avatar/>
+                        <Avatar width='64px' height='64px'/>
                         <div className={styles.container}>
                             <div className={styles.info}>{user.login}</div>
                             <div className={styles.info}>{user.elo}</div>

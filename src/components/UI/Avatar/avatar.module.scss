@@ -1,7 +1,9 @@
-.imgWrapper {
-  text-align: center;
+.avatar {
+  display: inline-block;
 }
 .img {
-  border-radius: 50%;
-  border: solid 2px #81B34A;
+  display: inline-block;
+  border-radius: 10%;
+  border: solid 1px #81B34A;
+  margin-top: 4px;
 }

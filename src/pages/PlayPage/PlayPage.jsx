@@ -1,4 +1,4 @@
-import GameTypeTitle from '../../components/GameTypeTitle/GameTypeTitle'
+import GameTypeTitle from '../../components/UI/GameTypeTitle/GameTypeTitle'
 import styles from './playPage.module.scss'
 
 const PlayPage = () => {

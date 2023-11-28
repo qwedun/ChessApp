@@ -1,0 +1,11 @@
+.info {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+}
+.infoWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}

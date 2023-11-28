@@ -7,42 +7,6 @@ import Rook from "./figures/rook";
 import Queen from "./figures/queen";
 import Title from "./figures/title";
 class Board {
-
-    static changeTurn(currentTurn, setCurrentTurn) {
-        if (currentTurn === 'white') {
-            setCurrentTurn('black');
-        }
-        else {
-            setCurrentTurn('white');
-        }
-    }
-
-    static prepareForSending(figure) {
-        const {name, color, x, y, firstMove} = JSON.parse(JSON.stringify(figure));
-        return JSON.stringify({
-            name: name,
-            color: color,
-            x: x,
-            y: y,
-            firstMove: firstMove
-        })
-    }
-    static createFigureFromJson(json) {
-        if (!json.name)
-            return new Title({...json})
-        if (json.name === 'knight')
-            return new Knight({...json})
-        if (json.name === 'queen')
-            return new Queen({...json})
-        if (json.name === 'bishop')
-            return new Bishop({...json})
-        if (json.name === 'rook')
-            return new Rook({...json})
-        if (json.name === 'pawn')
-            return new Pawn({...json})
-        if (json.name === 'King')
-            return new King({...json})
-    }
     static createBoardFromJSON(json) {
         const newBoard = [];
         for (let j = 0; j < 8; j++) {
@@ -130,6 +94,19 @@ class Board {
             newBoard.push([])
             for (let i = 0; i < 8; i++) {
                 newBoard[j][i] = Figure.createFigure(board[j][i])
+            }
+        }
+        return newBoard
+    }
+    static makeOpposite(board) {
+        const newBoard = [];
+        for (let j = 0; j < 8; j++) {
+            newBoard.push([]);
+            for (let i = 0; i < 8; i++) {
+                const figure = Figure.createFigure(board[7-j][7-i])
+                figure.y = j;
+                figure.x = i;
+                newBoard[j][i] = figure;
             }
         }
         return newBoard

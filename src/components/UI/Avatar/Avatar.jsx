@@ -1,9 +1,9 @@
 import styles from './avatar.module.scss'
 import shrek from '../../../assets/shrek.jpg'
-export const Avatar = () => {
+const Avatar = ({...props}) => {
     return (
-        <div className={styles.imgWrapper}>
-            <img className={styles.img} src={shrek} width='64px' height='64px'/>
-        </div>
+        <img {...props} className={styles.img} src={shrek} />
     );
 };
+
+export default Avatar

@@ -13,10 +13,10 @@ export class GameRules {
 
         if (board.attackingFiguresCount > 1) {
             if (!King.isKingCanMove(board, currentKing))
-                console.log("LOSE")
+                alert("LOSE")
         } else {
             if (!King.isKingCanMove(board, currentKing) && !King.isKingCanBeDefended(board, currentKing))
-                console.log("LOSE")
+                alert("LOSE")
         }
     }
     static isStalemate(board, color) {

@@ -1,6 +1,5 @@
 import { api, URL } from "../server/API";
 import axios from "axios";
-import {setIsAuth} from "../store/slices/userSlice";
 
 export class authService {
     static async login(email, password) {

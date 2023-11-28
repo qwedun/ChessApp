@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { lazy } from "react";
 import { LayoutRouter } from "./pages/LayoutRouter/LayoutRouter";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { checkAuth } from "./store/slices/userSlice";
 
 const MainPage = lazy(() => import('./pages/MainPage/MainPage'))
@@ -11,6 +11,9 @@ const RegisterForm = lazy(() => import('./components/forms/RegisterForm'))
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'))
 const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 const ConfirmLoginPage = lazy(() => import('./pages/ConfirmLoginPage/ConfirmLoginPage'))
+const SessionPage = lazy(() => import('./pages/SessionPage/SessionPage'))
+const SessionPage2 = lazy(() => import('./pages/SessionPage/SessionPage2'))
+
 
 export default function App () {
 
@@ -32,6 +35,8 @@ export default function App () {
                 <Route path='archive' element={<MainPage/>}/>
                 <Route path='news' element={<MainPage/>}/>
                 <Route path='play' element={<PlayPage/>}/>
+                <Route path='play/1' element={<SessionPage isOnline={true}/>}/>
+                <Route path='play/2' element={<SessionPage2 isOnline={true}/>}/>
             </Route>
         </Routes>
     )

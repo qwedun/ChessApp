@@ -9,22 +9,22 @@ import {useDispatch} from "react-redux";
 import {collection, limit, onSnapshot, orderBy, query, addDoc, serverTimestamp} from "firebase/firestore";
 import {db} from "../server/firestore";
 
-export default function Chessboard({board, setBoard, isOnline}) {
+export default function Chessboard({board, setBoard, isOnline, currentPlayer}) {
 
     const [currentFigure, setCurrentFigure] = useState()
     const [currentTurn, setCurrentTurn] = useState('white')
-    const [currentPlayer] = useState('white')
 
     const colors = {
         black: 'white',
         white: 'black'
     }
-
     const dispatch = useDispatch()
 
     const king = useRef(Board.findKing(board, currentTurn))
 
-    const posRefs = collection(db, 'session')
+    let posRefs
+    if (isOnline) posRefs = collection(db, 'session')
+    else posRefs = collection(db, 'single')
 
     useEffect(() => {
         const queryPos = query(posRefs, orderBy('timestamp', 'desc'), limit(1))
@@ -35,13 +35,22 @@ export default function Chessboard({board, setBoard, isOnline}) {
             })
             if (data.length === 0) return
             const board = Board.createBoardFromJSON(JSON.parse(data[0].board))
-            setBoard(board)
+            if (currentPlayer === data[0].currentPlayer)
+                setBoard(Board.updateBoard(board, colors[currentTurn], currentPlayer))
+            else {
+                const newBoard = Board.makeOpposite(board)
+                setBoard(Board.updateBoard(newBoard, colors[currentTurn], currentPlayer))
+            }
+
+            setCurrentTurn(colors[data[0].turn])
         })
     }, []);
 
     const handleSubmit = async(board) => {
         await addDoc(posRefs, {
             board: JSON.stringify(board),
+            currentPlayer: currentPlayer,
+            turn: currentTurn,
             timestamp: serverTimestamp(),
         })
     }
@@ -52,14 +61,13 @@ export default function Chessboard({board, setBoard, isOnline}) {
             GameRules.isCheckMate(king.current, board)
             GameRules.isStalemate(board, currentTurn)
         }
-    }, [board, currentTurn]);
+    }, [board]);
 
     function handleClick(figure) {
+        console.log(board)
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, king.current)
             dispatch(setArray(board.slice()))
-            Board.changeTurn(currentTurn, setCurrentTurn)
-            setBoard(Board.updateBoard(board, colors[currentTurn], currentPlayer))
             handleSubmit(board)
         }
         Board.removeTitles(board)
@@ -83,7 +91,7 @@ export default function Chessboard({board, setBoard, isOnline}) {
     return (
         <DndProvider backend={HTML5Backend}>
             <div
-                style={{display: 'flex', width: '640px', flexWrap: 'wrap', height: '640px', position: 'relative'}}>
+                style={{display: 'flex', width: '480px', flexWrap: 'wrap', height: '480px', position: 'relative'}}>
                 {board.map((value, yIndex) => (
                     value.map((item, xIndex) => {
                         return (

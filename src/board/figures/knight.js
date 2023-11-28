@@ -10,7 +10,6 @@ class Knight {
 
     checkMoves(board, checkForAttack, isKingChecked, isRender) {
         const color = this.color
-
         if (this.kingDefender && !checkForAttack) return
 
         Figure.knightTitles(board, this.x, this.y).forEach(title => {
