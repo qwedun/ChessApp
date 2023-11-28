@@ -18,6 +18,8 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer}) {
         black: 'white',
         white: 'black'
     }
+
+
     const dispatch = useDispatch()
 
     const king = useRef(Board.findKing(board, currentTurn))
