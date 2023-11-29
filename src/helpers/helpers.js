@@ -15,3 +15,18 @@ export const playSound = (src) => {
     new Audio(src).play()
 }
 
+export const chessNotationString = (y, x, color) => {
+    let resString, resY, resX
+
+    if (color === 'white')  {
+        resString = 'abcdefgh';
+        resX = resString[x];
+        resY = 8 - y;
+    } else {
+        resString = 'hgfedcba'
+        resX = resString[x]
+        resY = 1 + y;
+    }
+
+    return `${resX}${resY}`
+}

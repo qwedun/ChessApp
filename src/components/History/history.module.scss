@@ -1,0 +1,29 @@
+.history {
+  height: 100%;
+  border-bottom: solid 3px #749654;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.light {
+  background-color: #81B34A;
+  height: 24px;
+}
+.dark {
+  background-color: #749654;
+  height: 24px;
+}
+.container {
+  display: flex;
+  font-size: 20px;
+  color: #222222;
+  font-weight: bold;
+}
+.flex {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  vertical-align: center;
+  position: relative;
+  padding: 0 6px;
+}

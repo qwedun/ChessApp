@@ -6,19 +6,17 @@ import Board from "./board";
 import {GameRules} from "./gameRules";
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
-import {collection, limit, onSnapshot, orderBy, query, addDoc, serverTimestamp} from "firebase/firestore";
+import {collection, limit, onSnapshot, orderBy, query, addDoc} from "firebase/firestore";
 import {db} from "../server/firestore";
 
-export default function Chessboard({board, setBoard, isOnline, currentPlayer}) {
+export default function Chessboard({board, setBoard, isOnline, currentPlayer, currentTurn, setCurrentTurn}) {
 
     const [currentFigure, setCurrentFigure] = useState()
-    const [currentTurn, setCurrentTurn] = useState('white')
 
     const colors = {
         black: 'white',
         white: 'black'
     }
-
 
     const dispatch = useDispatch()
 
@@ -43,7 +41,6 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer}) {
                 const newBoard = Board.makeOpposite(board)
                 setBoard(Board.updateBoard(newBoard, colors[currentTurn], currentPlayer))
             }
-
             setCurrentTurn(colors[data[0].turn])
         })
     }, []);
@@ -53,7 +50,8 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer}) {
             board: JSON.stringify(board),
             currentPlayer: currentPlayer,
             turn: currentTurn,
-            timestamp: serverTimestamp(),
+            timestamp: Date.now(),
+            currentFigure: JSON.stringify(currentFigure)
         })
     }
 

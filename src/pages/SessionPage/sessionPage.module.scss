@@ -1,5 +1,6 @@
 .mainWrapper {
   display: flex;
+  justify-content: space-between;
 }
 .info {
   display: flex;
@@ -7,4 +8,29 @@
 .flexContainer {
   display: flex;
   justify-content: space-between;
+}
+.session {
+  background-color: #E1E1E1;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  border-bottom: solid 3px #749654;
+  height: 20%;
+}
+.history {
+  height: 100%;
+  border-bottom: solid 3px #749654;
+}
+.chat {
+  height: 50%;
+}
+.container {
+  background-color: #81B34A;
+  height: 24px;
+}
+.container1 {
+  background-color: #749654;
+  height: 24px;
 }

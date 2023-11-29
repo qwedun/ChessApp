@@ -7,14 +7,17 @@ const GamePage = ({isOnline}) => {
 
     const [board, setBoard] = useState(Board.createBoard('white'))
     const [currentPlayer] = useState('white')
+    const [currentTurn, setCurrentTurn] = useState('white')
 
     return (
         <div style={{display: 'flex'}}>
             <Chessboard
+                currentPlayer={currentPlayer}
+                currentTurn={currentTurn}
+                setCurrentTurn={setCurrentTurn}
                 board={board}
                 setBoard={setBoard}
                 isOnline={isOnline}
-                currentPlayer={currentPlayer}
             />
             <SessionHistory board={board}/>
         </div>
