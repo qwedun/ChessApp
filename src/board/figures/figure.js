@@ -182,7 +182,27 @@ class Figure {
     }
 
     static moveFigures(currentFigure, figure, board)  {
-        if (currentFigure.name === 'pawn') currentFigure.firstMove = false;
+        if (currentFigure.firstMove) currentFigure.firstMove = false;
+
+        if (figure.canCastleRight) {
+            board[figure.y][figure.x - 1] = new Rook({
+                x: figure.x - 1,
+                y: figure.y,
+                color: currentFigure.color,
+                firstMove: false
+            });
+            board[figure.y][7] = new Title({x: 7, y: figure.y})
+        }
+
+        if (figure.canCastleLeft) {
+            board[figure.y][figure.x + 1] = new Rook({
+                x: figure.x + 1,
+                y: figure.y,
+                color: currentFigure.color,
+                firstMove: false
+            });
+            board[figure.y][0] = new Title({x: 0, y: figure.y})
+        }
 
         board[figure.y][figure.x] = board[currentFigure.y][currentFigure.x];
         board[currentFigure.y][currentFigure.x] = new Title({x: currentFigure.x, y: currentFigure.y});

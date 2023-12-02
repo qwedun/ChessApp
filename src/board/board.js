@@ -50,14 +50,8 @@ class Board {
         return board
     }
 
-    static updateBoard(board, color, currentPlayer) {
+    static updateBoard(board, color, currentPlayer, isOnline) {
         const newBoard = Board.cloneBoard(board)
-
-        for (let j = 0; j < 8; j++) {
-            for (let i = 0; i < 8; i++) {
-                const figure = newBoard[j][i]
-            }
-        }
 
         for (let j = 0; j < 8; j++) {
             for (let i = 0; i < 8; i++) {
@@ -70,7 +64,7 @@ class Board {
         }
 
         King.checkForKing(Board.findKing(newBoard, color), newBoard, currentPlayer)
-
+        King.isKingCanCastle(Board.findKing(newBoard, color), currentPlayer, newBoard, isOnline)
 
         for (let j = 0; j < 8; j++) {
             for (let i = 0; i < 8; i++) {

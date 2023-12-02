@@ -36,10 +36,10 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer, cu
             if (data.length === 0) return
             const board = Board.createBoardFromJSON(JSON.parse(data[0].board))
             if (currentPlayer === data[0].currentPlayer)
-                setBoard(Board.updateBoard(board, colors[currentTurn], currentPlayer))
+                setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
             else {
                 const newBoard = Board.makeOpposite(board)
-                setBoard(Board.updateBoard(newBoard, colors[currentTurn], currentPlayer))
+                setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
             }
             setCurrentTurn(colors[data[0].turn])
         })
@@ -56,10 +56,10 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer, cu
     }
 
     useEffect(() => {
-        king.current = Board.findKing(board, currentTurn)
+        king.current = Board.findKing(board, currentTurn);
         if (king.current.underCheck) {
-            GameRules.isCheckMate(king.current, board)
-            GameRules.isStalemate(board, currentTurn)
+            GameRules.isCheckMate(king.current, board);
+            GameRules.isStalemate(board, currentTurn);
         }
     }, [board]);
 

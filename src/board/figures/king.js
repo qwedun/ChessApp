@@ -18,7 +18,7 @@ class King {
 
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
-                if (board[this.y][this.x] === board[i][j]) continue;
+                if (this === board[i][j]) continue;
                 const title = board[i][j]
 
                 if (title.name || checkForAttack) {
@@ -38,7 +38,14 @@ class King {
                     Figure.setProperty(title, 'canMove', 'kingCanMove', isRender)
             }
         }
-        King.checkForKing(board[this.y][this.x], board, currentPlayer)
+
+        if (board[this.y][this.x - 2]?.canCastleLeft)
+            Figure.setProperty(board[this.y][this.x - 2], 'canMove', 'kingCanMove', isRender)
+
+        if (board[this.y][this.x + 2]?.canCastleRight)
+            Figure.setProperty(board[this.y][this.x + 2], 'canMove', 'kingCanMove', isRender)
+
+        //King.checkForKing(board[this.y][this.x], board, currentPlayer)
     }
 
 
@@ -47,8 +54,6 @@ class King {
         const yMax = (king.y === 7) ? 7 : king.y + 1;
         const xMin = (king.x === 0) ? 0 : king.x - 1;
         const xMax = (king.x === 7) ? 7 : king.x + 1;
-
-
 
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
@@ -68,7 +73,6 @@ class King {
     }
 
     static isKingCanBeDefended(board) {
-
         for (let row of board) {
             for (let figure of row) {
 
@@ -100,6 +104,33 @@ class King {
                     this.setAttack(king, attackingFigures, title)
                 }
         })
+    }
+
+    static isKingCanCastle(king, currentPlayer, board, isOnline) {
+        if (!king.firstMove || king.underCheck) return;
+
+        const y = (isOnline) ? 7 : (currentPlayer === 'white') ? 7 : 0;
+
+        if (board[y][0].name && !board[y][0].firstMove) return
+        if (board[y][7].name && !board[y][7].firstMove) return
+
+        let canCastleLeft = true, canCastleRight = true;
+
+        for (let i = 3; i > 0; i--) {
+            const figure = board[y][i];
+            if (figure.name || figure.canBeAttacked) canCastleLeft = false;
+        }
+
+        for (let i = 5; i < 7; i++) {
+            const figure = board[y][i];
+            if (figure.name || figure.canBeAttacked) canCastleRight = false;
+        }
+
+        if (canCastleRight)
+            board[y][6].canCastleRight = true;
+
+        if (canCastleLeft)
+            board[y][2].canCastleLeft = true;
     }
 
     static setTitleBehindKing(board, y, x, color) {

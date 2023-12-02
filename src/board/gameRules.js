@@ -4,6 +4,7 @@ import Board from "./board";
 import {playSound} from "../helpers/helpers";
 import capture from "../assets/sounds/capture.mp3";
 import move from '../assets/sounds/move-self.mp3'
+import castle from '../assets/sounds/castle.mp3'
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
 
@@ -31,8 +32,9 @@ export class GameRules {
         return true
     }
     static moveFigures(board, currentFigure, figure) {
-        if (figure.underAttack) playSound(capture);
-        if (figure.canMove) playSound(move);
+        if (figure.canCastleLeft || figure.canCastleRight) playSound(castle)
+        else if (figure.underAttack) playSound(capture);
+        else if (figure.canMove) playSound(move);
         Figure.moveFigures(currentFigure, figure, board);
     }
 }

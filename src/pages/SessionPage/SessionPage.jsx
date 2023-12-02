@@ -5,7 +5,7 @@ import Board from "../../board/board";
 import styles from './sessionPage.module.scss'
 import Timer from '../../components/Timer/Timer'
 import PlayerInfo from '../../components/UI/InGamePlayerInfo/InGamePlayerInfo'
-import {collection, limit, onSnapshot, orderBy, query} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {db} from "../../server/firestore";
 
 const SessionPage = ({isOnline}) => {

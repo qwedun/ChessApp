@@ -3,18 +3,10 @@ import styles from './historyString.module.scss'
 
 const HistoryString = ({data, prevData, currentPlayer}) => {
     const figure = JSON.parse(data.currentFigure)
-    let pos;
-
     const name = figure.name.charAt(0).toUpperCase() + figure.name.slice(1)
-
     const src = require(`../../board/assets/${figure.color}${name}.svg`)
-
-    pos = chessNotationString(figure.y, figure.x, figure.color)
-
-    //else pos = chessNotationString(7 - figure.y, 7 - figure.x)
+    const pos = chessNotationString(figure.y, figure.x, figure.color)
     const previewName = (name === 'Pawn' ? '' : (name === 'Knight' ? 'N' : name[0]))
-
-
 
     return (
         <div>

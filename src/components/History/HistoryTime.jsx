@@ -15,7 +15,7 @@ const HistoryTime = ({data, prevData}) => {
         ratio = (diff / rapid * 100) > 100 ? '100%' : diff / rapid * 100 + '%';
         seconds = (seconds < 10 ? '0' + seconds : seconds);
         milliseconds = (milliseconds < 10 ? '0' + milliseconds : milliseconds)
-        time = (minutes ? minutes + ':' + seconds + ':' + milliseconds : seconds + ':' + milliseconds);
+        time = (minutes ? minutes + ':' + seconds + '.' + milliseconds : seconds + '.' + milliseconds);
     }
     return (
         <div>
