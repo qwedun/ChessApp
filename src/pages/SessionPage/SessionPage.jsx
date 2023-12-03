@@ -62,7 +62,6 @@ const SessionPage = ({isOnline}) => {
 
                 </div>
                 <History history={history} currentPlayer={currentPlayer}/>
-                <ControlPanel data={data} board={board} setBoard={setBoard} currentPlayer={currentPlayer}/>
                 <div className={styles.chat}>
 
                 </div>
