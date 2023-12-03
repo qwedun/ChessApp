@@ -65,6 +65,7 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer, cu
 
     function handleClick(figure) {
         console.log(board)
+        if (board.showable) return
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, king.current)
             dispatch(setArray(board.slice()))

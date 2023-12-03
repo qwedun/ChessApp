@@ -25,8 +25,12 @@ class Board {
                     newBoard[j][i] = new Queen({...figure})
                 else if (figure.name === 'king')
                     newBoard[j][i] = new King({...figure})
-                else
-                    newBoard[j][i] = new Title({...figure})
+                else {
+                    if (figure.enPassant && !figure.secondMove)
+                        newBoard[j][i] = new Title({...figure, secondMove: true})
+                    else
+                        newBoard[j][i] = new Title({...figure, secondMove: false, enPassant: false})
+                }
             }
         }
         return newBoard

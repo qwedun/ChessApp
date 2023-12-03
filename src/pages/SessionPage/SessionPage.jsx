@@ -7,6 +7,7 @@ import Timer from '../../components/Timer/Timer'
 import PlayerInfo from '../../components/UI/InGamePlayerInfo/InGamePlayerInfo'
 import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {db} from "../../server/firestore";
+import ControlPanel from "../../components/ControlPanel/ControlPanel";
 
 const SessionPage = ({isOnline}) => {
 
@@ -14,6 +15,7 @@ const SessionPage = ({isOnline}) => {
     const [currentPlayer] = useState('white')
     const [currentTurn, setCurrentTurn] = useState('white')
     const [history, setHistory] = useState([])
+    const [data, setData] = useState([])
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
@@ -31,6 +33,7 @@ const SessionPage = ({isOnline}) => {
                 local.push(data.slice(i, i + 2))
             }
             setHistory(local)
+            setData(data)
         })
     }, []);
 
@@ -59,6 +62,7 @@ const SessionPage = ({isOnline}) => {
 
                 </div>
                 <History history={history} currentPlayer={currentPlayer}/>
+                <ControlPanel data={data} board={board} setBoard={setBoard} currentPlayer={currentPlayer}/>
                 <div className={styles.chat}>
 
                 </div>
