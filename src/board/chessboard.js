@@ -6,17 +6,12 @@ import Board from "./board";
 import {GameRules} from "./gameRules";
 import {setArray} from "../store/slices/historySlice";
 import {useDispatch} from "react-redux";
-import {collection, limit, onSnapshot, orderBy, query, addDoc} from "firebase/firestore";
+import {collection, addDoc} from "firebase/firestore";
 import {db} from "../server/firestore";
 
-export default function Chessboard({board, setBoard, isOnline, currentPlayer, currentTurn, setCurrentTurn}) {
+export default function Chessboard({board, isOnline, currentPlayer, currentTurn}) {
 
     const [currentFigure, setCurrentFigure] = useState()
-
-    const colors = {
-        black: 'white',
-        white: 'black'
-    }
 
     const dispatch = useDispatch()
 
@@ -25,25 +20,6 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer, cu
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
     else posRefs = collection(db, 'single')
-
-    useEffect(() => {
-        const queryPos = query(posRefs, orderBy('timestamp', 'desc'), limit(1))
-        onSnapshot(queryPos, (snapshot) => {
-            const data = [];
-            snapshot.forEach(doc => {
-                data.push({...doc.data()})
-            })
-            if (data.length === 0) return
-            const board = Board.createBoardFromJSON(JSON.parse(data[0].board))
-            if (currentPlayer === data[0].currentPlayer)
-                setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
-            else {
-                const newBoard = Board.makeOpposite(board)
-                setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
-            }
-            setCurrentTurn(colors[data[0].turn])
-        })
-    }, []);
 
     const handleSubmit = async(board) => {
         await addDoc(posRefs, {
@@ -64,7 +40,6 @@ export default function Chessboard({board, setBoard, isOnline, currentPlayer, cu
     }, [board]);
 
     function handleClick(figure) {
-        console.log(board)
         if (board.showable) return
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, king.current)
