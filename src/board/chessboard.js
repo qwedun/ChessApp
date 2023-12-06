@@ -24,7 +24,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     const [pawnPassed, setPawnPassed] = useState(null);
     const [pawnIndex, setPawnIndex] = useState(null);
 
-    const [type, setType] = useState()
+    const type = useRef();
     const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
     const king = useRef(Board.findKing(board, currentPlayer));
 
@@ -39,7 +39,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
             turn: currentTurn,
             timestamp: Date.now(),
             currentFigure: JSON.stringify(currentFigure),
-            type: type || 'move',
+            type: type.current
         })
     }
 
@@ -72,7 +72,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
         console.log(board)
 
         if (figure.underAttack || figure.canMove) {
-            GameRules.moveFigures(board, currentFigure, figure, setType);
+            GameRules.moveFigures(board, currentFigure, figure, type);
             if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
                 handleSubmit(board);
         }

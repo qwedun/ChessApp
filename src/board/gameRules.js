@@ -24,10 +24,10 @@ export class GameRules {
         alert('PAT')
         return true
     }
-    static moveFigures(board, currentFigure, figure, setType) {
-        if ((figure.canCastleLeft || figure.canCastleRight) && currentFigure.name === 'king') setType('castle')
-        else if (figure.underAttack) setType('capture')
-        else if (figure.canMove) setType('move')
+    static moveFigures(board, currentFigure, figure, type) {
+        if ((figure.canCastleLeft || figure.canCastleRight) && currentFigure.name === 'king') type.current = 'castle'
+        else if (figure.underAttack) type.current = 'capture'
+        else if (figure.canMove) type.current = 'move'
         Figure.moveFigures(currentFigure, figure, board);
     }
     static isPawnPassed(board, isOnline, currentPlayer, setPawnIndex) {
