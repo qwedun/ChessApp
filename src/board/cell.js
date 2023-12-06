@@ -1,7 +1,7 @@
 import styles from './cell.module.scss'
 import { useDrag, useDrop } from "react-dnd";
 
-export default function Cell({cellColor, figure, currentFigure, currentTurn, handleClick}) {
+export default function Cell({cellColor, figure, currentFigure, handleClick}) {
 
     const [, drag] = useDrag(() => ({
         type: 'title',
@@ -25,7 +25,7 @@ export default function Cell({cellColor, figure, currentFigure, currentTurn, han
             {figure.underAttack && <div className = {styles.underAttack}></div>}
             {figure.src && <img
                 ref={drag}
-                    className={`${styles.img}`}
+                className={styles.img}
                 src={require("" + figure.src)}
                 alt="piece"/>}
         </div>

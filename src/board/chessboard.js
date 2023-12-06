@@ -3,19 +3,21 @@ import Cell from './cell.js'
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Board from "./board";
+import Figure from "./figures/figure";
 import {GameRules} from "./gameRules";
-import {setArray} from "../store/slices/historySlice";
-import {useDispatch} from "react-redux";
 import {collection, addDoc} from "firebase/firestore";
 import {db} from "../server/firestore";
+import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
+import {playSound} from "../helpers/helpers";
+import move from '../assets/sounds/move-self.mp3'
 
 export default function Chessboard({board, isOnline, currentPlayer, currentTurn}) {
 
-    const [currentFigure, setCurrentFigure] = useState()
+    const [currentFigure, setCurrentFigure] = useState();
+    const [pawnPassed, setPawnPassed] = useState(null);
+    const [pawnIndex, setPawnIndex] = useState(null);
 
-    const dispatch = useDispatch()
-
-    const king = useRef(Board.findKing(board, currentTurn))
+    const king = useRef(Board.findKing(board, currentTurn));
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
@@ -27,7 +29,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn}
             currentPlayer: currentPlayer,
             turn: currentTurn,
             timestamp: Date.now(),
-            currentFigure: JSON.stringify(currentFigure)
+            currentFigure: JSON.stringify(currentFigure),
         })
     }
 
@@ -39,15 +41,23 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn}
         }
     }, [board]);
 
+    useEffect(() => {
+        Figure.createFigureFromName(board, pawnPassed, pawnIndex, currentPlayer);
+        setPawnIndex(null);
+        if (pawnIndex) handleSubmit(board)
+    }, [pawnPassed]);
+
+
     function handleClick(figure) {
         if (board.showable) return
-        if (figure.underAttack || figure.canMove) {
-            GameRules.moveFigures(board, currentFigure, figure, king.current)
-            dispatch(setArray(board.slice()))
-            handleSubmit(board)
-        }
-        Board.removeTitles(board)
 
+        if (figure.underAttack || figure.canMove) {
+            GameRules.moveFigures(board, currentFigure, figure, king.current);
+            if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
+                handleSubmit(board);
+        }
+
+        Board.removeTitles(board)
         setCurrentFigure(figure)
 
         if (isOnline)
@@ -67,13 +77,18 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn}
     return (
         <DndProvider backend={HTML5Backend}>
             <div
-                style={{display: 'flex', width: '480px', flexWrap: 'wrap', height: '480px', position: 'relative'}}>
+                style={{display: 'flex', width: '560px', flexWrap: 'wrap', height: '560px', position: 'relative'}}>
+                {pawnIndex && <PawnPassedMenu
+                    currentPlayer={currentPlayer}
+                    pawnPassed={pawnPassed}
+                    setPawnPassed={setPawnPassed}
+                    pawnIndex={pawnIndex}
+                />}
                 {board.map((value, yIndex) => (
                     value.map((item, xIndex) => {
                         return (
                             <Cell
                                 handleClick={handleClick}
-                                currentTurn={currentTurn}
                                 currentFigure={currentFigure}
                                 figure = {item}
                                 cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}>

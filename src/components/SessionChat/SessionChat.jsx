@@ -9,7 +9,7 @@ const SessionChat = ({messages, chatRef, currentPlayer}) => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         e.target[0].value = '';
-        if (!message) return
+        if (!message.trim()) return
 
         await addDoc(chatRef, {
             message: message,

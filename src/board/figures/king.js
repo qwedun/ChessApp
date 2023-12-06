@@ -45,7 +45,7 @@ class King {
         if (board[this.y][this.x + 2]?.canCastleRight)
             Figure.setProperty(board[this.y][this.x + 2], 'canMove', 'kingCanMove', isRender)
 
-        //King.checkForKing(board[this.y][this.x], board, currentPlayer)
+        King.checkForKing(board[this.y][this.x], board, currentPlayer)
     }
 
 
@@ -116,21 +116,37 @@ class King {
 
         let canCastleLeft = true, canCastleRight = true;
 
-        for (let i = 3; i > 0; i--) {
+        for (let i = king.x - 1; i > 0; i--) {
             const figure = board[y][i];
-            if (figure.name || figure.canBeAttacked) canCastleLeft = false;
+            if (currentPlayer === 'white' && i === 1 && !figure.name) continue
+
+            else if (figure.name || figure.canBeAttacked) {
+                canCastleLeft = false;
+                break
+            }
         }
 
-        for (let i = 5; i < 7; i++) {
+        for (let i = king.x + 1; i < 7; i++) {
             const figure = board[y][i];
-            if (figure.name || figure.canBeAttacked) canCastleRight = false;
+            if (currentPlayer === 'black' && i === 6 && !figure.name) continue
+
+            else if (figure.name || figure.canBeAttacked) {
+                canCastleRight = false;
+                break;
+            }
         }
 
-        if (canCastleRight)
-            board[y][6].canCastleRight = true;
+        if (canCastleRight) {
+            if (currentPlayer === 'black')
+                board[y][5].canCastleRight = true;
+            else board[y][6].canCastleRight = true;
+        }
 
-        if (canCastleLeft)
-            board[y][2].canCastleLeft = true;
+        if (canCastleLeft) {
+            if (currentPlayer === 'black')
+                board[y][1].canCastleLeft = true;
+            else board[y][2].canCastleLeft = true;
+        }
     }
 
     static setTitleBehindKing(board, y, x, color) {

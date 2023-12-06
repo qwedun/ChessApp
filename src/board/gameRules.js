@@ -1,13 +1,10 @@
 import King from "./figures/king";
 import Figure from "./figures/figure";
-import Board from "./board";
 import {playSound} from "../helpers/helpers";
 import capture from "../assets/sounds/capture.mp3";
 import move from '../assets/sounds/move-self.mp3'
 import castle from '../assets/sounds/castle.mp3'
-import {setArray} from "../store/slices/historySlice";
-import {useDispatch} from "react-redux";
-
+import Knight from "./figures/knight";
 export class GameRules {
     static isCheckMate(currentKing, board) {
         if (!currentKing.underCheck) return
@@ -31,10 +28,20 @@ export class GameRules {
         alert('PAT')
         return true
     }
-    static moveFigures(board, currentFigure, figure) {
-        if (figure.canCastleLeft || figure.canCastleRight) playSound(castle)
-        else if (figure.underAttack) playSound(capture);
-        else if (figure.canMove) playSound(move);
+    static moveFigures(board, currentFigure, figure, type) {
+        if ((figure.canCastleLeft || figure.canCastleRight) && currentFigure.name === 'king') type.current = castle;
+        else if (figure.underAttack) type.current = 'attack';
+        else if (figure.canMove) type.current = 'move';
         Figure.moveFigures(currentFigure, figure, board);
+    }
+    static isPawnPassed(board, isOnline, currentPlayer, setPawnIndex) {
+        for (let i = 0; i < 8; i++) {
+            const figure = board[0][i];
+            if (figure.color === currentPlayer && figure.name === 'pawn') {
+                setPawnIndex(i)
+                return true
+            }
+        }
+        return false
     }
 }

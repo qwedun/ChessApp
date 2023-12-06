@@ -1,10 +1,9 @@
 .history {
   height: 350px;
   border-bottom: solid 3px #749654;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
-
 .light {
   background-color: #81B34A;
   height: 24px;

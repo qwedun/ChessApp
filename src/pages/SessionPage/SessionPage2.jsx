@@ -17,7 +17,7 @@ const SessionPage = ({isOnline}) => {
 
     const [board, setBoard] = useState(Board.createBoard('black'));
     const [currentPlayer] = useState('black');
-    const [currentTurn, setCurrentTurn] = useState('black');
+    const [currentTurn, setCurrentTurn] = useState('white');
     const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Chessboard from "../../board/chessboard";
 import History from "../../components/History/History";
 import Board from "../../board/board";
@@ -21,7 +21,6 @@ const SessionPage = ({isOnline}) => {
     const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
-
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
 
@@ -41,7 +40,6 @@ const SessionPage = ({isOnline}) => {
             for (let i = 0; i < data.length; i += 2) {
                 local.push(data.slice(i, i + 2))
             }
-
             setHistory(local)
             setData(data)
 
@@ -53,7 +51,7 @@ const SessionPage = ({isOnline}) => {
                 const newBoard = Board.makeOpposite(board)
                 setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
             }
-            setCurrentTurn(colors[data[data.length - 1].turn])
+            setCurrentTurn(colors[data[data.length - 1].turn]);
         })
 
         onSnapshot(queryChat, snapshot => {

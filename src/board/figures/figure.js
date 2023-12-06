@@ -77,7 +77,17 @@ class Figure {
             return new Bishop({...figure})
     }
 
-
+    static createFigureFromName(board, name, pawnIndex, currentPlayer) {
+        const settings = {
+            x: pawnIndex,
+            y: 0,
+            color:currentPlayer,
+        };
+        if (name === 'Queen') board[0][pawnIndex] = new Queen(settings);
+        else if (name === 'Knight') board[0][pawnIndex] = new Knight(settings);
+        else if (name === 'Rook') board[0][pawnIndex] = new Rook(settings);
+        else board[0][pawnIndex] = new Bishop(settings);
+    }
 
     static setProperty(title, property, canBeProperty, isRender) {
         if (isRender)
@@ -190,7 +200,7 @@ class Figure {
                 }
         }
 
-        if (figure.canCastleRight) {
+        if (figure.canCastleRight && currentFigure.name === 'king') {
             board[figure.y][figure.x - 1] = new Rook({
                 x: figure.x - 1,
                 y: figure.y,
@@ -200,7 +210,7 @@ class Figure {
             board[figure.y][7] = new Title({x: 7, y: figure.y})
         }
 
-        if (figure.canCastleLeft) {
+        if (figure.canCastleLeft && currentFigure.name === 'king') {
             board[figure.y][figure.x + 1] = new Rook({
                 x: figure.x + 1,
                 y: figure.y,
