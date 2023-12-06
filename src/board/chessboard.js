@@ -56,7 +56,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
         } else {
             if (sound === 'move') playSound(move);
             else if (sound === 'castle') playSound(castle);
-            else playSound('capture');
+            else playSound(capture);
         }
     }, [board]);
 
