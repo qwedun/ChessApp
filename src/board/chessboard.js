@@ -78,7 +78,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
         }
 
         Board.removeTitles(board)
-        setCurrentFigure(figure)
+        if (!pawnIndex) setCurrentFigure(figure)
 
         if (isOnline)
             if (figure.color !== currentPlayer || currentTurn !== currentPlayer)
