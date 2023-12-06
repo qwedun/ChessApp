@@ -9,15 +9,24 @@ import {collection, addDoc} from "firebase/firestore";
 import {db} from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
 import {playSound} from "../helpers/helpers";
+import capture from "../assets/sounds/capture.mp3";
 import move from '../assets/sounds/move-self.mp3'
+import castle from '../assets/sounds/castle.mp3'
+import check from '../assets/sounds/move-check.mp3'
 
-export default function Chessboard({board, isOnline, currentPlayer, currentTurn}) {
 
+export default function Chessboard({board, isOnline, currentPlayer, currentTurn, sound}) {
+    const colors = {
+        black: 'white',
+        white: 'black'
+    }
     const [currentFigure, setCurrentFigure] = useState();
     const [pawnPassed, setPawnPassed] = useState(null);
     const [pawnIndex, setPawnIndex] = useState(null);
 
-    const king = useRef(Board.findKing(board, currentTurn));
+    const [type, setType] = useState()
+    const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
+    const king = useRef(Board.findKing(board, currentPlayer));
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
@@ -30,14 +39,24 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn}
             turn: currentTurn,
             timestamp: Date.now(),
             currentFigure: JSON.stringify(currentFigure),
+            type: type || 'move',
         })
     }
 
     useEffect(() => {
-        king.current = Board.findKing(board, currentTurn);
+        king.current = Board.findKing(board, currentPlayer);
+        oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
+
         if (king.current.underCheck) {
+            playSound(check);
             GameRules.isCheckMate(king.current, board);
             GameRules.isStalemate(board, currentTurn);
+        } else if (oppositeKing.current.underCheck) {
+            playSound(check)
+        } else {
+            if (sound === 'move') playSound(move);
+            else if (sound === 'castle') playSound(castle);
+            else playSound('capture');
         }
     }, [board]);
 
@@ -50,9 +69,10 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn}
 
     function handleClick(figure) {
         if (board.showable) return
+        console.log(board)
 
         if (figure.underAttack || figure.canMove) {
-            GameRules.moveFigures(board, currentFigure, figure, king.current);
+            GameRules.moveFigures(board, currentFigure, figure, setType);
             if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
                 handleSubmit(board);
         }

@@ -12,7 +12,7 @@ export const validateEmail = (email) => {
 };
 
 export const playSound = (src) => {
-    new Audio(src).play()
+    new Audio(src).play().catch(e => console.log(e))
 }
 
 export const chessNotationString = (y, x, color) => {

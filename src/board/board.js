@@ -66,7 +66,6 @@ class Board {
                     figure.checkMoves(newBoard, true, false, false, currentPlayer)
             }
         }
-        console.log(Board.findKing(newBoard, color))
         King.checkForKing(Board.findKing(newBoard, color), newBoard, currentPlayer)
         King.isKingCanCastle(Board.findKing(newBoard, color), currentPlayer, newBoard, isOnline)
 

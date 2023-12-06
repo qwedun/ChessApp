@@ -21,6 +21,7 @@ const SessionPage = ({isOnline}) => {
     const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
+    const [type, setType] = useState();
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
 
@@ -44,6 +45,7 @@ const SessionPage = ({isOnline}) => {
             setData(data)
 
             if (data.length === 0) return
+            setType(data[data.length - 1].type)
             const board = Board.createBoardFromJSON(JSON.parse(data[data.length - 1].board))
             if (currentPlayer === data[data.length - 1].currentPlayer)
                 setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
@@ -75,6 +77,7 @@ const SessionPage = ({isOnline}) => {
                     board={board}
                     isOnline={isOnline}
                     currentTurn={currentTurn}
+                    sound={type}
                 />
                 <div className={styles.flexContainer}>
                     <PlayerInfo username='kek' elo='213123'/>
