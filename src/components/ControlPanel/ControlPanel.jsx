@@ -44,7 +44,7 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
         setBoard(board)
     }
     const handleEnd = () => {
-        if (!data[0]) return
+        if (!data[0] || index === data.length - 1) return
 
         let board = Board.createBoardFromJSON(JSON.parse(data[data.length - 1].board))
 
@@ -56,7 +56,7 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
     }
 
     const handleStart = () => {
-        if (!data[0]) return
+        if (!data[0] || index === 0) return
         let board = Board.createBoardFromJSON(JSON.parse(data[0].board))
 
         if (currentPlayer === 'black') board = Board.makeOpposite(board)
