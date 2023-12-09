@@ -4,11 +4,11 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Board from "./board";
 import Figure from "./figures/figure";
-import {GameRules} from "./gameRules";
-import {collection, addDoc} from "firebase/firestore";
-import {db} from "../server/firestore";
+import { GameRules } from "./gameRules";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
-import {playSound} from "../helpers/helpers";
+import { playSound } from "../helpers/helpers";
 import capture from "../assets/sounds/capture.mp3";
 import move from '../assets/sounds/move-self.mp3'
 import castle from '../assets/sounds/castle.mp3'
@@ -27,10 +27,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     const type = useRef();
     const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
     const king = useRef(Board.findKing(board, currentPlayer));
-
-    let posRefs
-    if (isOnline) posRefs = collection(db, 'session')
-    else posRefs = collection(db, 'single')
+    const posRefs = collection(db, 'session')
 
     const handleSubmit = async(board) => {
         await addDoc(posRefs, {
@@ -61,9 +58,9 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     }, [board]);
 
     useEffect(() => {
-        Figure.createFigureFromName(board, pawnPassed, pawnIndex, currentPlayer);
+        if (pawnPassed) Figure.createFigureFromName(board, pawnPassed.figure, pawnIndex, currentPlayer);
         setPawnIndex(null);
-        if (pawnIndex) handleSubmit(board)
+        if (pawnIndex || pawnIndex === 0) handleSubmit(board)
     }, [pawnPassed]);
 
 

@@ -1,7 +1,12 @@
 import styles from './pawnPassedMenu.module.scss'
 
 const PawnPassedMenu = ({currentPlayer, setPawnPassed, pawnPassed, pawnIndex}) => {
-    const figures = ['Queen', 'Knight', 'Bishop', 'Rook'];
+    const figures = [
+        {figure: 'Queen'},
+        {figure: 'Knight'},
+        {figure: 'Bishop'},
+        {figure: 'Rook'}
+    ];
     const left = 70 * pawnIndex + 'px';
 
     const handleClick = (index) => {
@@ -18,7 +23,7 @@ const PawnPassedMenu = ({currentPlayer, setPawnPassed, pawnPassed, pawnIndex}) =
                         <img
                         className={styles.img}
                         alt={value}
-                        src={require(`../../board/assets/${currentPlayer + value + '.svg'}`)}/>
+                        src={require(`../../board/assets/${currentPlayer + value.figure + '.svg'}`)}/>
                     </div>
                 )
             })}
