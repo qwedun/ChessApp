@@ -194,10 +194,6 @@ class Figure {
     static moveFigures(currentFigure, figure, board)  {
         if (currentFigure.firstMove)  {
             currentFigure.firstMove = false;
-            if (currentFigure.name === 'pawn')
-                if (Math.abs(currentFigure.y - figure.y) === 2) {
-                    board[figure.y + 1][figure.x].enPassant = true;
-                }
         }
 
         if (figure.canCastleRight && currentFigure.name === 'king') {

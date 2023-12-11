@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import Chessboard from "../../board/chessboard";
 import History from "../../components/History/History";
 import Board from "../../board/board";
@@ -9,10 +9,11 @@ import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {db} from "../../server/firestore";
 import ControlPanel from "../../components/ControlPanel/ControlPanel";
 import SessionChat from "../../components/SessionChat/SessionChat";
+import {FEN} from "../../board/FEN";
 const SessionPage = ({isOnline}) => {
     const colors = {
-        black: 'white',
-        white: 'black'
+        b: 'white',
+        w: 'black'
     }
 
     const [board, setBoard] = useState(Board.createBoard('white'));
@@ -21,7 +22,8 @@ const SessionPage = ({isOnline}) => {
     const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
-    const [type, setType] = useState();
+    const [type, setType] = useState()
+
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
 
@@ -41,19 +43,26 @@ const SessionPage = ({isOnline}) => {
             for (let i = 0; i < data.length; i += 2) {
                 local.push(data.slice(i, i + 2))
             }
+
             setHistory(local)
             setData(data)
 
             if (data.length === 0) return
             setType(data[data.length - 1].type)
-            const board = Board.createBoardFromJSON(JSON.parse(data[data.length - 1].board))
-            if (currentPlayer === data[data.length - 1].currentPlayer)
+
+            const state = data[data.length - 1]
+
+            const {turn} = FEN.getDataFromFen(state.FEN)
+            const board = FEN.createBoardFromFen(state.FEN);
+
+            if (currentPlayer === 'white')
                 setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
             else {
                 const newBoard = Board.makeOpposite(board)
                 setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
             }
-            setCurrentTurn(colors[data[data.length - 1].turn]);
+            setCurrentTurn(colors[turn])
+            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -78,6 +87,7 @@ const SessionPage = ({isOnline}) => {
                     isOnline={isOnline}
                     currentTurn={currentTurn}
                     sound={type}
+                    data={data}
                 />
                 <div className={styles.flexContainer}>
                     <PlayerInfo username='kek' elo='213123'/>

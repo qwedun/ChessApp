@@ -13,9 +13,10 @@ import capture from "../assets/sounds/capture.mp3";
 import move from '../assets/sounds/move-self.mp3'
 import castle from '../assets/sounds/castle.mp3'
 import check from '../assets/sounds/move-check.mp3'
+import { FEN } from "./FEN";
 
 
-export default function Chessboard({board, isOnline, currentPlayer, currentTurn, sound}) {
+export default function Chessboard({board, isOnline, currentPlayer, currentTurn, sound, data}) {
     const colors = {
         black: 'white',
         white: 'black'
@@ -29,11 +30,10 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     const king = useRef(Board.findKing(board, currentPlayer));
     const posRefs = collection(db, 'session')
 
-    const handleSubmit = async(board) => {
+    const handleSubmit = async(board, currentFigure, isAttacked) => {
+        const whiteBoard = currentPlayer === 'black' ? Board.makeOpposite(board) : board;
         await addDoc(posRefs, {
-            board: JSON.stringify(board),
-            currentPlayer: currentPlayer,
-            turn: currentTurn,
+            FEN: FEN.createFenString(whiteBoard, currentTurn, data, currentFigure, isAttacked),
             timestamp: Date.now(),
             currentFigure: JSON.stringify(currentFigure),
             type: type.current
@@ -66,14 +66,13 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
 
     function handleClick(figure) {
         if (board.showable) return
-        console.log(board)
 
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, type);
             if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
-                handleSubmit(board);
+                handleSubmit(board, currentFigure, figure.underAttack);
         }
-
+        console.log(board)
         Board.removeTitles(board)
         if (!pawnIndex) setCurrentFigure(figure)
 

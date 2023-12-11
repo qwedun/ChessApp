@@ -9,10 +9,11 @@ import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {db} from "../../server/firestore";
 import ControlPanel from "../../components/ControlPanel/ControlPanel";
 import SessionChat from "../../components/SessionChat/SessionChat";
+import {FEN} from "../../board/FEN";
 const SessionPage = ({isOnline}) => {
     const colors = {
-        black: 'white',
-        white: 'black'
+        b: 'white',
+        w: 'black'
     }
 
     const [board, setBoard] = useState(Board.createBoard('black'));
@@ -48,14 +49,21 @@ const SessionPage = ({isOnline}) => {
 
             if (data.length === 0) return
             setType(data[data.length - 1].type)
-            const board = Board.createBoardFromJSON(JSON.parse(data[data.length - 1].board))
-            if (currentPlayer === data[data.length - 1].currentPlayer)
+
+            const state = data[data.length - 1]
+
+            const {turn} = FEN.getDataFromFen(state.FEN)
+            const board = FEN.createBoardFromFen(state.FEN);
+
+            if (currentPlayer === 'white')
                 setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
             else {
                 const newBoard = Board.makeOpposite(board)
+                console.log(board, newBoard)
                 setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
             }
-            setCurrentTurn(colors[data[data.length - 1].turn])
+            setCurrentTurn(colors[turn])
+            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -80,6 +88,7 @@ const SessionPage = ({isOnline}) => {
                     isOnline={isOnline}
                     currentTurn={currentTurn}
                     sound={type}
+                    data={data}
                 />
                 <div className={styles.flexContainer}>
                     <PlayerInfo username='kek' elo='213123'/>
