@@ -5,7 +5,7 @@ import Queen from "./figures/queen";
 import Knight from "./figures/knight";
 import Bishop from "./figures/bishop";
 import King from "./figures/king";
-import {chessNotationString} from "../helpers/helpers";
+import {chessNotationString, setEnPassant} from "../helpers/helpers";
 
 export class FEN {
     static createFenString = (board, currentTurn, data, currentFigure, isAttacked)  => {
@@ -21,7 +21,6 @@ export class FEN {
         return fenString
     }
     static turnsWithoutCapturing = (prevFen, currentFigure, isAttacked) => {
-        console.log(prevFen)
         if (!prevFen) return '0';
         if (currentFigure.name === 'pawn') return '0';
         if (isAttacked) return '0';
@@ -31,6 +30,7 @@ export class FEN {
         const newBoard = [];
 
         const {board} = this.getDataFromFen(fenString);
+        const {passedPawn} = this.getDataFromFen(fenString);
         const rows = board.split('/');
 
         for (let i = 0; i < 8; i++) {
@@ -38,7 +38,7 @@ export class FEN {
             newBoard.push([]);
             const row = rows[i];
 
-            for (let j = 0; j < row.length; j++) {
+            for (let j = 0; j < 8; j++) {
 
                 let char = row[j];
 
@@ -71,7 +71,13 @@ export class FEN {
             }
 
         }
-        return newBoard;
+
+        if (passedPawn === '-') return newBoard;
+
+        else {
+            setEnPassant(passedPawn, newBoard);
+            return newBoard;
+        }
     }
 
     static boardFen = (board) => {

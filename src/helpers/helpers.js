@@ -30,3 +30,18 @@ export const chessNotationString = (y, x, color) => {
 
     return `${resX}${resY}`
 }
+export const setEnPassant = (pos, board) => {
+
+    const posString = 'abcdefgh';
+
+    const [x, y] = pos;
+    let resX, resY = 8 - y;
+
+    for (let i = 0; i < 8; i++) {
+        if (posString[i] === x) {
+            resX = i;
+            break
+        }
+    }
+    board[resY][resX].enPassant = true;
+}

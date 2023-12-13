@@ -7,6 +7,7 @@ import half from '../../assets/half.svg'
 import leave from '../../assets/leave.svg'
 import { useEffect, useState } from "react";
 import Board from "../../board/board";
+import {FEN} from '../../board/FEN'
 
 
 
@@ -21,10 +22,8 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
     const handleNext = () => {
         if (index + 1 > data.length - 1) return
 
-        let board = Board.createBoardFromJSON(JSON.parse(data[index + 1].board))
-
-        if (index % 2 === 0 && currentPlayer === 'white') board = Board.makeOpposite(board)
-        else if (index % 2 === 1 && currentPlayer === 'black') board = Board.makeOpposite(board)
+        let board = FEN.createBoardFromFen(data[index + 1].FEN)
+        if (currentPlayer === 'black') board = Board.makeOpposite(board)
 
         if (index + 1 !== data.length - 1) board.showable = true;
         setIndex(index + 1);
@@ -34,10 +33,9 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
     const handlePrev = () => {
         if (index - 1 < 0) return
 
-        let board = Board.createBoardFromJSON(JSON.parse(data[index - 1].board))
+        let board = FEN.createBoardFromFen(data[index - 1].FEN)
 
-        if (index % 2 === 0 && currentPlayer === 'white') board = Board.makeOpposite(board)
-        else if (index % 2 === 1 && currentPlayer === 'black') board = Board.makeOpposite(board)
+        if (currentPlayer === 'black') board = Board.makeOpposite(board)
 
         board.showable = true;
         setIndex(index - 1);
@@ -46,10 +44,9 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
     const handleEnd = () => {
         if (!data[0] || index === data.length - 1) return
 
-        let board = Board.createBoardFromJSON(JSON.parse(data[data.length - 1].board))
+        let board = FEN.createBoardFromFen(data[data.length - 1].FEN)
 
-        if (data.length % 2 === 0 && currentPlayer === 'white') board = Board.makeOpposite(board)
-        else if (data.length % 2 === 1 && currentPlayer === 'black') board = Board.makeOpposite(board)
+        if (currentPlayer === 'black') board = Board.makeOpposite(board)
 
         setIndex(data.length - 1)
         setBoard(board)
@@ -57,7 +54,7 @@ const ControlPanel = ({data, currentPlayer, setBoard}) => {
 
     const handleStart = () => {
         if (!data[0] || index === 0) return
-        let board = Board.createBoardFromJSON(JSON.parse(data[0].board))
+        let board = FEN.createBoardFromFen(data[0].FEN)
 
         if (currentPlayer === 'black') board = Board.makeOpposite(board)
 
