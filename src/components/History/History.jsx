@@ -7,22 +7,22 @@ const History = ({history, currentPlayer}) => {
             {history.map((data, index) => {
                 const style = (index % 2 === 0 ? styles.light : styles.dark)
                 return (
-                    <div className={`${style} ${styles.container}`}>
+                    <div className={`${style} ${styles.container}`}>{index + 1 + '.'}
                         {data.map((data, i, array) => {
                             let prevData
                             if (index !== 0 || i === 1)
                                 prevData = array[i - 1] || history[index - 1][1];
-                            return (
+                            return (<>
                                 <div className={styles.flex}>
                                     <HistoryString
                                         data={data}
                                         prevData={prevData}
                                         currentPlayer={currentPlayer}/>
-                                    <HistoryTime
-                                        data={data}
-                                        prevData={prevData}/>
                                 </div>
-                            )
+                                <HistoryTime
+                                    data={data}
+                                    prevData={prevData}/>
+                            </>)
                         })}
                     </div>
                 )

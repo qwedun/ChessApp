@@ -9,8 +9,8 @@ const HistoryString = ({data, prevData, currentPlayer}) => {
     const previewName = (name === 'Pawn' ? '' : (name === 'Knight' ? 'N' : name[0]))
 
     return (
-        <div>
-            <img src={src} width='20px' height='20px'/>
+        <div className={styles.container}>
+            <img className={styles.img} src={src} width='20px' height='20px'/>
             <span className={styles.text}>{previewName + pos}</span>
         </div>
     );

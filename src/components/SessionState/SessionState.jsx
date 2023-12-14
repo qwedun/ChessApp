@@ -5,7 +5,7 @@ import SessionChat from "../SessionChat/SessionChat";
 const SessionState = ({board, setBoard, data, messages, history, currentPlayer, chatRefs}) => {
     return (
         <div className={styles.session}>
-            <div>
+            <div className={styles.header}>
 
             </div>
             <History history={history} currentPlayer={currentPlayer}/>

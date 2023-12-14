@@ -5,10 +5,27 @@
   right: 90px;
   margin-top: 2px;
 }
+.white {
+  top: 0;
+}
+.black {
+  bottom: 0;
+}
 .progress {
   background-color: #eceed4;
-  border-radius: 5px;
+  border-radius: 2px;
   position: absolute;
   right: 0;
-  height: 20px;
+  height: 9px;
+}
+.wrapper {
+  position: absolute;
+  right: 2%;
+}
+.time {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 11px;
+  position: absolute;
+  right: -45px;
 }
