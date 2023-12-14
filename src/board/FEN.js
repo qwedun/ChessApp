@@ -9,14 +9,19 @@ import {chessNotationString, setEnPassant} from "../helpers/helpers";
 
 export class FEN {
     static createFenString = (board, currentTurn, data, currentFigure, isAttacked)  => {
+        const colors = {
+            b: 'w',
+            w: 'b'
+        }
 
         const kingsCanCastleFen = this.isKingsCanCastleFen(data, board);
         const boardFen = this.boardFen(board);
+        const {board: boardFenSimple} = this.getDataFromFen(boardFen);
         const turnsWithoutCapturing = this.turnsWithoutCapturing(data[data.length - 2]?.FEN, currentFigure, isAttacked)
-        const pawnPassFen = this.isPawnPassFen(boardFen, data[data.length - 2]?.FEN)
+        const pawnPassFen = this.isPawnPassFen(boardFenSimple, data[data.length - 2]?.FEN)
         const turnsCount = Math.floor((data.length + 1) / 2);
 
-        const fenString = `${boardFen} ${currentTurn[0]} ${kingsCanCastleFen} ${pawnPassFen} ${turnsWithoutCapturing} ${turnsCount}`
+        const fenString = `${boardFen} ${colors[currentTurn[0]]} ${kingsCanCastleFen} ${pawnPassFen} ${turnsWithoutCapturing} ${turnsCount}`
 
         return fenString
     }
@@ -84,10 +89,16 @@ export class FEN {
         let fenString = '';
 
         for (let row of board) {
+            let localIndex = 0;
             for (let title of row) {
 
-                if (!title.name) fenString += '1'
-
+                if (!title.name) {
+                    localIndex += 1
+                    if (title.x === 7) {
+                        fenString += String(localIndex);
+                        localIndex = 0;
+                    }
+                }
                 else {
                     let titleName;
                     const {color, name} = title
@@ -97,7 +108,9 @@ export class FEN {
                     else
                         name === 'knight' ? titleName = name[1].toUpperCase() : titleName = name[0].toUpperCase()
 
-                    fenString += titleName;
+                    if (!localIndex) fenString += titleName;
+                    else fenString += String(localIndex) + titleName
+                    localIndex = 0
                 }
             }
             fenString += '/'
@@ -176,9 +189,28 @@ export class FEN {
         return '-';
     }
     static getDataFromFen = (fen) => {
+
         const data = fen.split(' ');
+        const board = data[0].split('/')
+        let boardFen = '';
+
+        for (let row of board) {
+            for (let char of row) {
+
+                if (isNaN(+char)){
+                    boardFen += char;
+                    continue
+                }
+
+                for (let i = 0; i < +char; i++) {
+                    boardFen += '1';
+                }
+
+            }
+            boardFen += '/'
+        }
         return {
-            board: data[0],
+            board: boardFen.slice(0, -1),
             turn: data[1],
             kingsCanCastle: data[2],
             passedPawn: data[3],

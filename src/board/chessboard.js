@@ -8,26 +8,16 @@ import { GameRules } from "./gameRules";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
-import { playSound } from "../helpers/helpers";
-import capture from "../assets/sounds/capture.mp3";
-import move from '../assets/sounds/move-self.mp3'
-import castle from '../assets/sounds/castle.mp3'
-import check from '../assets/sounds/move-check.mp3'
 import { FEN } from "./FEN";
 
 
-export default function Chessboard({board, isOnline, currentPlayer, currentTurn, sound, data}) {
-    const colors = {
-        black: 'white',
-        white: 'black'
-    }
+export default function Chessboard({board, isOnline, currentPlayer, currentTurn, king, data}) {
+
     const [currentFigure, setCurrentFigure] = useState();
     const [pawnPassed, setPawnPassed] = useState(null);
     const [pawnIndex, setPawnIndex] = useState(null);
 
     const type = useRef();
-    const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
-    const king = useRef(Board.findKing(board, currentPlayer));
     const posRefs = collection(db, 'session')
 
     const handleSubmit = async(board, currentFigure, isAttacked) => {
@@ -39,23 +29,6 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
             type: type.current
         })
     }
-
-    useEffect(() => {
-        king.current = Board.findKing(board, currentPlayer);
-        oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
-
-        if (king.current.underCheck) {
-            playSound(check);
-            GameRules.isCheckMate(king.current, board);
-            GameRules.isStalemate(board, currentTurn);
-        } else if (oppositeKing.current.underCheck) {
-            playSound(check)
-        } else {
-            if (sound === 'move') playSound(move);
-            else if (sound === 'castle') playSound(castle);
-            else playSound(capture);
-        }
-    }, [board]);
 
     useEffect(() => {
         if (pawnPassed) Figure.createFigureFromName(board, pawnPassed.figure, pawnIndex, currentPlayer);

@@ -54,7 +54,7 @@ class Board {
         return board
     }
 
-    static updateBoard(board, color, currentPlayer, isOnline) {
+    static updateBoard(board, currentPlayer, isOnline) {
         const newBoard = Board.cloneBoard(board)
 
         for (let j = 0; j < 8; j++) {
@@ -62,17 +62,17 @@ class Board {
                 const figure = newBoard[j][i];
                 if (!figure.name) continue
 
-                if (figure.color !== color)
+                if (figure.color !== currentPlayer)
                     figure.checkMoves(newBoard, true, false, false, currentPlayer)
             }
         }
-        King.checkForKing(Board.findKing(newBoard, color), newBoard, currentPlayer)
-        King.isKingCanCastle(Board.findKing(newBoard, color), currentPlayer, newBoard, isOnline)
+        King.checkForKing(Board.findKing(newBoard, currentPlayer), newBoard, currentPlayer)
+        King.isKingCanCastle(Board.findKing(newBoard, currentPlayer), currentPlayer, newBoard, isOnline)
 
         for (let j = 0; j < 8; j++) {
             for (let i = 0; i < 8; i++) {
                 const figure = newBoard[j][i];
-                if (figure.color === color) figure.checkMoves?.(newBoard, false, false, false, currentPlayer)
+                if (figure.color === currentPlayer) figure.checkMoves?.(newBoard, false, false, false, currentPlayer)
             }
         }
         return newBoard

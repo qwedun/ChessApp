@@ -55,20 +55,24 @@ class King {
         const xMin = (king.x === 0) ? 0 : king.x - 1;
         const xMax = (king.x === 7) ? 7 : king.x + 1;
 
+        console.log(king, board[7][3])
+
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
                 const title = board[i][j]
-                if (king === title) continue;
+                if (title.name === 'king') continue;
 
                 if (title.kingCanMove) {
                     return true;
                 }
 
                 if (title.name && title.color !== king.color && !title.underFriendlyAttack) {
+                    console.log(title)
                     return true
                 }
             }
         }
+        console.log(32434)
         return false;
     }
 

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Chessboard from "../../board/chessboard";
 import History from "../../components/History/History";
 import Board from "../../board/board";
@@ -10,19 +10,38 @@ import {db} from "../../server/firestore";
 import ControlPanel from "../../components/ControlPanel/ControlPanel";
 import SessionChat from "../../components/SessionChat/SessionChat";
 import {FEN} from "../../board/FEN";
+import {GameRules} from "../../board/gameRules";
+import {playSound} from "../../helpers/helpers";
+import check from "../../assets/sounds/move-check.mp3";
+import move from "../../assets/sounds/move-self.mp3";
+import castle from "../../assets/sounds/castle.mp3";
+import capture from "../../assets/sounds/capture.mp3";
+import notify from '../../assets/sounds/notify.mp3'
+import GameResult from "../../components/GameResult/GameResult";
+import King from "../../board/figures/king";
 const SessionPage = ({isOnline}) => {
     const colors = {
-        b: 'white',
-        w: 'black'
+        b: 'black',
+        w: 'white',
+        black: 'white',
+        white: 'black',
     }
 
     const [board, setBoard] = useState(Board.createBoard('black'));
     const [currentPlayer] = useState('black');
     const [currentTurn, setCurrentTurn] = useState('white');
+
     const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
+
     const [type, setType] = useState()
+
+    const [gameState, setGameState] = useState({
+        result: null,
+        reason: null,
+        winColor: null,
+    });
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
@@ -56,14 +75,12 @@ const SessionPage = ({isOnline}) => {
             const board = FEN.createBoardFromFen(state.FEN);
 
             if (currentPlayer === 'white')
-                setBoard(Board.updateBoard(board, currentPlayer, currentPlayer, true))
+                setBoard(Board.updateBoard(board, currentPlayer, true))
             else {
                 const newBoard = Board.makeOpposite(board)
-                console.log(board, newBoard)
-                setBoard(Board.updateBoard(newBoard, currentPlayer, currentPlayer, true))
+                setBoard(Board.updateBoard(newBoard, currentPlayer, true))
             }
             setCurrentTurn(colors[turn])
-            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -75,19 +92,65 @@ const SessionPage = ({isOnline}) => {
         })
     }, []);
 
+    const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
+    const king = useRef(Board.findKing(board, currentPlayer));
+
+    useEffect(() => {
+
+        king.current = Board.findKing(board, currentPlayer);
+        oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
+
+        if (data.length === 0) return
+
+        GameRules.isStalemate(board, currentTurn);
+
+        if (king.current.underCheck) {
+            playSound(check)
+            if (GameRules.isCheckMate(king.current, board)) {
+                setGameState({
+                    result: 'lose',
+                    reason: 'checkmate',
+                    winColor: colors[currentPlayer],
+                });
+                playSound(notify);
+            }
+        } else if (oppositeKing.current.underCheck) {
+            playSound(check)
+            const local = Board.makeOpposite(board);
+            oppositeKing.current = Board.findKing(local, colors[currentPlayer]);
+            if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, colors[currentPlayer], isOnline))) {
+                setGameState({
+                    result: 'win',
+                    reason: 'checkmate',
+                });
+                playSound(notify);
+            }
+        } else {
+            if (type === 'move') playSound(move);
+            else if (type === 'castle') playSound(castle);
+            else playSound(capture);
+        }
+    }, [data]);
+
     return (
         <div className={styles.mainWrapper}>
-            <div>
+            <div className={styles.relative}>
                 <div className={styles.flexContainer}>
                     <PlayerInfo username='bebra' elo='912390'/>
                     <Timer currentTurn={currentTurn} currentPlayer={'black'}/>
                 </div>
+                {gameState.result &&
+                    <GameResult
+                        result={gameState.result}
+                        reason={gameState.reason}
+                        color={gameState.winColor}/>
+                }
                 <Chessboard
                     currentPlayer={currentPlayer}
                     board={board}
                     isOnline={isOnline}
                     currentTurn={currentTurn}
-                    sound={type}
+                    king={king}
                     data={data}
                 />
                 <div className={styles.flexContainer}>
