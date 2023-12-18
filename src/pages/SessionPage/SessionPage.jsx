@@ -48,8 +48,8 @@ const SessionPage = ({isOnline}) => {
     else posRefs = collection(db, 'single')
     const chatRefs = collection(db, 'chat');
 
-    const queryPos = query(posRefs, orderBy('timestamp'))
-    const queryChat = query(chatRefs, orderBy('timestamp'))
+    const queryPos = query(posRefs, orderBy('timestamp'));
+    const queryChat = query(chatRefs, orderBy('timestamp'));
 
     useEffect(() => {
         onSnapshot(queryPos, snapshot => {
@@ -80,7 +80,6 @@ const SessionPage = ({isOnline}) => {
                 setBoard(Board.updateBoard(newBoard, currentPlayer, true))
             }
             setCurrentTurn(colors[turn])
-            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -102,16 +101,23 @@ const SessionPage = ({isOnline}) => {
         oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
 
         if (data.length === 0) return
+        const oppositeBoard = Board.makeOpposite(board);
 
-        GameRules.isStalemate(board, currentTurn);
+        if (GameRules.isStalemate(board, currentTurn) ||
+            GameRules.isStalemate(Board.updateBoard(oppositeBoard, colors[currentPlayer], true), currentTurn)) {
+            setGameState({
+                result: 'stalemate',
+                reason: '',
+                show: true,
+            })
+        }
 
         if (king.current.underCheck) {
             playSound(check)
-            console.log(31322)
             if (GameRules.isCheckMate(king.current, board)) {
                 setGameState({
                     result: 'lose',
-                    reason: 'checkmate',
+                    reason: 'by checkmate',
                     winColor: colors[currentPlayer],
                     show: true,
                 });
@@ -124,7 +130,7 @@ const SessionPage = ({isOnline}) => {
             if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, colors[currentPlayer], isOnline))) {
                 setGameState({
                     result: 'win',
-                    reason: 'checkmate',
+                    reason: 'by checkmate',
                     show: true,
                 });
                 playSound(notify);
@@ -139,9 +145,9 @@ const SessionPage = ({isOnline}) => {
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.relative}>
-                <div className={styles.flexContainer}>
-                    <PlayerInfo username='bebra' elo='912390'/>
-                    <Timer currentTurn={currentTurn} currentPlayer={'black'}/>
+                <div className={`${styles.flexContainer} ${styles.flexTop}`}>
+                    <PlayerInfo username='bebra' elo='912390' board={board} color={colors[currentPlayer]}/>
+                    <Timer currentTurn={currentTurn} currentPlayer={'black'} data={data} setGameState={setGameState}/>
                 </div>
                 {gameState.show &&
                     <GameResult
@@ -157,9 +163,9 @@ const SessionPage = ({isOnline}) => {
                     king={king}
                     data={data}
                 />
-                <div className={styles.flexContainer}>
-                    <PlayerInfo username='kek' elo='213123'/>
-                    <Timer currentTurn={currentTurn} currentPlayer={'white'}/>
+                <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
+                    <PlayerInfo username='kek' elo='213123' board={board} color={currentPlayer}/>
+                    <Timer currentTurn={currentTurn} currentPlayer={currentPlayer} data={data} setGameState={setGameState}/>
                 </div>
             </div>
             {<SessionState board={board} setBoard={setBoard}

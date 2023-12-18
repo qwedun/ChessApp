@@ -1,14 +1,11 @@
 import {useEffect, useRef, useState} from 'react';
 import Chessboard from "../../board/chessboard";
-import History from "../../components/History/History";
 import Board from "../../board/board";
 import styles from './sessionPage.module.scss'
 import Timer from '../../components/Timer/Timer'
 import PlayerInfo from '../../components/UI/InGamePlayerInfo/InGamePlayerInfo'
 import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {db} from "../../server/firestore";
-import ControlPanel from "../../components/ControlPanel/ControlPanel";
-import SessionChat from "../../components/SessionChat/SessionChat";
 import {FEN} from "../../board/FEN";
 import {GameRules} from "../../board/gameRules";
 import {playSound} from "../../helpers/helpers";
@@ -18,7 +15,8 @@ import castle from "../../assets/sounds/castle.mp3";
 import capture from "../../assets/sounds/capture.mp3";
 import notify from '../../assets/sounds/notify.mp3'
 import GameResult from "../../components/GameResult/GameResult";
-import King from "../../board/figures/king";
+import SessionState from "../../components/SessionState/SessionState";
+import axios from "axios";
 const SessionPage = ({isOnline}) => {
     const colors = {
         b: 'black',
@@ -41,6 +39,7 @@ const SessionPage = ({isOnline}) => {
         result: null,
         reason: null,
         winColor: null,
+        show: false,
     });
 
     let posRefs
@@ -81,6 +80,7 @@ const SessionPage = ({isOnline}) => {
                 setBoard(Board.updateBoard(newBoard, currentPlayer, true))
             }
             setCurrentTurn(colors[turn])
+            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -90,6 +90,7 @@ const SessionPage = ({isOnline}) => {
             })
             setMessages(data);
         })
+
     }, []);
 
     const oppositeKing = useRef(Board.findKing(board, colors[currentTurn]))
@@ -101,16 +102,33 @@ const SessionPage = ({isOnline}) => {
         oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
 
         if (data.length === 0) return
+        const oppositeBoard = Board.makeOpposite(board);
 
-        GameRules.isStalemate(board, currentTurn);
+        if (GameRules.isStalemate(board, currentTurn)) {
+            setGameState({
+                result: 'stalemate',
+                reason: '',
+                show: true,
+            })
+            playSound(notify);
+        }
+        if (GameRules.isStalemate(Board.updateBoard(oppositeBoard, colors[currentPlayer], true), colors[currentTurn])) {
+            setGameState({
+                result: 'stalemate',
+                reason: '',
+                show: true,
+            })
+            playSound(notify);
+        }
 
         if (king.current.underCheck) {
             playSound(check)
             if (GameRules.isCheckMate(king.current, board)) {
                 setGameState({
                     result: 'lose',
-                    reason: 'checkmate',
+                    reason: 'by checkmate',
                     winColor: colors[currentPlayer],
+                    show: true,
                 });
                 playSound(notify);
             }
@@ -121,7 +139,8 @@ const SessionPage = ({isOnline}) => {
             if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, colors[currentPlayer], isOnline))) {
                 setGameState({
                     result: 'win',
-                    reason: 'checkmate',
+                    reason: 'by checkmate',
+                    show: true,
                 });
                 playSound(notify);
             }
@@ -135,11 +154,11 @@ const SessionPage = ({isOnline}) => {
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.relative}>
-                <div className={styles.flexContainer}>
-                    <PlayerInfo username='bebra' elo='912390'/>
-                    <Timer currentTurn={currentTurn} currentPlayer={'black'}/>
+                <div className={`${styles.flexContainer} ${styles.flexTop}`}>
+                    <PlayerInfo username='bebra' elo='912390' board={board} color={colors[currentPlayer]}/>
+                    <Timer currentTurn={currentTurn} currentPlayer={colors[currentPlayer]} data={data} setGameState={setGameState}/>
                 </div>
-                {gameState.result &&
+                {gameState.show &&
                     <GameResult
                         result={gameState.result}
                         reason={gameState.reason}
@@ -153,19 +172,16 @@ const SessionPage = ({isOnline}) => {
                     king={king}
                     data={data}
                 />
-                <div className={styles.flexContainer}>
-                    <PlayerInfo username='kek' elo='213123'/>
-                    <Timer currentTurn={currentTurn} currentPlayer={'white'}/>
+                <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
+                    <PlayerInfo username='kek' elo='213123' board={board} color={currentPlayer}/>
+                    <Timer currentTurn={currentTurn} currentPlayer={currentPlayer} data={data} setGameState={setGameState}/>
                 </div>
             </div>
-            <div className={styles.session}>
-                <div className={styles.header}>
-
-                </div>
-                <History history={history} currentPlayer={currentPlayer}/>
-                <ControlPanel data={data} board={board} setBoard={setBoard} currentPlayer={currentPlayer}/>
-                <SessionChat messages={messages} currentPlayer={currentPlayer} chatRef={chatRefs}/>
-            </div>
+            {<SessionState board={board} setBoard={setBoard}
+                           history={history} data={data}
+                           messages={messages} chatRefs={chatRefs}
+                           currentPlayer={currentPlayer}
+            />}
         </div>
     );
 };

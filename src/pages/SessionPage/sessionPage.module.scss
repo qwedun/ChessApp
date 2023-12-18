@@ -11,6 +11,19 @@
 .flexContainer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  background-color: #222222;
+  height: 60px;
+  width: 100%;
+  padding: 0 12px;
+}
+.flexTop {
+  margin-bottom: -6px;
+  border-radius: 3px 3px 0 0;
+}
+.flexBottom {
+  margin-top: -6px;
+  border-radius: 0 0 3px 3px;
 }
 .session {
   background-color: #E1E1E1;

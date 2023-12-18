@@ -4,8 +4,10 @@
   font-weight: bold;
 }
 .infoWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   margin-left: 10px;
+  color: white;
+  font-weight: normal
+}
+.elo {
+  margin-left: 6px;
 }

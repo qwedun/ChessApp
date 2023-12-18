@@ -1,3 +1,15 @@
 .timer {
-  height: 50%;
+  background-color: #6a6a6b;
+  width: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 2px;
+  color: #eceed4;
+  font-weight: bold;
+  font-size: 20px;
+  height: 40px;
+}
+.active {
+  background-color: #81B34A;
 }

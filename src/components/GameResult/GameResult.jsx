@@ -4,9 +4,20 @@ import checkmate from '../../assets/checkmate.svg';
 
 const GameResult = ({result, reason, color}) => {
 
-    const src = (result === 'win') ? winner : checkmate;
-    const message = (result === 'win') ? 'You Won!' : color + ' Wins';
-    const state = (result === 'win') ? styles.win : styles.lose
+    let src, message, state;
+
+    if (result === 'win') {
+        src = winner;
+        message = 'You Won!';
+        state = styles.win
+    } else if (result === 'lose') {
+        src = checkmate;
+        message = color + ' Wins';
+        state = styles.lose
+    } else if (result === 'stalemate') {
+        message = 'Stalemate';
+        state = styles.stalemate
+    }
 
     return (
         <div className={styles.main}>
@@ -14,7 +25,7 @@ const GameResult = ({result, reason, color}) => {
                 <img className={styles.img} src={src}/>
                 <div>
                     <div>{message}</div>
-                    <div className={styles.reason}>by {reason}</div>
+                    <div className={styles.reason}>{reason}</div>
                 </div>
             </div>
             <div className={styles.review}>Game Review</div>

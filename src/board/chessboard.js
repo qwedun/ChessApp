@@ -45,7 +45,6 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
             if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
                 handleSubmit(board, currentFigure, figure.underAttack);
         }
-        console.log(board)
         Board.removeTitles(board)
         if (!pawnIndex) setCurrentFigure(figure)
 
@@ -66,7 +65,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     return (
         <DndProvider backend={HTML5Backend}>
             <div
-                style={{display: 'flex', width: '560px', flexWrap: 'wrap', height: '560px', position: 'relative'}}>
+                style={{display: 'flex', width: '584px', flexWrap: 'wrap', height: '584px', position: 'relative', border: '12px solid #222222'}}>
                 {pawnIndex && <PawnPassedMenu
                     currentPlayer={currentPlayer}
                     pawnPassed={pawnPassed}

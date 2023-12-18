@@ -14,7 +14,6 @@ export class GameRules {
         return false
     }
     static isStalemate(board, color) {
-        console.log(board)
         for (let row of board)
             for (let figure of row) {
                 if (figure.canBeMoved) return false
