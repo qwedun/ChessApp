@@ -1,0 +1,62 @@
+.mainWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.relative {
+  position: relative;
+}
+
+.info {
+  display: flex;
+}
+
+.flexContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #222222;
+  height: 60px;
+  width: 100%;
+  padding: 0 12px;
+}
+
+.flexTop {
+  margin-bottom: -6px;
+  border-radius: 3px 3px 0 0;
+}
+
+.flexBottom {
+  margin-top: -6px;
+  border-radius: 0 0 3px 3px;
+}
+
+.session {
+  background-color: #E1E1E1;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  border-bottom: solid 3px #749654;
+  height: 5%;
+}
+
+.chat {
+  height: 50%;
+  margin-top: 3px;
+  border-top: solid 3px #749654;
+}
+
+.container {
+  background-color: #81B34A;
+  height: 24px;
+}
+
+.container1 {
+  background-color: #749654;
+  height: 24px;
+}
+
+/*# sourceMappingURL=sessionPage.module.css.map */

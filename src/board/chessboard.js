@@ -26,7 +26,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
             FEN: FEN.createFenString(whiteBoard, currentTurn, data, currentFigure, isAttacked),
             timestamp: Date.now(),
             currentFigure: JSON.stringify(currentFigure),
-            type: type.current
+            type: type.current,
         })
     }
 

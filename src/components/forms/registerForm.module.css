@@ -1,0 +1,61 @@
+.title {
+  margin: 0 auto;
+  color: #81B34A;
+  font-size: 30px;
+}
+
+.form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 83%;
+  margin: 0 auto;
+  align-items: center;
+  position: relative;
+}
+
+.register {
+  color: #81B34A;
+  text-align: center;
+}
+
+.buttonWrapper {
+  margin: 0 auto;
+}
+
+.popUp {
+  position: absolute;
+  top: 112%;
+  left: 50%;
+  color: red;
+  font-weight: bold;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.list {
+  width: 90%;
+  margin: 0 auto;
+  font-size: 14px;
+}
+.list li {
+  list-style-type: none;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+.list li:before {
+  content: url("../../assets/warning.svg");
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+/*# sourceMappingURL=registerForm.module.css.map */

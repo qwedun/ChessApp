@@ -1,0 +1,48 @@
+.input {
+  border: #515151 solid 1px;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: none;
+  padding: 10px;
+  color: #515151;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #E1E1E1;
+}
+.input:focus {
+  border: #81B34A solid 2px;
+}
+
+.inputBox {
+  position: relative;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.labelEnd {
+  color: #81B34A;
+  transform: translate(10px, -10px);
+  transition: transform 100ms;
+}
+
+.labelStart {
+  transition: transform 100ms;
+  transform: translate(10px, 12px);
+  color: #515151;
+}
+
+.labelEndStatic {
+  color: #515151;
+  transform: translate(10px, -10px);
+  transition: transform 100ms;
+}
+
+.label {
+  position: absolute;
+  background: #E1E1E1;
+  padding: 0 5px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/*# sourceMappingURL=input.module.css.map */

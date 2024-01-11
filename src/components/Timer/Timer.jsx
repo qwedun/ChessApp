@@ -11,7 +11,7 @@ import clock6 from '../../assets/clock-0900.svg'
 import clock7 from '../../assets/clock-1100.svg'
 
 
-const Timer = ({currentTurn, currentPlayer, data, setGameState}) => {
+const Timer = ({currentTurn, color, data, setGameState, currentPlayer}) => {
 
     const [blackTime, setBlackTime] = useState({
         minutes: 3,
@@ -61,13 +61,13 @@ const Timer = ({currentTurn, currentPlayer, data, setGameState}) => {
         });
 
         let timer;
-        if (currentTurn === currentPlayer) {
+        if (currentTurn === color) {
             let setTime;
-            currentPlayer === 'black'? setTime = setBlackTime : setTime = setWhiteTime;
+            color === 'black'? setTime = setBlackTime : setTime = setWhiteTime;
             timer = setInterval(() => {
                 setIndex(prev => prev + 1 < 8 ? prev + 1 : 0);
+
                 setTime(prev => {
-                    console.log(prev)
                     if (prev.seconds - 1 < 0 && prev.minutes <= 0) {
                         clearInterval(timer);
                         return {seconds: 0, minutes: 0}
@@ -83,7 +83,7 @@ const Timer = ({currentTurn, currentPlayer, data, setGameState}) => {
     }, [data]);
 
     useEffect(() => {
-        if (!(whiteTime.seconds === 0 && whiteTime.minutes === 0)) return;
+        if (!(whiteTime.seconds <= 0 && whiteTime.minutes <= 0)) return;
 
         if (currentPlayer === 'white')
             setGameState({
@@ -102,7 +102,7 @@ const Timer = ({currentTurn, currentPlayer, data, setGameState}) => {
     }, [whiteTime]);
 
     useEffect(() => {
-        if (!(blackTime.seconds === 0 && blackTime.minutes === 0)) return;
+        if (!(blackTime.seconds <= 0 && blackTime.minutes <= 0)) return;
 
         if (currentPlayer === 'black')
             setGameState({
@@ -123,12 +123,12 @@ const Timer = ({currentTurn, currentPlayer, data, setGameState}) => {
     const blackTimeString = `${blackTime.minutes}:${blackTime.seconds < 10 ? '0' + blackTime.seconds : blackTime.seconds}`
     const whiteTimeString = `${whiteTime.minutes}:${whiteTime.seconds < 10 ? '0' + whiteTime.seconds : whiteTime.seconds}`
 
-    const style = (currentTurn === currentPlayer ? styles.active : null);
+    const style = (currentTurn === color ? styles.active : null);
 
     return (
         <div className={`${styles.timer} ${style}`}>
             <img alt='clock' src={clock[index]}/>
-            {currentPlayer === 'black' ? blackTimeString : whiteTimeString}
+            {color === 'black' ? blackTimeString : whiteTimeString}
         </div>
     );
 };

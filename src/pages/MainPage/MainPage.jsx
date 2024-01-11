@@ -2,15 +2,13 @@ import { URL, api } from "../../server/API";
 import { logout } from '../../store/slices/userSlice'
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from 'react'
-
-function handleClick() {
-
-    api.get(URL + '/hello')
-        .then(res => console.log(res))
-}
-
+import {Navigate} from "react-router-dom";
 
 export function MainPage() {
+    Navigate({to: '/play/2'})
+    function handleClick() {
+
+    }
     const dispatch = useDispatch()
 
     async function handleLogout() {

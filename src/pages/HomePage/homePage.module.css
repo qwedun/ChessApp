@@ -1,0 +1,16 @@
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6a6a6b;
+  border-bottom: solid 3px #81B34A;
+  display: inline-block;
+}
+
+.chartsContainer {
+  display: flex;
+  padding: 15px 0;
+  justify-content: space-around;
+  height: 330px;
+}
+
+/*# sourceMappingURL=homePage.module.css.map */

@@ -1,0 +1,20 @@
+.button {
+  background-color: #81B34A;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 30px;
+  color: white;
+  transition: box-shadow 200ms;
+}
+.button:enabled:hover {
+  box-shadow: 0 0 20px #81B34A;
+}
+.button:enabled:active {
+  background-color: #E1E1E1;
+}
+.button:disabled {
+  background-color: grey;
+  opacity: 0.4;
+}
+
+/*# sourceMappingURL=button.module.css.map */

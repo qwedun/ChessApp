@@ -1,0 +1,11 @@
+.avatar {
+  display: inline-block;
+}
+
+.img {
+  display: inline-block;
+  border-radius: 10%;
+  border: solid 1px #81B34A;
+}
+
+/*# sourceMappingURL=avatar.module.css.map */

@@ -1,28 +1,27 @@
-import Button from "../UI/Button/Button";
-import Input from "../UI/Input/Input";
+import Button from "../UI/Button/Button.jsx";
+import Input from "../UI/Input/Input.jsx";
 import styles from './loginForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../store/slices/userSlice";
-import { login } from "../../store/slices/userSlice";
-import axios from "axios";
-import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp";
-
-
-
-
+import { setError } from "../../store/slices/userSlice.js";
+import { login } from "../../store/slices/userSlice.js";
+import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp.jsx";
 
 const LoginForm = () => {
 
     const dispatch = useDispatch()
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+
     const [emailFocus, setEmailFocus] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
-    const user = useSelector(state => state.user)
+
+    const isLoading = useSelector((state) => state.user.isLoading)
+
     function handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault()
+
         dispatch(login({password: password, email: email}))
     }
 
@@ -55,7 +54,7 @@ const LoginForm = () => {
             </Input>
 
             <div className={styles.buttonWrapper}>
-                <Button disabled={(!(email && password) || user.isLoading)}>Login</Button>
+                <Button disabled={(!(email && password) || isLoading)}>Login</Button>
             </div>
             <div className={styles.register}>Dont have an account?&nbsp;
                 <Link

@@ -1,0 +1,37 @@
+.wrapper {
+  width: 600px;
+  height: 100%;
+  color: #6a6a6b;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  position: relative;
+}
+
+.chart {
+  background-color: #222222;
+  border-radius: 40px;
+  padding: 30px;
+}
+
+.info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin: auto;
+}
+
+.infoContainer {
+  width: 40%;
+  background-color: #313131;
+  margin: 5px auto;
+  padding: 3px 10px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  color: #E1E1E1;
+  font-weight: normal;
+}
+
+/*# sourceMappingURL=charts.module.css.map */

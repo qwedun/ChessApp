@@ -1,0 +1,37 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-top: 3px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-weight: bold;
+  color: #222222;
+}
+.container img {
+  position: relative;
+  left: -4px;
+}
+.container:hover {
+  background-color: #A0A0A0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.img:hover {
+  background-color: #A0A0A0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=controlPanel.module.css.map */

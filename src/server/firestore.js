@@ -2,12 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
 
 const app = initializeApp({
-    apiKey: "AIzaSyCaBe7k8nmZOKjOv_LMlz9z_Z9HGkqy_L0",
-    authDomain: "shiferchess.firebaseapp.com",
-    projectId: "shiferchess",
-    storageBucket: "shiferchess.appspot.com",
-    messagingSenderId: "329711495771",
-    appId: "1:329711495771:web:c3a036bc06b238ca0f2d7e"
+    apiKey: "AIzaSyBg3j4RS9_XLYCcXBt0nHp80BetlJqPX6c",
+    authDomain: "shiferchess-9a110.firebaseapp.com",
+    projectId: "shiferchess-9a110",
+    storageBucket: "shiferchess-9a110.appspot.com",
+    messagingSenderId: "87779793548",
+    appId: "1:87779793548:web:1d3763d98ae49e9e4539a9",
+    measurementId: "G-RXTDHDYG5P",
 });
 
 export const db = getFirestore(app)

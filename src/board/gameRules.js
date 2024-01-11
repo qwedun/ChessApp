@@ -16,7 +16,7 @@ export class GameRules {
     static isStalemate(board, color) {
         for (let row of board)
             for (let figure of row) {
-                if (figure.canBeMoved) return false
+                if (figure.canBeMoved || figure.kingCanMove) return false
                 if (figure.name && figure.canBeAttacked && figure.color !== color) return false
             }
         return true

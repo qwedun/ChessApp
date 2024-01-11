@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  vertical-align: center;
+  justify-content: flex-start;
+  width: 20px;
+}
+
+.img {
+  margin: 2px 4px 0 0;
+}
+
+.text {
+  display: flex;
+  font-size: 17px;
+  align-items: center;
+}
+
+/*# sourceMappingURL=historyString.module.css.map */

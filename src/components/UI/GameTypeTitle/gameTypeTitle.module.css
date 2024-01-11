@@ -1,0 +1,31 @@
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #A0A0A0;
+  cursor: pointer;
+  width: 270px;
+  height: 180px;
+  border: #E1E1E1 solid 3px;
+  margin: 3px;
+  border-radius: 10px;
+}
+.title:hover {
+  background-color: #81B34A;
+}
+
+.center {
+  color: #E1E1E1;
+}
+
+.type {
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.time {
+  font-size: 30px;
+}
+
+/*# sourceMappingURL=gameTypeTitle.module.css.map */

@@ -1,0 +1,35 @@
+.history {
+  height: 350px;
+  border-bottom: solid 3px #749654;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.light {
+  background-color: #81B34A;
+  height: 24px;
+}
+
+.dark {
+  background-color: #749654;
+  height: 24px;
+}
+
+.container {
+  display: flex;
+  font-size: 20px;
+  color: #222222;
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+.flex {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  vertical-align: center;
+  position: relative;
+  padding: 0 6px;
+}
+
+/*# sourceMappingURL=history.module.css.map */
