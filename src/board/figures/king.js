@@ -1,12 +1,13 @@
 import Figure from './figure.js'
+import { FEN } from "../FEN";
+import Board from "../board";
 class King {
-    constructor({x, y, color, firstMove}) {
+    constructor({x, y, color}) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.src = './assets/' + color + 'King.svg';
         this.name = 'king';
-        this.firstMove = firstMove;
     }
 
 
@@ -18,23 +19,26 @@ class King {
 
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
-                if (this === board[i][j]) continue;
-                const title = board[i][j]
 
-                if (title.name || checkForAttack) {
+                const title = board[i][j];
+                if (this === title) continue;
 
-                    if (!title.name) {
+                const {name, canBeAttacked, color, underFriendlyAttack} = title;
+
+                if (name || checkForAttack) {
+
+                    if (!name) {
                         title.canBeAttacked = true;
                     }
 
-                    else if (title.color !== this.color && !title.underFriendlyAttack)
+                    else if (color !== this.color && !underFriendlyAttack)
                         Figure.setProperty(title, 'underAttack', 'canBeAttacked', isRender)
 
-                    else if (title.color === this.color) {
+                    else if (color === this.color) {
                         title.underFriendlyAttack = true;
                     }
                 }
-                else if (!title.canBeAttacked)
+                else if (!canBeAttacked)
                     Figure.setProperty(title, 'canMove', 'kingCanMove', isRender)
             }
         }
@@ -55,24 +59,22 @@ class King {
         const xMin = (king.x === 0) ? 0 : king.x - 1;
         const xMax = (king.x === 7) ? 7 : king.x + 1;
 
-        console.log(king, board[7][3])
-
         for (let i = yMin; i <= yMax; i++) {
             for (let j = xMin; j <= xMax; j++) {
-                const title = board[i][j]
-                if (title.name === 'king') continue;
 
-                if (title.kingCanMove) {
+                const {name, kingCanMove, color, underFriendlyAttack} = board[i][j];
+
+                if (name === 'king') continue;
+
+                if (kingCanMove) {
                     return true;
                 }
 
-                if (title.name && title.color !== king.color && !title.underFriendlyAttack) {
-                    console.log(title)
+                if (name && color !== king.color && !underFriendlyAttack) {
                     return true
                 }
             }
         }
-        console.log(32434)
         return false;
     }
 
@@ -110,17 +112,28 @@ class King {
         })
     }
 
-    static isKingCanCastle(king, currentPlayer, board, isOnline) {
-        if (!king.firstMove || king.underCheck) return;
+    static isKingCanCastle(king, currentPlayer, board, isOnline, data) {
+        const newBoard = currentPlayer === 'white' ? board : Board.makeOpposite(board);
+
+        const fenString = FEN.isKingsCanCastleFen(data, newBoard);
+
+        if (fenString === '-') return;
+
+        let canCastleRight = false, canCastleLeft = false;
+
+        if (currentPlayer === 'white') {
+            if (fenString.includes('K')) canCastleRight = true;
+            if (fenString.includes('Q')) canCastleLeft = true;
+        } else {
+            if (fenString.includes('k')) canCastleRight = true;
+            if (fenString.includes('q')) canCastleLeft = true;
+        }
 
         const y = (isOnline) ? 7 : (currentPlayer === 'white') ? 7 : 0;
 
-        if (board[y][0].name && !board[y][0].firstMove) return
-        if (board[y][7].name && !board[y][7].firstMove) return
-
-        let canCastleLeft = true, canCastleRight = true;
-
         for (let i = king.x - 1; i > 0; i--) {
+            if (!canCastleLeft) break
+
             const figure = board[y][i];
             if (currentPlayer === 'white' && i === 1 && !figure.name) continue
 
@@ -131,10 +144,13 @@ class King {
         }
 
         for (let i = king.x + 1; i < 7; i++) {
+            if (!canCastleRight) break;
+
             const figure = board[y][i];
             if (currentPlayer === 'black' && i === 6 && !figure.name) continue
 
             else if (figure.name || figure.canBeAttacked) {
+                console.log(figure)
                 canCastleRight = false;
                 break;
             }

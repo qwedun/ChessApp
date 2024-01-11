@@ -5,10 +5,6 @@ import { useState, useEffect } from 'react'
 import {Navigate} from "react-router-dom";
 
 export function MainPage() {
-    Navigate({to: '/play/2'})
-    function handleClick() {
-
-    }
     const dispatch = useDispatch()
 
     async function handleLogout() {
@@ -21,7 +17,7 @@ export function MainPage() {
 
 
     return (<>
-        <div onClick={handleClick}>
+        <div>
             HELLO
         </div>
         <div onClick={handleLogout}>LOGOUT</div>

@@ -1,13 +1,12 @@
 .common {
   background-color: #222222;
-  border-radius: 5px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
   position: relative;
+  font-size: 20px;
   display: flex;
   justify-content: space-around;
-  width: 70%;
 }
 .common:hover {
   background-color: #515151;
@@ -15,14 +14,13 @@
 
 .active {
   background-color: #81B34A;
-  border-radius: 5px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
   font-weight: bold;
   display: flex;
   justify-content: space-around;
-  width: 75%;
+  font-size: 20px;
 }
 .active:hover {
   background-color: #81B34A;
@@ -30,6 +28,12 @@
 
 a {
   text-decoration: none;
+}
+
+.text {
+  width: 50px;
+  position: relative;
+  left: -25px;
 }
 
 /*# sourceMappingURL=navlink.module.css.map */

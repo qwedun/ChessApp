@@ -43,6 +43,7 @@
   font-weight: bolder;
   font-size: 20px;
   background-color: #81B34A;
+  padding: 20px;
 }
 .profile {
   display: flex;
@@ -61,25 +62,25 @@
 }
 .collapse {
   background-color: #222222;
-  border-radius: 5px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
+  position: relative;
+  font-size: 20px;
   cursor: pointer;
 
   &:hover {
     background-color: #515151;
   }
   display:flex;
-  justify-content: center;
-  width: 70%;
+  justify-content: space-around;
 }
 .img {
   position: relative;
 }
 .logout {
   background-color: #222222;
-  border-radius: 5px;
+  font-size: 20px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
@@ -91,5 +92,9 @@
   }
   display:flex;
   justify-content: space-around;
-  width: 70%;
+}
+.text {
+  width: 50px;
+  position: relative;
+  left: -25px;
 }

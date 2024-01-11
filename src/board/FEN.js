@@ -188,6 +188,7 @@ export class FEN {
         }
         return '-';
     }
+
     static getDataFromFen = (fen) => {
 
         const data = fen.split(' ');
@@ -205,7 +206,6 @@ export class FEN {
                 for (let i = 0; i < +char; i++) {
                     boardFen += '1';
                 }
-
             }
             boardFen += '/'
         }

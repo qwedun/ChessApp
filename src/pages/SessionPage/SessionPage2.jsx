@@ -17,6 +17,7 @@ import notify from '../../assets/sounds/notify.mp3'
 import GameResult from "../../components/GameResult/GameResult";
 import SessionState from "../../components/SessionState/SessionState";
 import axios from "axios";
+import King from "../../board/figures/king";
 const SessionPage = ({isOnline}) => {
     const colors = {
         b: 'black',
@@ -48,8 +49,8 @@ const SessionPage = ({isOnline}) => {
     else posRefs = collection(db, 'single')
     const chatRefs = collection(db, 'chat');
 
-    const queryPos = query(posRefs, orderBy('timestamp'))
-    const queryChat = query(chatRefs, orderBy('timestamp'))
+    const queryPos = query(posRefs, orderBy('timestamp'));
+    const queryChat = query(chatRefs, orderBy('timestamp'));
 
     useEffect(() => {
         onSnapshot(queryPos, snapshot => {
@@ -62,25 +63,21 @@ const SessionPage = ({isOnline}) => {
                 local.push(data.slice(i, i + 2))
             }
 
-            setHistory(local)
-            setData(data)
+            setHistory(local);
+            setData(data);
 
             if (data.length === 0) return
-            setType(data[data.length - 1].type)
+            setType(data[data.length - 1].type);
 
-            const state = data[data.length - 1]
+            const state = data[data.length - 1];
 
-            const {turn} = FEN.getDataFromFen(state.FEN)
-            const board = FEN.createBoardFromFen(state.FEN);
+            const {turn} = FEN.getDataFromFen(state.FEN);
+            let board = FEN.createBoardFromFen(state.FEN);
+            if (currentPlayer === 'black') board = Board.makeOpposite(board);
+            setBoard(Board.updateBoard(board, currentPlayer, true))
+            console.log(board)
 
-            if (currentPlayer === 'white')
-                setBoard(Board.updateBoard(board, currentPlayer, true))
-            else {
-                const newBoard = Board.makeOpposite(board)
-                setBoard(Board.updateBoard(newBoard, currentPlayer, true))
-            }
             setCurrentTurn(colors[turn])
-            console.log(state.FEN)
         })
 
         onSnapshot(queryChat, snapshot => {
@@ -104,21 +101,13 @@ const SessionPage = ({isOnline}) => {
         if (data.length === 0) return
         const oppositeBoard = Board.makeOpposite(board);
 
-        if (GameRules.isStalemate(board, currentTurn)) {
+        if (GameRules.isStalemate(board, currentTurn) ||
+            GameRules.isStalemate(Board.updateBoard(oppositeBoard, colors[currentPlayer], true), currentTurn)) {
             setGameState({
                 result: 'stalemate',
                 reason: '',
                 show: true,
             })
-            playSound(notify);
-        }
-        if (GameRules.isStalemate(Board.updateBoard(oppositeBoard, colors[currentPlayer], true), colors[currentTurn])) {
-            setGameState({
-                result: 'stalemate',
-                reason: '',
-                show: true,
-            })
-            playSound(notify);
         }
 
         if (king.current.underCheck) {
@@ -149,6 +138,9 @@ const SessionPage = ({isOnline}) => {
             else if (type === 'castle') playSound(castle);
             else playSound(capture);
         }
+
+        King.isKingCanCastle(king.current, currentPlayer, board, isOnline, data)
+
     }, [data]);
 
     return (

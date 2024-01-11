@@ -1,12 +1,11 @@
 import Figure from './figure.js'
 class   Pawn {
-    constructor({x, y, color, firstMove, secondMove}) {
+    constructor({x, y, color, firstMove}) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.src = './assets/' + color + 'Pawn.svg'
         this.firstMove = firstMove
-        this.secondMove = secondMove;
         this.name = 'pawn'
     }
 

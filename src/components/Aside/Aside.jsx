@@ -54,13 +54,13 @@ export const Aside = () => {
                         onClick={() => dispatch(logout())}
                         className={styles.logout}>
                         <img alt='logout' src={logoutImg} />
-                        {!isHide && 'Logout'}
+                        {!isHide && <div className={styles.text}>Logout</div>}
                     </div>
                     <div className={styles.collapse}
                          onClick={() => handleClick(isHide)}>
                         {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}
                         {isHide && <img className={styles.img} alt='collapse' src={rightArrow}/>}
-                        {!isHide && <span>Hide</span>}
+                        {!isHide && <span className={styles.text}>Hide</span>}
                     </div>
                 </div>
             </div>

@@ -1,22 +1,19 @@
 .common {
   background-color: #222222;
-  border-radius: 5px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
   position: relative;
+  font-size: 20px;
 
   &:hover {
     background-color: #515151;
   }
   display:flex;
   justify-content: space-around;
-
-  width: 70%;
 }
 .active {
   background-color: #81B34A;
-  border-radius: 5px;
   margin: 5px auto;
   padding: 7px;
   color: #E1E1E1;
@@ -26,8 +23,13 @@
   }
   display:flex;
   justify-content: space-around;
-  width: 75%;
+  font-size: 20px;
 }
 a {
   text-decoration: none;
+}
+.text {
+  width: 50px;
+  position: relative;
+  left: -25px;
 }

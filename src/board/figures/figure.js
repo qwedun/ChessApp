@@ -192,16 +192,12 @@ class Figure {
     }
 
     static moveFigures(currentFigure, figure, board)  {
-        if (currentFigure.firstMove)  {
-            currentFigure.firstMove = false;
-        }
 
         if (figure.canCastleRight && currentFigure.name === 'king') {
             board[figure.y][figure.x - 1] = new Rook({
                 x: figure.x - 1,
                 y: figure.y,
                 color: currentFigure.color,
-                firstMove: false
             });
             board[figure.y][7] = new Title({x: 7, y: figure.y})
         }
@@ -211,7 +207,6 @@ class Figure {
                 x: figure.x + 1,
                 y: figure.y,
                 color: currentFigure.color,
-                firstMove: false
             });
             board[figure.y][0] = new Title({x: 0, y: figure.y})
         }
