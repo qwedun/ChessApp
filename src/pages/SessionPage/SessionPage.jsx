@@ -147,7 +147,7 @@ const SessionPage = ({isOnline}) => {
             <div className={styles.relative}>
                 <div className={`${styles.flexContainer} ${styles.flexTop}`}>
                     <PlayerInfo username='bebra' elo='912390' board={board} color={colors[currentPlayer]}/>
-                    <Timer currentTurn={currentTurn} currentPlayer={'black'} data={data} setGameState={setGameState}/>
+                    <Timer currentPlayer={currentPlayer} currentTurn={currentTurn} color={colors[currentPlayer]} data={data} setGameState={setGameState}/>
                 </div>
                 {gameState.show &&
                     <GameResult
@@ -165,7 +165,7 @@ const SessionPage = ({isOnline}) => {
                 />
                 <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
                     <PlayerInfo username='kek' elo='213123' board={board} color={currentPlayer}/>
-                    <Timer currentTurn={currentTurn} currentPlayer={currentPlayer} data={data} setGameState={setGameState}/>
+                    <Timer currentPlayer={currentPlayer} currentTurn={currentTurn} color={currentPlayer} data={data} setGameState={setGameState}/>
                 </div>
             </div>
             {<SessionState board={board} setBoard={setBoard}
