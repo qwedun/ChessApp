@@ -2,6 +2,8 @@ import styles from './historyTime.module.scss'
 import {FEN} from "../../board/FEN";
 
 const HistoryTime = ({data, prevData}) => {
+    if (!prevData || !data.currentFigure) return
+
     let milliseconds, seconds, minutes, time, ratio
     const rapid = 180000;
     const figureColor = JSON.parse(data.currentFigure).color

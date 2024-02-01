@@ -46,6 +46,7 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
                 handleSubmit(board, currentFigure, figure.underAttack);
         }
         Board.removeTitles(board)
+
         if (!pawnIndex) setCurrentFigure(figure)
 
         if (isOnline)

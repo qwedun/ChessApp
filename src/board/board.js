@@ -46,7 +46,6 @@ class Board {
     static removeTitles(board) {
         for (let row of board)
             for (let figure of row) {
-                if (figure.name) continue;
 
                 figure.canMove = false;
                 figure.underAttack = false;

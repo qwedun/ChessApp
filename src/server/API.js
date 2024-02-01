@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const URL = 'https://api-jmjs.vercel.app'
+export const URL = 'https://shiferchess.ru'
 
 export const api = axios.create({
         withCredentials: true,

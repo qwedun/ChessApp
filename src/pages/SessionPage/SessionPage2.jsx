@@ -30,7 +30,6 @@ const SessionPage = ({isOnline}) => {
     const [currentPlayer] = useState('black');
     const [currentTurn, setCurrentTurn] = useState('white');
 
-    const [history, setHistory] = useState([]);
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
 
@@ -54,16 +53,11 @@ const SessionPage = ({isOnline}) => {
 
     useEffect(() => {
         onSnapshot(queryPos, snapshot => {
-            const local = [];
             const data = [];
             snapshot.forEach(doc => {
                 data.push({...doc.data()})
             })
-            for (let i = 0; i < data.length; i += 2) {
-                local.push(data.slice(i, i + 2))
-            }
 
-            setHistory(local);
             setData(data);
 
             if (data.length === 0) return
@@ -75,7 +69,6 @@ const SessionPage = ({isOnline}) => {
             let board = FEN.createBoardFromFen(state.FEN);
             if (currentPlayer === 'black') board = Board.makeOpposite(board);
             setBoard(Board.updateBoard(board, currentPlayer, true))
-            console.log(board)
 
             setCurrentTurn(colors[turn])
         })
@@ -169,11 +162,10 @@ const SessionPage = ({isOnline}) => {
                     <Timer currentPlayer={currentPlayer} currentTurn={currentTurn} color={currentPlayer} data={data} setGameState={setGameState}/>
                 </div>
             </div>
-            {<SessionState board={board} setBoard={setBoard}
-                           history={history} data={data}
-                           messages={messages} chatRefs={chatRefs}
-                           currentPlayer={currentPlayer}
-            />}
+            <SessionState board={board} setBoard={setBoard}
+                           data={data} messages={messages}
+                           chatRefs={chatRefs} currentPlayer={currentPlayer}
+            />
         </div>
     );
 };
