@@ -1,6 +1,6 @@
 import styles from './pawnPassedMenu.module.scss'
 
-const PawnPassedMenu = ({currentPlayer, setPawnPassed, pawnPassed, pawnIndex}) => {
+const PawnPassedMenu = ({currentPlayer, setPawnPassed, pawnIndex}) => {
     const figures = [
         {figure: 'Queen'},
         {figure: 'Knight'},
