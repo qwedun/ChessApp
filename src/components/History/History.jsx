@@ -1,8 +1,11 @@
 import styles from './history.module.scss'
 import HistoryString from "./HistoryString";
 import HistoryTime from "./HistoryTime";
-const History = ({data, currentPlayer}) => {
+import { useCurrentPlayer } from "../../hooks/hooks";
+
+const History = ({data}) => {
     const history = [];
+    const currentPlayer = useCurrentPlayer();
     for (let i = 0; i < data.length; i += 2) {
         history.push(data.slice(i, i + 2))
     }

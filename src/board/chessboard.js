@@ -9,13 +9,15 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
 import { FEN } from "./FEN";
+import { useSelector } from "react-redux";
+import { useCurrentPlayer } from "../hooks/hooks";
 
-
-export default function Chessboard({board, isOnline, currentPlayer, currentTurn, king, data}) {
+export default function Chessboard({board, isOnline, currentTurn, king, data}) {
 
     const [currentFigure, setCurrentFigure] = useState();
-    const [pawnPassed, setPawnPassed] = useState(null);
-    const [pawnIndex, setPawnIndex] = useState(null);
+    const [passedPawn, setPassedPawn] = useState(null);
+    const [createdFigure, setCreatedFigure] = useState(null);
+    const currentPlayer = useCurrentPlayer();
 
     const type = useRef();
     const posRefs = collection(db, 'session')
@@ -31,23 +33,28 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
     }
 
     useEffect(() => {
-        if (pawnPassed) Figure.createFigureFromName(board, pawnPassed.figure, pawnIndex, currentPlayer);
-        setPawnIndex(null);
-        if (pawnIndex || pawnIndex === 0) handleSubmit(board)
-    }, [pawnPassed]);
+        if (createdFigure) Figure.createFigureFromName(board, createdFigure, passedPawn.x, currentPlayer);
+        setPassedPawn(null)
+        if (passedPawn) handleSubmit(board, currentFigure)
+    }, [createdFigure]);
 
+    useEffect(() => {
+        setCurrentFigure(passedPawn)
+    }, [passedPawn]);
 
     function handleClick(figure) {
         if (board.showable) return
 
+        if (!passedPawn) setCurrentFigure(figure)
+
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, type);
-            if (!GameRules.isPawnPassed(board, isOnline, currentPlayer, setPawnIndex))
-                handleSubmit(board, currentFigure, figure.underAttack);
+            if (figure.y === 0 && currentFigure?.name === 'pawn') {
+                setPassedPawn(currentFigure)
+            }
+            else handleSubmit(board, currentFigure, figure.underAttack);
         }
         Board.removeTitles(board)
-
-        if (!pawnIndex) setCurrentFigure(figure)
 
         if (isOnline)
             if (figure.color !== currentPlayer || currentTurn !== currentPlayer)
@@ -67,11 +74,12 @@ export default function Chessboard({board, isOnline, currentPlayer, currentTurn,
         <DndProvider backend={HTML5Backend}>
             <div
                 style={{display: 'flex', width: '584px', flexWrap: 'wrap', height: '584px', position: 'relative', border: '12px solid #222222'}}>
-                {pawnIndex && <PawnPassedMenu
-                    currentPlayer={currentPlayer}
-                    pawnPassed={pawnPassed}
-                    setPawnPassed={setPawnPassed}
-                    pawnIndex={pawnIndex}
+                {passedPawn && <PawnPassedMenu
+                    currentFigure={currentFigure}
+                    passedPawn={passedPawn}
+                    setPassedPawn={setPassedPawn}
+                    setCreatedFigure={setCreatedFigure}
+                    setCurrentFigure={setCurrentFigure}
                 />}
                 {board.map((value, yIndex) => (
                     value.map((item, xIndex) => {

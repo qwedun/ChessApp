@@ -150,7 +150,6 @@ class King {
             if (currentPlayer === 'black' && i === 6 && !figure.name) continue
 
             else if (figure.name || figure.canBeAttacked) {
-                console.log(figure)
                 canCastleRight = false;
                 break;
             }

@@ -16,31 +16,22 @@ import capture from "../../assets/sounds/capture.mp3";
 import notify from '../../assets/sounds/notify.mp3'
 import GameResult from "../../components/GameResult/GameResult";
 import SessionState from "../../components/SessionState/SessionState";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setResult, setCurrentPlayer } from "../../store/slices/sessionSlice";
 import King from "../../board/figures/king";
+import { colors } from "../../constants/constants";
 const SessionPage = ({isOnline}) => {
-    const colors = {
-        b: 'black',
-        w: 'white',
-        black: 'white',
-        white: 'black',
-    }
+    const dispatch = useDispatch();
 
     const [board, setBoard] = useState(Board.createBoard('white'));
-    const [currentPlayer] = useState('white');
     const [currentTurn, setCurrentTurn] = useState('white');
-
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
-
     const [type, setType] = useState()
+    dispatch(setCurrentPlayer('white'))
 
-    const [gameState, setGameState] = useState({
-        result: null,
-        reason: null,
-        winColor: null,
-        show: false,
-    });
+    const sessionState = useSelector(state => state.sessionState);
+    const currentPlayer = sessionState.currentPlayer;
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
@@ -96,22 +87,22 @@ const SessionPage = ({isOnline}) => {
 
         if (GameRules.isStalemate(board, currentTurn) ||
             GameRules.isStalemate(Board.updateBoard(oppositeBoard, colors[currentPlayer], true), currentTurn)) {
-            setGameState({
-                result: 'stalemate',
+            dispatch(setResult({
+                result: 'Stalemate',
                 reason: '',
                 show: true,
-            })
+            }))
         }
 
         if (king.current.underCheck) {
             playSound(check)
             if (GameRules.isCheckMate(king.current, board)) {
-                setGameState({
-                    result: 'lose',
+                dispatch(setResult({
+                    result: 'Lose',
                     reason: 'by checkmate',
                     winColor: colors[currentPlayer],
                     show: true,
-                });
+                }));
                 playSound(notify);
             }
         } else if (oppositeKing.current.underCheck) {
@@ -119,11 +110,11 @@ const SessionPage = ({isOnline}) => {
             const local = Board.makeOpposite(board);
             oppositeKing.current = Board.findKing(local, colors[currentPlayer]);
             if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, colors[currentPlayer], isOnline))) {
-                setGameState({
-                    result: 'win',
+                dispatch(setResult({
+                    result: 'Win',
                     reason: 'by checkmate',
                     show: true,
-                });
+                }));
                 playSound(notify);
             }
         } else {
@@ -141,16 +132,10 @@ const SessionPage = ({isOnline}) => {
             <div className={styles.relative}>
                 <div className={`${styles.flexContainer} ${styles.flexTop}`}>
                     <PlayerInfo username='bebra' elo='912390' board={board} color={colors[currentPlayer]}/>
-                    <Timer currentPlayer={currentPlayer} currentTurn={currentTurn} color={colors[currentPlayer]} data={data} setGameState={setGameState}/>
+                    <Timer currentTurn={currentTurn} color={colors[currentPlayer]} data={data}/>
                 </div>
-                {gameState.show &&
-                    <GameResult
-                        result={gameState.result}
-                        reason={gameState.reason}
-                        color={gameState.winColor}/>
-                }
+                {sessionState.partyResult.show && <GameResult/>}
                 <Chessboard
-                    currentPlayer={currentPlayer}
                     board={board}
                     isOnline={isOnline}
                     currentTurn={currentTurn}
@@ -159,12 +144,12 @@ const SessionPage = ({isOnline}) => {
                 />
                 <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
                     <PlayerInfo username='kek' elo='213123' board={board} color={currentPlayer}/>
-                    <Timer currentPlayer={currentPlayer} currentTurn={currentTurn} color={currentPlayer} data={data} setGameState={setGameState}/>
+                    <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>
             <SessionState board={board} setBoard={setBoard}
                            data={data} messages={messages}
-                           chatRefs={chatRefs} currentPlayer={currentPlayer}
+                           chatRefs={chatRefs}
             />
         </div>
     );

@@ -1,20 +1,24 @@
 import styles from './gameResult.module.scss';
 import winner from '../../assets/winner.svg';
 import checkmate from '../../assets/checkmate.svg';
+import { useSelector } from "react-redux";
 
-const GameResult = ({result, reason, color}) => {
+const GameResult = () => {
+    const partyResult = useSelector(state => state.sessionState.partyResult);
+    const { result } = partyResult;
 
     let src, message, state;
 
-    if (result === 'win') {
+
+    if (result === 'Win') {
         src = winner;
         message = 'You Won!';
         state = styles.win
-    } else if (result === 'lose') {
+    } else if (result === 'Lose') {
         src = checkmate;
-        message = color + ' Wins';
+        message = partyResult.winColor + ' Wins';
         state = styles.lose
-    } else if (result === 'stalemate') {
+    } else if (result === 'Stalemate') {
         message = 'Stalemate';
         state = styles.stalemate
     }
@@ -24,8 +28,10 @@ const GameResult = ({result, reason, color}) => {
             <div className={`${styles.title} ${state}`}>
                 <img className={styles.img} src={src}/>
                 <div>
-                    <div>{message}</div>
-                    <div className={styles.reason}>{reason}</div>
+                    <div>
+                        {message}
+                    </div>
+                    <div className={styles.reason}>{partyResult.reason}</div>
                 </div>
             </div>
             <div className={styles.review}>Game Review</div>

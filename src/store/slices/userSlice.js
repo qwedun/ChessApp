@@ -26,7 +26,6 @@ export const register = createAsyncThunk(
     async ({email, password}, {rejectWithValue}) => {
         try {
             const response = await authService.register(email, password);
-            console.log(response)
             return response.payload;
         } catch (e) {
             return rejectWithValue(e)
@@ -115,7 +114,6 @@ const userSlice = createSlice({
                 state.isAuthLoading = true;
             })
             .addCase(checkAuth.fulfilled, (state, action) => {
-                console.log(action)
                 if (action.payload.data.login) {
                     state.isAuth = true;
                     state.login = action.payload.data.login;
@@ -125,12 +123,10 @@ const userSlice = createSlice({
                 localStorage.setItem('token', action.payload.data.access_token)
             })
             .addCase(checkAuth.rejected, (state, action) => {
-                console.log(action)
                 state.isAuthLoading = false;
             })
 
             .addCase(confirmLogin.pending, (state, action) => {
-                console.log(action)
                 state.isLoading = true;
             })
             .addCase(confirmLogin.fulfilled, (state, action) => {
@@ -141,7 +137,6 @@ const userSlice = createSlice({
                 state.elo = 9999999;
             })
             .addCase(confirmLogin.rejected, (state, action) => {
-                console.log(action)
                 state.isLoading = false;
                 state.error = action.payload.response.data.error
             })

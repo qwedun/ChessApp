@@ -1,5 +1,8 @@
 import styles from './timer.module.scss'
 import {useEffect, useState} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setResult } from "../../store/slices/sessionSlice";
+import { useCurrentPlayer } from "../../hooks/hooks";
 import {FEN} from "../../board/FEN";
 import clock0 from '../../assets/clock-0000.svg'
 import clock1 from '../../assets/clock-0100.svg'
@@ -11,7 +14,10 @@ import clock6 from '../../assets/clock-0900.svg'
 import clock7 from '../../assets/clock-1100.svg'
 
 
-const Timer = ({currentTurn, color, data, setGameState, currentPlayer}) => {
+const Timer = ({currentTurn, color, data}) => {
+    const sessionState = useSelector(state => state.sessionState);
+    const dispatch = useDispatch();
+    const currentPlayer = useCurrentPlayer();
 
     const [blackTime, setBlackTime] = useState({
         minutes: 3,
@@ -22,6 +28,7 @@ const Timer = ({currentTurn, color, data, setGameState, currentPlayer}) => {
         minutes: 3,
         seconds: 0,
     })
+
     const [index, setIndex] = useState(0);
     const clock = [clock0, clock1, clock2, clock3, clock4, clock5, clock6, clock7];
 
@@ -86,18 +93,18 @@ const Timer = ({currentTurn, color, data, setGameState, currentPlayer}) => {
         if (!(whiteTime.seconds <= 0 && whiteTime.minutes <= 0)) return;
 
         if (currentPlayer === 'white')
-            setGameState({
-                result: 'lose',
+            dispatch(setResult({
+                result: 'Lose',
                 reason: 'by timeout',
                 show: true,
                 winColor: 'Black',
-            })
+            }))
         else
-            setGameState({
-                result: 'win',
+            dispatch(setResult({
+                result: 'Win',
                 reason: 'by timeout',
                 show: true,
-            })
+            }))
 
     }, [whiteTime]);
 
@@ -105,18 +112,18 @@ const Timer = ({currentTurn, color, data, setGameState, currentPlayer}) => {
         if (!(blackTime.seconds <= 0 && blackTime.minutes <= 0)) return;
 
         if (currentPlayer === 'black')
-            setGameState({
-                result: 'lose',
+            dispatch(setResult({
+                result: 'Lose',
                 reason: 'by timeout',
                 show: true,
                 winColor: 'White',
-            })
+            }))
         else
-            setGameState({
-                result: 'win',
+            dispatch(setResult({
+                result: 'Win',
                 reason: 'by timeout',
                 show: true,
-            })
+            }))
     }, [blackTime]);
 
 

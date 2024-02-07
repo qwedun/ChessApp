@@ -31,4 +31,3 @@ export default function Cell({cellColor, figure, currentFigure, handleClick}) {
         </div>
     )
 }
-

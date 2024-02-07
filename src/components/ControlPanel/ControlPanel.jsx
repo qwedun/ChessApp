@@ -8,12 +8,13 @@ import leave from '../../assets/leave.svg'
 import { useEffect, useState } from "react";
 import Board from "../../board/board";
 import {FEN} from '../../board/FEN'
+import { useCurrentPlayer } from "../../hooks/hooks";
 
 
-
-const ControlPanel = ({data, currentPlayer, setBoard}) => {
+const ControlPanel = ({data, setBoard}) => {
 
     const [index, setIndex] = useState(data.length - 1);
+    const currentPlayer = useCurrentPlayer();
 
     useEffect(() => {
         setIndex(data.length - 1)

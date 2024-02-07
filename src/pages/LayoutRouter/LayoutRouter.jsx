@@ -10,7 +10,6 @@ export const LayoutRouter = () => {
 
     const location = useLocation()
     const path = location.pathname
-
     if (user.isAuthLoading)
         return <Preloader/>
 

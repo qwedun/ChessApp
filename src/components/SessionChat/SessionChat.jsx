@@ -1,8 +1,10 @@
 import styles from './sessionChat.module.scss'
 import {useEffect, useRef, useState} from "react";
 import {addDoc} from "firebase/firestore";
-const SessionChat = ({messages, chatRef, currentPlayer}) => {
+import { useCurrentPlayer } from "../../hooks/hooks";
 
+const SessionChat = ({messages, chatRef}) => {
+    const currentPlayer = useCurrentPlayer();
     const [message, setMessage] = useState('');
     const ref = useRef()
 

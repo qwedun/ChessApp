@@ -46,9 +46,9 @@ const EatenPieces = ({board, currentPlayer}) => {
                     const marginLeft = (index === 0) ? '0px' : 30 * index + 'px';
 
                     return (
-                        <div className={styles.container} style={{left: marginLeft}}>
+                        <div className={styles.container} style={{left: marginLeft}} key={index}>
                             {value.map((name, index) => {
-                                return <img className={styles.img} alt='img'
+                                return <img className={styles.img} alt='img' key={index}
                                             style={{left: 8 * index + 'px'}}
                                             src={require(`../../../board/assets/${colors[currentPlayer]}${name}.svg`)}/>
                             })}

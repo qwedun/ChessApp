@@ -1,17 +1,17 @@
 import styles from './pawnPassedMenu.module.scss'
+import { useCurrentPlayer } from "../../hooks/hooks";
+const PawnPassedMenu = ({setCreatedFigure, passedPawn}) => {
+    const currentPlayer = useCurrentPlayer();
 
-const PawnPassedMenu = ({currentPlayer, setPawnPassed, pawnIndex}) => {
     const figures = [
         {figure: 'Queen'},
         {figure: 'Knight'},
         {figure: 'Bishop'},
         {figure: 'Rook'}
     ];
-    const left = 70 * pawnIndex + 'px';
+    const left = 70 * passedPawn.x + 'px';
 
-    const handleClick = (index) => {
-        setPawnPassed(figures[index]);
-    }
+    const handleClick = (index) => setCreatedFigure(figures[index].figure);
 
     return (
         <div className={styles.menu} style={{left: left}}>
