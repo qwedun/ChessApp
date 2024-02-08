@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../store/slices/userSlice.js";
 import { login } from "../../store/slices/userSlice.js";
 import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp.jsx";
+import axios from "axios";
 
 const LoginForm = () => {
 
@@ -19,10 +20,11 @@ const LoginForm = () => {
 
     const isLoading = useSelector((state) => state.user.isLoading)
 
-    function handleSubmit(e) {
-        e.preventDefault()
+        async function handleSubmit(e) {
+            e.preventDefault()
+            //await axios.post('https://shiferchess.ru/api/v1/password-reset', {email: email});
+            dispatch(login({password: password, email: email}))
 
-        dispatch(login({password: password, email: email}))
     }
 
     return (
@@ -37,6 +39,7 @@ const LoginForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setEmailFocus(true)}
                 onBlur={() => {setEmailFocus(false)}}
+                maxlength={100}
                 focus={emailFocus}
                 value={email}
             >Input your email
@@ -48,6 +51,7 @@ const LoginForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 onFocus={() => setPasswordFocus(true)}
                 onBlur={() => setPasswordFocus(false)}
+                maxlength={32}
                 focus={passwordFocus}
                 value={password}
             >Input your password

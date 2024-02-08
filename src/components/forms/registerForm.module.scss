@@ -28,7 +28,7 @@
 .popUp {
   position: absolute;
   top: 112%;
-  left: 50%;
+  left: 55%;
   color: red;
   font-weight: bold;
   opacity: 0.6;
@@ -50,4 +50,10 @@
       margin-right: 4px;
     }
   }
+}
+.passwordEye {
+  position: absolute;
+  right: 12%;
+  top: 13%;
+  cursor: pointer;
 }
