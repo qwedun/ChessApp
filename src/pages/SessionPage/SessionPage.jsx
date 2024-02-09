@@ -39,7 +39,7 @@ const SessionPage = ({isOnline}) => {
     else posRefs = collection(db, 'single')
     const chatRefs = collection(db, 'chat');
 
-    const queryPos = query(posRefs, orderBy('timestamp'));
+    const queryPos = query(posRefs, orderBy('server_timestamp'));
     const queryChat = query(chatRefs, orderBy('timestamp'));
 
     useEffect(() => {
@@ -59,6 +59,7 @@ const SessionPage = ({isOnline}) => {
             const {turn} = FEN.getDataFromFen(state.FEN);
             let board = FEN.createBoardFromFen(state.FEN);
             if (currentPlayer === 'black') board = Board.makeOpposite(board);
+            console.log(data, state);
             setBoard(Board.updateBoard(board, currentPlayer, true))
 
             setCurrentTurn(colors[turn])

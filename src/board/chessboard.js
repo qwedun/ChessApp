@@ -5,7 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Board from "./board";
 import Figure from "./figures/figure";
 import { GameRules } from "./gameRules";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
 import { FEN } from "./FEN";
@@ -29,6 +29,7 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
             timestamp: Date.now(),
             currentFigure: JSON.stringify(currentFigure),
             type: type.current,
+            server_timestamp: serverTimestamp(),
         })
     }
 

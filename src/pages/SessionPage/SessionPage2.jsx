@@ -39,7 +39,7 @@ const SessionPage = ({isOnline}) => {
     else posRefs = collection(db, 'single')
     const chatRefs = collection(db, 'chat');
 
-    const queryPos = query(posRefs, orderBy('timestamp'));
+    const queryPos = query(posRefs, orderBy('server_timestamp'));
     const queryChat = query(chatRefs, orderBy('timestamp'));
 
     useEffect(() => {
