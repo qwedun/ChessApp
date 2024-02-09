@@ -1,5 +1,5 @@
 import styles from './timer.module.scss'
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setResult } from "../../store/slices/sessionSlice";
 import { useCurrentPlayer } from "../../hooks/hooks";
@@ -15,9 +15,10 @@ import clock7 from '../../assets/clock-1100.svg'
 
 
 const Timer = ({currentTurn, color, data}) => {
-    const sessionState = useSelector(state => state.sessionState);
+    const sessionState = useSelector(state => state.sessionState.partyResult);
     const dispatch = useDispatch();
     const currentPlayer = useCurrentPlayer();
+
 
     const [blackTime, setBlackTime] = useState({
         minutes: 3,
@@ -31,6 +32,7 @@ const Timer = ({currentTurn, color, data}) => {
 
     const [index, setIndex] = useState(0);
     const clock = [clock0, clock1, clock2, clock3, clock4, clock5, clock6, clock7];
+    const timerRef = useRef()
 
     useEffect(() => {
         if (!data[data.length -3]) return
@@ -45,8 +47,8 @@ const Timer = ({currentTurn, color, data}) => {
             else blackTimer += value.timestamp - data[index - 1].timestamp;
         })
 
-        if (currentTurn === 'black') blackTimer += Date.now() - data[data.length - 1].timestamp;
-        else whiteTimer += Date.now() - data[data.length - 1].timestamp;
+        if (currentTurn === 'black' && !sessionState.result) blackTimer += Date.now() - data[data.length - 1].timestamp;
+        else if (!sessionState.result) whiteTimer += Date.now() - data[data.length - 1].timestamp;
 
         blackTimer = 180000 - blackTimer;
         whiteTimer = 180000 - whiteTimer;
@@ -67,16 +69,15 @@ const Timer = ({currentTurn, color, data}) => {
             seconds: whiteSeconds < 0 ? 0 : whiteSeconds,
         });
 
-        let timer;
         if (currentTurn === color) {
             let setTime;
             color === 'black'? setTime = setBlackTime : setTime = setWhiteTime;
-            timer = setInterval(() => {
+            timerRef.current = setInterval(() => {
                 setIndex(prev => prev + 1 < 8 ? prev + 1 : 0);
 
                 setTime(prev => {
                     if (prev.seconds - 1 < 0 && prev.minutes <= 0) {
-                        clearInterval(timer);
+                        clearInterval(timerRef.current);
                         return {seconds: 0, minutes: 0}
                     }
                     if (prev.seconds - 1 < 0) return {minutes: prev.minutes - 1, seconds: 59}
@@ -84,10 +85,10 @@ const Timer = ({currentTurn, color, data}) => {
                 })
             }, 1000)
         }
-        else clearInterval(timer)
-        return ()   => clearInterval(timer)
+        else clearInterval(timerRef.current)
+        return ()   => clearInterval(timerRef.current)
 
-    }, [data]);
+    }, [data, sessionState.result]);
 
     useEffect(() => {
         if (!(whiteTime.seconds <= 0 && whiteTime.minutes <= 0)) return;
@@ -125,6 +126,15 @@ const Timer = ({currentTurn, color, data}) => {
                 show: true,
             }))
     }, [blackTime]);
+
+    useEffect(() => {
+        if (!data[data.length -3]) return
+        clearInterval(timerRef.current);
+
+        const turn = FEN.getDataFromFen(data[data.length - 1].FEN);
+        console.log(turn)
+
+    }, [sessionState.result]);
 
 
     const blackTimeString = `${blackTime.minutes}:${blackTime.seconds < 10 ? '0' + blackTime.seconds : blackTime.seconds}`

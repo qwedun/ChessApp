@@ -14,6 +14,8 @@ const initialState = {
         reason: '',
     },
     currentPlayer: '',
+    whiteTime: '',
+    blackTime: '',
 }
 
 export const lossOffer = createAsyncThunk(

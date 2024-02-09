@@ -161,6 +161,7 @@ export class FEN {
         if (!(whiteCastleLeft || whiteCastleRight || blackCastleRight || blackCastleLeft))
             return '-'
 
+        data.pop();
         return whiteCastleRight + whiteCastleLeft + blackCastleRight + blackCastleLeft;
     }
     static isPawnPassFen = (board, prevFen) => {

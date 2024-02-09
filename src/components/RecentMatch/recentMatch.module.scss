@@ -1,0 +1,29 @@
+.main {
+  display: flex;
+  justify-content: space-around;
+  background-color: #313131;
+  height: 50px;
+  margin-bottom: 3px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.players {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-width: 30%;
+}
+.title {
+  min-width: 14%;
+  height: 100%;
+}
+.flex {
+  display: flex;
+  height: 100%;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
