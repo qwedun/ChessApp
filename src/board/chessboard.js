@@ -46,7 +46,6 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
         if (board.showable) return
 
         if (!passedPawn) setCurrentFigure(figure)
-        Board.removeTitles(board)
 
         if (figure.underAttack || figure.canMove) {
             GameRules.moveFigures(board, currentFigure, figure, type);
@@ -55,7 +54,7 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
             }
             else handleSubmit(board, currentFigure, figure.underAttack);
         }
-
+        Board.removeTitles(board)
 
         if (isOnline)
             if (figure.color !== currentPlayer || currentTurn !== currentPlayer)
