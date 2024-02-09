@@ -1,15 +1,7 @@
 import styles from './recentMatch.module.scss'
-import redMinus from '../../assets/redMinus.svg'
-import greenPlus from '../../assets/greenPlus.svg'
-import rapid from '../../assets/rapid.svg'
-import blitz from '../../assets/blitz.svg'
-import bullet from '../../assets/bullet.svg'
-const RecentMatch = ({data}) => {
-    const types = {
-        'rapid': rapid,
-        'blitz': blitz,
 
-    }
+const RecentMatch = ({data}) => {
+
 
 
     return (

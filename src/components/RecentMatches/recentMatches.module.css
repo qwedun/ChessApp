@@ -1,0 +1,26 @@
+.main {
+  background-color: #222222;
+  color: #E1E1E1;
+  font-size: 18px;
+}
+
+.flex {
+  display: flex;
+  padding: 5px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.title {
+  min-width: 14%;
+}
+
+.playersTitle {
+  min-width: 30%;
+}
+
+/*# sourceMappingURL=recentMatches.module.css.map */
