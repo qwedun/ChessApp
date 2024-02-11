@@ -4,7 +4,7 @@ class Knight {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.src = './assets/' + color + 'Knight.svg';
+        this.src = '/assets/' + color + 'Knight.svg';
         this.name = 'knight'
     }
 

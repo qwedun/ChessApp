@@ -26,7 +26,7 @@ export default function Cell({cellColor, figure, currentFigure, handleClick}) {
             {figure.src && <img
                 ref={drag}
                 className={styles.img}
-                src={require("" + figure.src)}
+                src={require('.' + figure.src)}
                 alt="piece"/>}
         </div>
     )

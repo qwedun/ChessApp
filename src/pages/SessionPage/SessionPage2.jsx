@@ -78,6 +78,7 @@ const SessionPage = ({isOnline}) => {
     const king = useRef(Board.findKing(board, currentPlayer));
 
     useEffect(() => {
+        if (!data[data.length - 1]?.server_timestamp) return
 
         king.current = Board.findKing(board, currentPlayer);
         oppositeKing.current = Board.findKing(board, colors[currentPlayer]);

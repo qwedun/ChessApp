@@ -59,7 +59,6 @@ const SessionPage = ({isOnline}) => {
             const {turn} = FEN.getDataFromFen(state.FEN);
             let board = FEN.createBoardFromFen(state.FEN);
             if (currentPlayer === 'black') board = Board.makeOpposite(board);
-            console.log(data, state);
             setBoard(Board.updateBoard(board, currentPlayer, true))
 
             setCurrentTurn(colors[turn])
@@ -79,7 +78,7 @@ const SessionPage = ({isOnline}) => {
     const king = useRef(Board.findKing(board, currentPlayer));
 
     useEffect(() => {
-
+        if (!data[data.length - 1]?.server_timestamp) return
         king.current = Board.findKing(board, currentPlayer);
         oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
 

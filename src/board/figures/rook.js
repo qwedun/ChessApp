@@ -5,7 +5,7 @@ class Rook {
         this.y = y;
         this.color = color;
         this.name = 'rook'
-        this.src = './assets/' + color + 'Rook.svg';
+        this.src = '/assets/' + color + 'Rook.svg';
     }
 
     checkMoves(board, checkForAttack, isKingChecked, isRender) {

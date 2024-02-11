@@ -4,7 +4,7 @@ class   Pawn {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.src = './assets/' + color + 'Pawn.svg'
+        this.src = '/assets/' + color + 'Pawn.svg'
         this.firstMove = firstMove
         this.name = 'pawn'
     }

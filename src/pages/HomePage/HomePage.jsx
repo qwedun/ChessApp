@@ -11,8 +11,8 @@ const HomePage = () => {
                 <RatingChart/>
                 <PartiesChart/>
             </div>
-
-
+            <div className={styles.title}>Recent Matches</div>
+            <RecentMatches/>
         </>
     );
 };

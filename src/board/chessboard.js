@@ -11,6 +11,7 @@ import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
 import { FEN } from "./FEN";
 import { useSelector } from "react-redux";
 import { useCurrentPlayer } from "../hooks/hooks";
+import styles from './chessboard.module.scss'
 
 export default function Chessboard({board, isOnline, currentTurn, king, data}) {
 
@@ -73,8 +74,7 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div
-                style={{display: 'flex', width: '584px', flexWrap: 'wrap', height: '584px', position: 'relative', border: '12px solid #222222'}}>
+            <div className={styles.chessboard}>
                 {passedPawn && <PawnPassedMenu
                     currentFigure={currentFigure}
                     passedPawn={passedPawn}
@@ -82,13 +82,13 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
                     setCreatedFigure={setCreatedFigure}
                     setCurrentFigure={setCurrentFigure}
                 />}
-                {board.map((value, yIndex) => (
-                    value.map((item, xIndex) => {
+                {board.map((row, yIndex) => (
+                    row.map((figure, xIndex) => {
                         return (
                             <Cell
                                 handleClick={handleClick}
                                 currentFigure={currentFigure}
-                                figure = {item}
+                                figure = {figure}
                                 cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}>
                             </Cell>
                         )

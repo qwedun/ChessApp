@@ -2,19 +2,20 @@
   background-color: #222222;
   color: #E1E1E1;
   font-size: 18px;
+  border-radius: 8px;
+  width: 80%;
 }
-.flex {
-  display: flex;
-  padding: 5px;
+.grid {
+  display: grid;
+  grid-template-columns: 14% 30% repeat(4, 14%);
+  padding: 10px 0 3px;
 }
 .wrapper {
   display: flex;
   justify-content: space-around;
   flex-direction: column;
+  padding: 5px 0;
 }
 .title {
   min-width: 14%;
-}
-.playersTitle {
-  min-width: 30%;
 }

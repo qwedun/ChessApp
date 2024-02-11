@@ -1,11 +1,13 @@
 import styles from './recentMatches.module.scss';
 import RecentMatch from "../RecentMatch/RecentMatch";
+import {useSelector} from "react-redux";
 
 const RecentMatches = () => {
+    const login = useSelector(state => state.user.login)
 
     const data = [{
         type: 'rapid',
-        blackPlayer: 'qwedun',
+        blackPlayer: login,
         whitePlayer: 'kachok',
         winColor: 'white',
         winPlayer: 'kachok',
@@ -14,16 +16,16 @@ const RecentMatches = () => {
     }, {
         type: 'blitz',
         blackPlayer: 'rustam',
-        whitePlayer: 'qwedun',
+        whitePlayer: login,
         winColor: 'black',
         winPlayer: 'rustam',
         blackPlayerElo: '821',
         whitePlayerElo: '788'
     }, {
         type: 'bullet',
-        blackPlayer: 'qwedun',
-        whitePlayer: 'canek',
-        winPlayer: 'canek',
+        blackPlayer: 'canek',
+        whitePlayer: login,
+        winPlayer: login,
         winColor: 'white',
         blackPlayerElo: '821',
         whitePlayerElo: '788'
@@ -31,16 +33,16 @@ const RecentMatches = () => {
 
     return (
         <div className={styles.main}>
-            <div className={styles.flex}>
-                <div className={styles.title}></div>
-                <div className={styles.playersTitle}>Players</div>
-                <div className={styles.title}>Result</div>
-                <div className={styles.title}>Accuracy</div>
-                <div className={styles.title}>Turns</div>
-                <div className={styles.title}>Date</div>
+            <div className={styles.grid}>
+                <div></div>
+                <div>Players</div>
+                <div>Result</div>
+                <div>Accuracy</div>
+                <div>Turns</div>
+                <div>Date</div>
             </div>
             <div className={styles.wrapper}>
-                {data.map(data => <RecentMatch data={data}/>)}
+                {data.map(data => <RecentMatch data={data} login={login}/>)}
             </div>
         </div>
     );

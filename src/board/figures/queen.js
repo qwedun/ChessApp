@@ -4,7 +4,7 @@ class Queen {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.src = './assets/' + color + 'Queen.svg'
+        this.src = '/assets/' + color + 'Queen.svg'
         this.name = 'queen'
     }
     checkMoves(board, checkForAttack, isKingChecked, isRender) {

@@ -4,7 +4,7 @@ class Bishop {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.src = './assets/' + color + 'Bishop.svg';
+        this.src = '/assets/' + color + 'Bishop.svg';
         this.name = 'bishop'
     }
 

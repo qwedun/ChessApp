@@ -6,7 +6,7 @@ class King {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.src = './assets/' + color + 'King.svg';
+        this.src = '/assets/' + color + 'King.svg';
         this.name = 'king';
     }
 
