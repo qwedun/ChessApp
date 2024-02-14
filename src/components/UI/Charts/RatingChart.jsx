@@ -16,6 +16,7 @@ export const RatingChart = () => {
         }],
     }
     const options = {
+        id: 2,
         plugins: {
             legend: false,
         },

@@ -44,7 +44,6 @@ export const Aside = () => {
                 <div>
                     <NavigationLink to='/home' url={home} isHide={isHide}>Home</NavigationLink>
                     <NavigationLink to='/socials' url={socials} isHide={isHide}>Socials</NavigationLink>
-                    <NavigationLink to='/board' url={title} isHide={isHide}>Board</NavigationLink>
                     <NavigationLink to='/archive' url={archive} isHide={isHide}>Archive</NavigationLink>
                     <NavigationLink to='/news' url={book} isHide={isHide}>News</NavigationLink>
                 </div>

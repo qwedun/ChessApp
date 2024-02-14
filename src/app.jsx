@@ -13,6 +13,7 @@ const PlayPage = lazy(() => import('./pages/PlayPage/PlayPage'))
 const ConfirmLoginPage = lazy(() => import('./pages/ConfirmLoginPage/ConfirmLoginPage'))
 const SessionPage = lazy(() => import('./pages/SessionPage/SessionPage'))
 const SessionPage2 = lazy(() => import('./pages/SessionPage/SessionPage2'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage/ProfilePage'))
 
 
 export default function App () {
@@ -37,6 +38,7 @@ export default function App () {
                 <Route path='play' element={<PlayPage/>}/>
                 <Route path='play/1' element={<SessionPage isOnline={true}/>}/>
                 <Route path='play/2' element={<SessionPage2 isOnline={true}/>}/>
+                <Route path='profile/:login' element={<ProfilePage/>}/>
             </Route>
         </Routes>
     )

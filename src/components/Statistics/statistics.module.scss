@@ -1,0 +1,31 @@
+.main {
+  padding: 12px;
+}
+.title {
+  font-size: 24px;
+  border-bottom: solid 2px #E1E1E1;
+}
+.hr {
+  position: relative;
+  width: 90%;
+  right: -10%;
+}
+.container {
+  font-size: 20px;
+  display: flex;
+  border-bottom: solid 2px #E1E1E1;
+  justify-content: space-between;
+}
+.img {
+  position: relative;
+  bottom: -5px;
+}
+.flexContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.right {
+  display: inline-block;
+  position: relative;
+  left: 90%;
+}
