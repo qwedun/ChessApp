@@ -1,13 +1,13 @@
 .wrapper {
   max-width: 1280px;
   position: relative;
-  height: 100%;
   margin: 0 auto;
   padding: 0px 30px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  height: 100%;
 }
 
 .rightWrapper {
