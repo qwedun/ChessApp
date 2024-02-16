@@ -1,0 +1,70 @@
+.main {
+  background-color: #313131;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 18px;
+}
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.options {
+  margin-top: 50px;
+  background-color: #749654;
+  border: solid 4px #222222;
+  width: 60%;
+  padding: 15px 0;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    background-color: #81B34A;
+  }
+}
+
+.play {
+  margin-top: 10px;
+  background-color: #81B34A;
+  width: 60%;
+  padding: 15px 0;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  border-bottom: 5px solid #E1E1E1;
+  cursor: pointer;
+  &:hover{
+    box-shadow:0 0 10px #749654;
+  }
+}
+.content {
+  margin-top: 10px;
+  background-color: #749654;
+  width: 70%;
+  padding: 20px 0;
+  text-align: center;
+  border-radius: 5px;
+  &:hover{
+    box-shadow:0 0 10px #749654;
+  }
+  position: relative;
+  cursor: pointer;
+}
+.img {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.type {
+  position: absolute;
+  left: 31%;
+  top: 10px;
+}
+.friend::before {
+  content: url('../../assets/handshake.svg');
+  position: absolute;
+  left: 20%;
+  top: 15px;
+}

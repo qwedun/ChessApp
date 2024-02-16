@@ -20,6 +20,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { setResult, setCurrentPlayer } from "../../store/slices/sessionSlice";
 import King from "../../board/figures/king";
 import { colors } from "../../constants/constants";
+import GameSearch from "../../components/GameSearch/GameSearch";
+import LinkCreateModal from "../../components/LinkCreateModal/LinkCreateModal";
+import {Link} from "react-router-dom";
 const SessionPage = ({isOnline}) => {
     const dispatch = useDispatch();
 
@@ -27,7 +30,8 @@ const SessionPage = ({isOnline}) => {
     const [currentTurn, setCurrentTurn] = useState('white');
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
-    const [type, setType] = useState()
+    const [type, setType] = useState();
+    const [showGameSearch, setShowGameSearch] = useState(true);
     dispatch(setCurrentPlayer('white'))
 
     const sessionState = useSelector(state => state.sessionState);
@@ -80,7 +84,7 @@ const SessionPage = ({isOnline}) => {
     useEffect(() => {
         if (!data[data.length - 1]?.server_timestamp) return
         king.current = Board.findKing(board, currentPlayer);
-        oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
+            oppositeKing.current = Board.findKing(board, colors[currentPlayer]);
 
         if (data.length === 0) return
         const oppositeBoard = Board.makeOpposite(board);
@@ -147,10 +151,10 @@ const SessionPage = ({isOnline}) => {
                     <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>
-            <SessionState board={board} setBoard={setBoard}
-                           data={data} messages={messages}
-                           chatRefs={chatRefs}
-            />
+            {showGameSearch && <GameSearch/>}
+            {!showGameSearch && <SessionState board={board} setBoard={setBoard}
+                          data={data} messages={messages}
+                          chatRefs={chatRefs}/>}
         </div>
     );
 };

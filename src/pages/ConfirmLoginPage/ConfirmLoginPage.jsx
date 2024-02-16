@@ -44,7 +44,7 @@ const ConfirmLoginPage = () => {
                     <div>New to chess</div>
                     <div className={styles.green}>Most Common</div>
                 </div>
-                <img alt='new' src={Pawn}/>
+                <img alt='new' width='30px' height='30px' src={Pawn}/>
             </button>
             <button
                 onClick={() => setElo(elos[1])}

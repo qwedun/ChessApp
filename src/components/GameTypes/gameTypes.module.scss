@@ -1,0 +1,21 @@
+.grid {
+  width: 50%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 33.33%);
+}
+.main {
+  width: 100%;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  margin: 5px;
+  background-color: #222222;
+  border-radius: 2px;
+  &:hover {
+    background-color: #81B34A;
+    cursor: pointer;
+  }
+}
