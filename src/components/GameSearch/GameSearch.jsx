@@ -4,6 +4,7 @@ import chessboard from '../../assets/smallChessboard.svg';
 import plus from '../../assets/greenPlus.svg';
 import users from '../../assets/users.svg';
 import GameCreate from "../GameCreate/GameCreate";
+import Games from "../Games/Games";
 
 const GameSearch = () => {
 
@@ -37,6 +38,7 @@ const GameSearch = () => {
                 </div>
             </div>
             {search && <GameCreate/>}
+            {games && <Games/>}
         </div>
     );
 };

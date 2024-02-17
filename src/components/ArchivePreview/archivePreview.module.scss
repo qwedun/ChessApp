@@ -1,0 +1,36 @@
+.container {
+  height: 32px;
+  border-bottom: solid 1px #222222;
+  display: grid;
+  grid-template-columns: 10% 35% 35% 10% 10%;
+  align-items: center;
+  justify-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: #6a6a6b;
+  }
+}
+.player {
+  font-weight: bold;
+}
+.win {
+  color: #81B34A;
+}
+.lose {
+  color: #b54a4a;
+}
+.wrapper {
+  overflow-y: scroll;
+  height: 479px;
+}
+.link {
+  display: block;
+  background-color: #81B34A;
+  padding: 10px;
+  margin: 10px;
+  color: #E1E1E1;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+}

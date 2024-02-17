@@ -1,0 +1,20 @@
+.container {
+  display: grid;
+  grid-template-columns: 80% 10% 10%;
+  align-items: center;
+  border-bottom: solid 2px #222222;
+  padding: 5px 0;
+  margin: 0 20px;
+  &:hover {
+    background-color: #6a6a6b;
+    cursor: pointer;
+  }
+}
+.players {
+  font-weight: bold;
+  margin-left: 10px;
+}
+.wrapper {
+  height: 536px;
+  overflow-y: scroll;
+}
