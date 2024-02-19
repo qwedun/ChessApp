@@ -18,7 +18,7 @@ export class FEN {
         const boardFen = this.boardFen(board);
         const {board: boardFenSimple} = this.getDataFromFen(boardFen);
         const turnsWithoutCapturing = this.turnsWithoutCapturing(data[data.length - 2]?.FEN, currentFigure, isAttacked)
-        const pawnPassFen = this.isPawnPassFen(boardFenSimple, data[data.length - 2]?.FEN)
+        const pawnPassFen = this.isPawnPassFen(boardFenSimple, data[data.length - 1]?.FEN)
         const turnsCount = Math.floor((data.length + 1) / 2);
 
         const fenString = `${boardFen} ${colors[currentTurn[0]]} ${kingsCanCastleFen} ${pawnPassFen} ${turnsWithoutCapturing} ${turnsCount}`

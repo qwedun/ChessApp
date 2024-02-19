@@ -1,8 +1,8 @@
 import styles from './avatar.module.scss'
-import shrek from '../../../assets/shrek.jpg'
+import pawnPicture from '../../../assets/pawnProfile.png'
 const Avatar = ({...props}) => {
     return (
-        <img {...props} className={styles.img} src={shrek} />
+        <img {...props} className={styles.img} src={pawnPicture} />
     );
 };
 

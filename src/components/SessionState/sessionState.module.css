@@ -1,9 +1,9 @@
 .session {
-  background-color: #E1E1E1;
+  background-color: #313131;
+  border-radius: 5px;
   width: 45%;
   display: flex;
   flex-direction: column;
-  outline: 3px solid #222222;
 }
 
 .header {

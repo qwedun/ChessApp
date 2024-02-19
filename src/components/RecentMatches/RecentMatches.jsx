@@ -8,14 +8,14 @@ const RecentMatches = () => {
     const data = [{
         type: 'rapid',
         blackPlayer: login,
-        whitePlayer: 'kachok',
+        whitePlayer: 'enemy',
         winColor: 'white',
         winPlayer: 'kachok',
         blackPlayerElo: '801',
         whitePlayerElo: '832'
     }, {
         type: 'blitz',
-        blackPlayer: 'rustam',
+        blackPlayer: 'enemy',
         whitePlayer: login,
         winColor: 'black',
         winPlayer: 'rustam',
@@ -23,7 +23,7 @@ const RecentMatches = () => {
         whitePlayerElo: '788'
     }, {
         type: 'bullet',
-        blackPlayer: 'canek',
+        blackPlayer: 'enemy',
         whitePlayer: login,
         winPlayer: login,
         winColor: 'white',

@@ -25,6 +25,7 @@ import LinkCreateModal from "../../components/LinkCreateModal/LinkCreateModal";
 import {Link} from "react-router-dom";
 const SessionPage = ({isOnline}) => {
     const dispatch = useDispatch();
+    const login = useSelector(state => state.user.login)
 
     const [board, setBoard] = useState(Board.createBoard('white'));
     const [currentTurn, setCurrentTurn] = useState('white');
@@ -135,11 +136,12 @@ const SessionPage = ({isOnline}) => {
         <div className={styles.mainWrapper}>
             <div className={styles.relative}>
                 <div className={`${styles.flexContainer} ${styles.flexTop}`}>
-                    <PlayerInfo username='bebra' elo='912390' board={board} color={colors[currentPlayer]}/>
+                    <PlayerInfo username='enemy' elo='810' board={board} color={colors[currentPlayer]}/>
                     <Timer currentTurn={currentTurn} color={colors[currentPlayer]} data={data}/>
                 </div>
                 {sessionState.partyResult.show && <GameResult/>}
                 <Chessboard
+                    setShowGameSearch={setShowGameSearch}
                     board={board}
                     isOnline={isOnline}
                     currentTurn={currentTurn}
@@ -147,7 +149,7 @@ const SessionPage = ({isOnline}) => {
                     data={data}
                 />
                 <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
-                    <PlayerInfo username='kek' elo='213123' board={board} color={currentPlayer}/>
+                    <PlayerInfo username={login} elo='800' board={board} color={currentPlayer}/>
                     <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>

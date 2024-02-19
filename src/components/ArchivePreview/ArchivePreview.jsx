@@ -4,8 +4,11 @@ import {Link} from "react-router-dom";
 import rapid from "../../assets/rapid.svg";
 import blitz from "../../assets/blitz.svg";
 import bullet from "../../assets/bullet.svg";
+import {useSelector} from "react-redux";
 
 const ArchivePreview = () => {
+    
+    const login = useSelector(state => state.user.login)
 
     const types = {
         rapid: rapid,
@@ -15,23 +18,23 @@ const ArchivePreview = () => {
 
     const data = [{
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -39,23 +42,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -63,23 +66,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -87,23 +90,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -111,23 +114,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -135,23 +138,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -159,23 +162,23 @@ const ArchivePreview = () => {
         winPlayer: 'twty',
     }, {
         type: 'rapid',
-        white: 'qwedun',
+        white: login,
         whiteElo: '800',
         black: 'ttet',
         blackElo: '500',
         time: 10,
-        winPlayer: 'qwedun',
+        winPlayer: login,
     }, {
         type: 'blitz',
         white: 'bbfr',
         whiteElo: '814',
-        black: 'qwedun',
+        black: login,
         blackElo: '890',
         time: 3,
         winPlayer: 'bbfr',
     }, {
         type: 'bullet',
-        white: 'qwedun',
+        white: login,
         whiteElo: '804',
         black: 'twty',
         blackElo: '490',
@@ -193,7 +196,7 @@ const ArchivePreview = () => {
                             <img alt='type' width='24px' height='24px' src={types[type]}/>
                             <div className={styles.player}>{white} ({whiteElo})</div>
                             <div className={styles.player}>{black} ({blackElo})</div>
-                            <div className={winPlayer === 'qwedun' ? styles.win : styles.lose}>
+                            <div className={winPlayer === login ? styles.win : styles.lose}>
                                 {winPlayer === white ? '1-0' : '0-1'}
                             </div>
                             <div>{time}</div>

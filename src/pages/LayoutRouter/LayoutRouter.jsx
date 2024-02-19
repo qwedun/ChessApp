@@ -22,7 +22,7 @@ export const LayoutRouter = () => {
         if (!user.canConfirmLogin) return <Navigate to='/login' replace={true}/>
         return <WelcomeLayout/>
     } else {
-        //if (!user.isAuth) return <Navigate to='/login' replace={true}/>
+            if (!user.isAuth) return <Navigate to='/login' replace={true}/>
         return <MainPageLayout/>
     }
 };

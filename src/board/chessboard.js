@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { useCurrentPlayer } from "../hooks/hooks";
 import styles from './chessboard.module.scss'
 
-export default function Chessboard({board, isOnline, currentTurn, king, data}) {
+export default function Chessboard({setShowGameSearch, board, isOnline, currentTurn, king, data}) {
 
     const [currentFigure, setCurrentFigure] = useState();
     const [passedPawn, setPassedPawn] = useState(null);
@@ -46,6 +46,7 @@ export default function Chessboard({board, isOnline, currentTurn, king, data}) {
 
     function handleClick(figure) {
         if (board.showable) return
+        setShowGameSearch(false);
 
         if (!passedPawn) setCurrentFigure(figure)
 

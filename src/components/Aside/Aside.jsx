@@ -36,7 +36,7 @@ export const Aside = () => {
                         <Avatar width='64px' height='64px'/>
                         <div className={styles.container}>
                             <div className={styles.info}>{user.login}</div>
-                            <div className={styles.info}>{user.elo}</div>
+                            <div className={styles.info}>800</div>
                         </div>
                     </div>}
                     {!isHide && <Link className={styles.play} to='/play'>Play</Link>}

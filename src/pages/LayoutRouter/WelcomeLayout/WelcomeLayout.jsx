@@ -7,7 +7,7 @@ export const WelcomeLayout = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.logoWrapper}>
-                <img alt="Logo" src={require("../../../assets/logo.png")}/> <span className={styles.title}>САНЯ ЛОХ ОБЪЕЛСЯ БЛОХ</span>
+                <img alt="Logo" src={require("../../../assets/logo.png")}/> <span className={styles.title}>SHIFERCHESS</span>
             </div>
             <div className={styles.main}>
                 <div className={styles.container}>
@@ -21,7 +21,7 @@ export const WelcomeLayout = () => {
                     </Suspense>
                 </div>
             </div>
-            <footer>FOOTER</footer>
+            <div></div>
         </div>
     );
 };
