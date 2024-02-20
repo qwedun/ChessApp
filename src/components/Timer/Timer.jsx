@@ -4,85 +4,58 @@ import { useSelector, useDispatch } from "react-redux";
 import { setResult } from "../../store/slices/sessionSlice";
 import { useCurrentPlayer } from "../../hooks/hooks";
 import {FEN} from "../../board/FEN";
-import clock0 from '../../assets/clock-0000.svg'
-import clock1 from '../../assets/clock-0100.svg'
-import clock2 from '../../assets/clock-0300.svg'
-import clock3 from '../../assets/clock-0500.svg'
-import clock4 from '../../assets/clock-0030.svg'
-import clock5 from '../../assets/clock-0700.svg'
-import clock6 from '../../assets/clock-0900.svg'
-import clock7 from '../../assets/clock-1100.svg'
+import { CLOCK } from "../../constants/constants";
 
 
 const Timer = ({currentTurn, color, data}) => {
+
     const sessionState = useSelector(state => state.sessionState.partyResult);
     const dispatch = useDispatch();
     const currentPlayer = useCurrentPlayer();
 
-
-    const [blackTime, setBlackTime] = useState({
-        minutes: 3,
-        seconds: 0,
-    })
-
-    const [whiteTime, setWhiteTime] = useState({
-        minutes: 3,
-        seconds: 0,
-    })
+    const [blackTime, setBlackTime] = useState(180)
+    const [whiteTime, setWhiteTime] = useState(180)
 
     const [index, setIndex] = useState(0);
-    const clock = [clock0, clock1, clock2, clock3, clock4, clock5, clock6, clock7];
     const timerRef = useRef()
 
     useEffect(() => {
-        if (!data[data.length -3]) return
+        if (!data[data.length - 2]) return
 
-        let blackTimer = 0, whiteTimer = 0;
+        let blackTimer = 180000, whiteTimer = 180000;
 
         data.forEach((value, index) => {
             const {turn} = FEN.getDataFromFen(value.FEN);
-            if (!data[index - 2]) return
+            if (!data[index - 1]) return
 
-            if (turn === 'b') whiteTimer += value.timestamp - data[index - 1].timestamp;
-            else blackTimer += value.timestamp - data[index - 1].timestamp;
+            if (turn === 'b') whiteTimer -= value.timestamp - data[index - 1].timestamp;
+            else blackTimer -= value.timestamp - data[index - 1].timestamp;
         })
 
-        if (currentTurn === 'black' && !sessionState.result) blackTimer += Date.now() - data[data.length - 1].timestamp;
-        else if (!sessionState.result) whiteTimer += Date.now() - data[data.length - 1].timestamp;
 
-        blackTimer = 180000 - blackTimer;
-        whiteTimer = 180000 - whiteTimer;
+        if (currentTurn === 'black' && !sessionState.result) blackTimer -= Date.now() - data[data.length - 1].timestamp;
+        else if (!sessionState.result) whiteTimer -= Date.now() - data[data.length - 1].timestamp;
 
-        const blackMinutes = Math.floor(blackTimer / 60000);
-        const whiteMinutes = Math.floor(whiteTimer / 60000);
+        setBlackTime(Math.floor(blackTimer / 1000));
+        setWhiteTime(Math.floor(whiteTimer / 1000));
 
-        const blackSeconds = ((blackTimer % 60000) / 1000).toFixed(0)
-        const whiteSeconds = ((whiteTimer % 60000) / 1000).toFixed(0)
+        if (currentTurn === 'white') {
+            if (sessionState.reason === 'by timeout') setWhiteTime(0)
+        } else if (sessionState.reason === 'by timeout') setBlackTime(0);
 
-        setBlackTime({
-            minutes: blackMinutes < 0 ? 0 : blackMinutes,
-            seconds: blackSeconds < 0 ? 0 : blackSeconds,
-        });
-
-        setWhiteTime({
-            minutes: whiteMinutes < 0 ? 0 : whiteMinutes,
-            seconds: whiteSeconds < 0 ? 0 : whiteSeconds,
-        });
+        if (blackTimer < 0 || whiteTimer < 0)
+            return
 
         if (currentTurn === color) {
             let setTime;
             color === 'black'? setTime = setBlackTime : setTime = setWhiteTime;
             timerRef.current = setInterval(() => {
                 setIndex(prev => prev + 1 < 8 ? prev + 1 : 0);
-
                 setTime(prev => {
-                    if (prev.seconds - 1 < 0 && prev.minutes <= 0) {
-                        clearInterval(timerRef.current);
-                        return {seconds: 0, minutes: 0}
-                    }
-                    if (prev.seconds - 1 < 0) return {minutes: prev.minutes - 1, seconds: 59}
-                    return {...prev, seconds: prev.seconds - 1}
-                })
+                    if (prev - 1 > 0) return prev - 1
+                    clearInterval(timerRef.current)
+                    return 0;
+                });
             }, 1000)
         }
         else clearInterval(timerRef.current)
@@ -91,7 +64,7 @@ const Timer = ({currentTurn, color, data}) => {
     }, [data, sessionState.result]);
 
     useEffect(() => {
-        if (!(whiteTime.seconds <= 0 && whiteTime.minutes <= 0)) return;
+        if (whiteTime > 0) return;
 
         if (currentPlayer === 'white')
             dispatch(setResult({
@@ -105,12 +78,12 @@ const Timer = ({currentTurn, color, data}) => {
                 result: 'Win',
                 reason: 'by timeout',
                 show: true,
+                winColor: 'White',
             }))
-
     }, [whiteTime]);
 
     useEffect(() => {
-        if (!(blackTime.seconds <= 0 && blackTime.minutes <= 0)) return;
+        if (blackTime > 0) return;
 
         if (currentPlayer === 'black')
             dispatch(setResult({
@@ -124,27 +97,23 @@ const Timer = ({currentTurn, color, data}) => {
                 result: 'Win',
                 reason: 'by timeout',
                 show: true,
+                winColor: 'Black'
             }))
     }, [blackTime]);
 
     useEffect(() => {
-        if (!data[data.length -3]) return
-        clearInterval(timerRef.current);
-
-        const turn = FEN.getDataFromFen(data[data.length - 1].FEN);
-        console.log(turn)
-
+        if (!data[0]) return
+        clearInterval(timerRef.current)
     }, [sessionState.result]);
 
-
-    const blackTimeString = `${blackTime.minutes}:${blackTime.seconds < 10 ? '0' + blackTime.seconds : blackTime.seconds}`
-    const whiteTimeString = `${whiteTime.minutes}:${whiteTime.seconds < 10 ? '0' + whiteTime.seconds : whiteTime.seconds}`
+    const blackTimeString = `${Math.floor(blackTime / 60)}:${blackTime % 60 < 10 ? '0' + blackTime % 60 : blackTime % 60}`
+    const whiteTimeString = `${Math.floor(whiteTime / 60)}:${whiteTime % 60 < 10 ? '0' + whiteTime % 60 : whiteTime % 60}`
 
     const style = (currentTurn === color ? styles.active : null);
 
     return (
         <div className={`${styles.timer} ${style}`}>
-            <img alt='clock' src={clock[index]}/>
+            <img alt='clock' src={CLOCK[index]}/>
             {color === 'black' ? blackTimeString : whiteTimeString}
         </div>
     );

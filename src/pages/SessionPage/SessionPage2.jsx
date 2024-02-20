@@ -28,7 +28,7 @@ const SessionPage = ({isOnline}) => {
     const login = useSelector(state => state.user.login)
 
     const [board, setBoard] = useState(Board.createBoard('black'));
-    const [currentTurn, setCurrentTurn] = useState('black');
+    const [currentTurn, setCurrentTurn] = useState('white');
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
     const [type, setType] = useState();
