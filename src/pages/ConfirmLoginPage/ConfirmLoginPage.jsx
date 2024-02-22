@@ -5,10 +5,11 @@ import Pawn from '../../assets/pawn.svg'
 import Queen from '../../assets/queen.svg'
 import Knight from '../../assets/knight.svg'
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { confirmLogin } from "../../store/slices/userSlice";
+import { useDispatch } from "react-redux";
 import Button from "../../components/UI/Button/Button";
 import { ErrorPopUp } from "../../components/UI/ErrorPopUp/ErrorPopUp";
+import { useConfirmLoginMutation } from "../../store/slices/authApi";
+import { setAuthConfirmLogin } from "../../store/slices/userSlice";
 
 const ConfirmLoginPage = () => {
 
@@ -18,12 +19,18 @@ const ConfirmLoginPage = () => {
 
     const elos = [400, 600, 800, 1000];
 
+    const [setConfirmLogin, { isLoading, isError, error}] = useConfirmLoginMutation();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user)
+
+    const handleConfirmLogin = async() => {
+        const { data } = await setConfirmLogin({login: login});
+        if (data)
+            dispatch(setAuthConfirmLogin({login: data.login}))
+    }
 
     return (
         <>
-            <ErrorPopUp/>
+        {isError && <ErrorPopUp></ErrorPopUp>}
             <div className={styles.title}>Create your login</div>
             <div>
                 <Input
@@ -63,8 +70,8 @@ const ConfirmLoginPage = () => {
             </button>
             <div className={styles.buttonWrapper}>
                 <Button
-                    onClick={() => dispatch(confirmLogin({login: login}))}
-                    disabled={(!(elo && login) || user.isLoading)}>Confirm</Button>
+                    onClick={() => handleConfirmLogin({login: login})}
+                    disabled={(!(elo && login) || isLoading)}>Confirm</Button>
             </div>
         </>
     );

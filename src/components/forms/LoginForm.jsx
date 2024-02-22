@@ -3,13 +3,14 @@ import Input from "../UI/Input/Input.jsx";
 import styles from './loginForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../store/slices/userSlice.js";
-import { login } from "../../store/slices/userSlice.js";
+import { useDispatch } from "react-redux";
+import { setAuthLogin } from "../../store/slices/userSlice.js";
 import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp.jsx";
-import axios from "axios";
+import { useLoginMutation } from "../../store/slices/authApi";
 
 const LoginForm = () => {
+
+    const [setLogin, {isError, isLoading, error}] = useLoginMutation();
 
     const dispatch = useDispatch()
     const [email, setEmail] = useState(null);
@@ -18,20 +19,18 @@ const LoginForm = () => {
     const [emailFocus, setEmailFocus] = useState(false)
     const [passwordFocus, setPasswordFocus] = useState(false)
 
-    const isLoading = useSelector((state) => state.user.isLoading)
-
-        async function handleSubmit(e) {
-            e.preventDefault()
-            //await axios.post('https://shiferchess.ru/api/v1/password-reset', {email: email});
-            dispatch(login({password: password, email: email}))
-
+    async function handleSubmit(e) {
+        e.preventDefault()
+        const { data } = await setLogin({email: email, password: password})
+        if (data)
+            dispatch(setAuthLogin(data))
     }
 
     return (
         <form
             className={styles.form}
             onSubmit={handleSubmit}>
-            <ErrorPopUp/>
+            {isError && <ErrorPopUp>{error?.data.detail || error?.data.message}</ErrorPopUp>}
             <span className={styles.title}>Login</span>
             <Input
                 type = 'email'
@@ -61,9 +60,8 @@ const LoginForm = () => {
                 <Button disabled={(!(email && password) || isLoading)}>Login</Button>
             </div>
             <div className={styles.register}>Dont have an account?&nbsp;
-                <Link
-                    onClick={() => dispatch(setError(0))}
-                    to={'/register'}>Register</Link></div>
+                <Link to={'/register'}>Register</Link>
+            </div>
         </form>
     );
 };

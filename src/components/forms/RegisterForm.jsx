@@ -6,13 +6,12 @@ import styles from './registerForm.module.scss'
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { checkPassword, validateEmail } from "../../helpers/helpers";
-import { useDispatch, useSelector } from "react-redux";
-import { register, setError } from "../../store/slices/userSlice";
 import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp";
+import { useRegisterMutation } from "../../store/slices/authApi";
 
 const LoginForm = () => {
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
+
+    const [setRegister, {isLoading, isError, error}] = useRegisterMutation()
 
     const [email, setEmail] = useState({
         value: null,
@@ -105,24 +104,16 @@ const LoginForm = () => {
         })
     }
 
-    function toggleVisibility() {
-        if (isPasswordHidden) setPasswordHidden(false);
-        else setPasswordHidden(true);
-    }
-
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-
-        dispatch(register({password: password.value, email: email.value}))
+        await setRegister({password: password.value, email: email.value});
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
 
             <span className={styles.title}>Register</span>
-            <ErrorPopUp/>
+            {isError && <ErrorPopUp>{error.data.email[0]}</ErrorPopUp>}
 
             <div style={{position: "relative"}}>
                 <Input
@@ -151,7 +142,9 @@ const LoginForm = () => {
                 autoComplete = "false"
             >Create your password
             </Input>
-                <img src={isPasswordHidden ? passwordShow : passwordHide} className={styles.passwordEye} onClick={toggleVisibility}/>
+                <img src={isPasswordHidden ? passwordShow : passwordHide}
+                     className={styles.passwordEye}
+                     onClick={() => setPasswordHidden(!isPasswordHidden)}/>
                 {password.isError && <div className={styles.popUp}>Password is not valid!</div>}
             </div>
 
@@ -178,15 +171,13 @@ const LoginForm = () => {
                 <div className={styles.buttonWrapper}>
                     <Button
                         type='submit'
-                        disabled={(!(email.isValid && password.isValid && confirmPassword.isValid) || user.isLoading) }>Register
+                        disabled={(!(email.isValid && password.isValid && confirmPassword.isValid) || isLoading) }>Register
                     </Button>
                 </div>
             </ul>
 
             <span className={styles.register}>Already have an account?&nbsp;
-                <Link
-                    onClick={() => dispatch(setError(0))}
-                    to={'/login'}>Login</Link></span>
+                <Link to={'/login'}>Login</Link></span>
         </form>
     );
 };

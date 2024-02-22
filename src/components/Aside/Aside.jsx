@@ -3,7 +3,6 @@ import { NavigationLink } from "../UI/NavigationLink/NavigationLink";
 import Avatar from "../UI/Avatar/Avatar";
 import home from '../../assets/home.svg'
 import socials from '../../assets/users-alt.svg'
-import title from '../../assets/board.svg'
 import settings from '../../assets/settings-sliders.svg'
 import archive from '../../assets/archive.svg'
 import leftArrow from '../../assets/angle-small-left.svg'
@@ -14,16 +13,21 @@ import logoutImg from '../../assets/logout.svg'
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from '../../store/slices/userSlice'
+import { setAuthLogout } from '../../store/slices/userSlice'
+import { useLogoutMutation } from "../../store/slices/authApi";
 
 export const Aside = () => {
+
+    const [setLogout, { isError }] = useLogoutMutation();
 
     const [isHide, setIsHide] = useState(false);
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
-    function handleClick(state) {
-        isHide ? setIsHide(false) : setIsHide(true);
+    const handleLogout = async() => {
+        await setLogout();
+        if (!isError)
+            dispatch(setAuthLogout())
     }
 
     return (
@@ -49,14 +53,12 @@ export const Aside = () => {
                 </div>
                 <div>
                     <NavigationLink to='/settings' url={settings} isHide={isHide}>Settings</NavigationLink>
-                    <div
-                        onClick={() => dispatch(logout())}
-                        className={styles.logout}>
+                    <div className={styles.logout} onClick={() => handleLogout()}>
                         <img alt='logout' src={logoutImg} />
                         {!isHide && <div className={styles.text}>Logout</div>}
                     </div>
                     <div className={styles.collapse}
-                         onClick={() => handleClick(isHide)}>
+                         onClick={() => setIsHide(!isHide)}>
                         {!isHide && <img className={styles.img} alt='collapse' src={leftArrow}/>}
                         {isHide && <img className={styles.img} alt='collapse' src={rightArrow}/>}
                         {!isHide && <span className={styles.text}>Hide</span>}
