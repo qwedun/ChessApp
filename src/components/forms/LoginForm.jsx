@@ -16,9 +16,6 @@ const LoginForm = () => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
-    const [emailFocus, setEmailFocus] = useState(false)
-    const [passwordFocus, setPasswordFocus] = useState(false)
-
     async function handleSubmit(e) {
         e.preventDefault()
         const { data } = await setLogin({email: email, password: password})
@@ -34,25 +31,13 @@ const LoginForm = () => {
             <span className={styles.title}>Login</span>
             <Input
                 type = 'email'
-                autoComplete
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => setEmailFocus(true)}
-                onBlur={() => {setEmailFocus(false)}}
-                maxlength={100}
-                focus={emailFocus}
-                value={email}
             >Input your email
             </Input>
 
             <Input
                 type='password'
-                autoComplete
                 onChange={(e) => setPassword(e.target.value)}
-                onFocus={() => setPasswordFocus(true)}
-                onBlur={() => setPasswordFocus(false)}
-                maxlength={32}
-                focus={passwordFocus}
-                value={password}
             >Input your password
             </Input>
 

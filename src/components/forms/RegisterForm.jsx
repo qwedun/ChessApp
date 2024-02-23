@@ -9,104 +9,43 @@ import { checkPassword, validateEmail } from "../../helpers/helpers";
 import { ErrorPopUp } from "../UI/ErrorPopUp/ErrorPopUp";
 import { useRegisterMutation } from "../../store/slices/authApi";
 
-const LoginForm = () => {
+const RegisterForm = () => {
 
     const [setRegister, {isLoading, isError, error}] = useRegisterMutation()
 
-    const [email, setEmail] = useState({
-        value: null,
-        isValid: false,
-        isError: false
-    });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const [password, setPassword] = useState({
-        value: null,
-        isValid: false,
-        isError: false,
-    });
+    const [emailValid, setEmailValid] = useState(false);
+    const [passwordValid, setPasswordValid] = useState(false);
+    const [confirmPasswordValid, setConfirmPasswordValid] = useState(false);
 
-    const [confirmPassword, setConfirmPassword] = useState({
-        value: null,
-        isValid: false,
-        isError: false,
-    });
-
-    const [emailFocus, setEmailFocus] = useState(false);
-    const [passwordFocus, setPasswordFocus] = useState(false);
-    const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
+    const [emailFocus, setEmailFocus] = useState(true);
+    const [passwordFocus, setPasswordFocus] = useState(true);
+    const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(true);
 
     const [isPasswordHidden, setPasswordHidden] = useState(true)
-
-    function handleEmailChange(e) {
-        if (validateEmail(e.target.value))
-            setEmail({
-                ...email,
-                isValid: true,
-                value: e.target.value
-            })
-        else setEmail({
-            ...email,
-            isValid: false,
-            value: e.target.value
-        })
-    }
-
-    function handlePasswordChange(e) {
-        if (checkPassword(e.target.value))
-            setPassword({
-                ...password,
-                isValid: true,
-                value: e.target.value
-            })
-        else setPassword({
-            ...password,
-            isValid: false,
-            value: e.target.value
-        })
-    }
-    function checkConfirmPassword(passwordToConfirm) {
-        return (passwordToConfirm === password.value);
-    }
-    function handlePasswordConfirmChange(e) {
-        if (checkConfirmPassword(e.target.value))
-            setConfirmPassword({
-                value: e.target.value,
-                isValid: true,
-                isError: false,
-            })
-        else setConfirmPassword({
-            value: e.target.value,
-            isValid: false,
-            isError: true,
-        })
-
-    }
-
-
-    function handleBlur(state, setState, setFocus) {
-        setFocus(false)
-        if (state.isValid)
-            setState({
-                ...state,
-                isError: false,
-            })
-        else setState({
-            ...state,
-            isError: true,
-        })
-    }
-
-    function handleFocus(state, setState, setFocus) {
-        setFocus(true)
-        setState({
-            ...state,
-            isError:false,
-        })
-    }
 
     async function handleSubmit(e) {
         e.preventDefault();
         await setRegister({password: password.value, email: email.value});
+    }
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+        setEmailValid(validateEmail(e.target.value));
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        setConfirmPasswordValid(e.target.value === confirmPassword);
+        setPasswordValid(checkPassword(e.target.value));
+    }
+
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+        setConfirmPasswordValid(password === e.target.value);
     }
 
     return (
@@ -115,52 +54,37 @@ const LoginForm = () => {
             <span className={styles.title}>Register</span>
             {isError && <ErrorPopUp>{error.data.email[0]}</ErrorPopUp>}
 
-            <div style={{position: "relative"}}>
+            <div className={styles.relative}>
                 <Input
-                    value={email.value}
-                    focus={emailFocus}
+                    setFocus={setEmailFocus}
                     type = 'email'
                     onChange={(e) => handleEmailChange(e)}
-                    onBlur={() => handleBlur(email, setEmail, setEmailFocus)}
-                    onFocus={() => handleFocus(email, setEmail, setEmailFocus)}
-                    maxlength={100}
-                    autoComplete = "false"
                 >Input your email
                 </Input>
-                {email.isError && <div className={styles.popUp}>Email is not valid!</div>}
+                {(!emailValid && !emailFocus) && <div className={styles.popUp}>Email is not valid!</div>}
             </div>
 
-            <div style={{position: "relative"}}>
+            <div className={styles.relative}>
             <Input
-                value={password.value}
-                focus={passwordFocus}
+                setFocus={setPasswordFocus}
                 type={isPasswordHidden ? 'password' : 'text'}
                 onChange={(e) => handlePasswordChange(e)}
-                onBlur={() => handleBlur(password, setPassword, setPasswordFocus)}
-                onFocus={() => handleFocus(password, setPassword, setPasswordFocus)}
-                maxlength={32}
-                autoComplete = "false"
             >Create your password
             </Input>
-                <img src={isPasswordHidden ? passwordShow : passwordHide}
+                <img src={isPasswordHidden ? passwordShow : passwordHide} alt='eye'
                      className={styles.passwordEye}
                      onClick={() => setPasswordHidden(!isPasswordHidden)}/>
-                {password.isError && <div className={styles.popUp}>Password is not valid!</div>}
+                {(!passwordValid && !passwordFocus) && <div className={styles.popUp}>Password is not valid!</div>}
             </div>
 
-            <div style={{position: "relative"}}>
+            <div className={styles.relative}>
                 <Input
-                    value={confirmPassword.value}
-                    focus={confirmPasswordFocus}
+                    setFocus={setConfirmPasswordFocus}
                     type={isPasswordHidden ? 'password' : 'text'}
-                    onChange={(e) => handlePasswordConfirmChange(e)}
-                    onBlur={() => handleBlur(confirmPassword, setConfirmPassword, setConfirmPasswordFocus)}
-                    onFocus={() => handleFocus(confirmPassword, setConfirmPassword, setConfirmPasswordFocus)}
-                    maxlength={32}
-                    autoComplete = "false"
+                    onChange={(e) => handleConfirmPasswordChange(e)}
                 >Confirm your password
                 </Input>
-                {confirmPassword.isError && <div className={styles.popUp}>Passwords don't match!</div>}
+                {(!confirmPasswordValid && !confirmPasswordFocus) && <div className={styles.popUp}>Passwords don't match!</div>}
             </div>
 
             <ul className={styles.list}>
@@ -169,9 +93,8 @@ const LoginForm = () => {
                 <li>Contain special characters</li>
                 <li>Be at least 8 characters long</li>
                 <div className={styles.buttonWrapper}>
-                    <Button
-                        type='submit'
-                        disabled={(!(email.isValid && password.isValid && confirmPassword.isValid) || isLoading) }>Register
+                    <Button type='submit'
+                        disabled={(!(emailValid && passwordValid && confirmPasswordValid) || isLoading) }>Register
                     </Button>
                 </div>
             </ul>
@@ -182,4 +105,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

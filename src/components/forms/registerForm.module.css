@@ -65,4 +65,8 @@
   cursor: pointer;
 }
 
+.relative {
+  position: relative;
+}
+
 /*# sourceMappingURL=registerForm.module.css.map */
