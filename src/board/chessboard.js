@@ -1,7 +1,5 @@
 import {useEffect, useState, useRef} from 'react'
 import Cell from './cell.js'
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import Board from "./board";
 import Figure from "./figures/figure";
 import { GameRules } from "./gameRules";
@@ -9,15 +7,16 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../server/firestore";
 import PawnPassedMenu from "../components/PawnPassedMenu/PawnPassedMenu";
 import { FEN } from "./FEN";
-import { useSelector } from "react-redux";
 import { useCurrentPlayer } from "../hooks/hooks";
 import styles from './chessboard.module.scss'
 
 export default function Chessboard({setShowGameSearch, board, isOnline, currentTurn, king, data}) {
 
+    const boardRef = useRef();
     const [currentFigure, setCurrentFigure] = useState();
     const [passedPawn, setPassedPawn] = useState(null);
     const [createdFigure, setCreatedFigure] = useState(null);
+    const [imgRef, setImgRef] = useState(null)
     const currentPlayer = useCurrentPlayer();
 
     const type = useRef();
@@ -73,29 +72,41 @@ export default function Chessboard({setShowGameSearch, board, isOnline, currentT
         else figure.checkMoves(board, false, king.current.underCheck, true, currentPlayer);
     }
 
+    const move = (e, imgRef) => {
+        e.preventDefault()
+        const rect = boardRef?.current.getBoundingClientRect();
+        boardRef.current.style.cursor = 'grabbing';
+        imgRef.current.style.position = 'absolute';
+        imgRef.current.style.left = e.clientX - rect.left  - imgRef.current.width + 'px';
+        imgRef.current.style.top = e.clientY - rect.top - imgRef.current.height + 'px';
+    }
+
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className={styles.chessboard}>
-                {passedPawn && <PawnPassedMenu
-                    currentFigure={currentFigure}
-                    passedPawn={passedPawn}
-                    setPassedPawn={setPassedPawn}
-                    setCreatedFigure={setCreatedFigure}
-                    setCurrentFigure={setCurrentFigure}
-                />}
-                {board.map((row, yIndex) => (
-                    row.map((figure, xIndex) => {
-                        return (
-                            <Cell
-                                handleClick={handleClick}
-                                currentFigure={currentFigure}
-                                figure = {figure}
-                                cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}>
-                            </Cell>
-                        )
-                    })
-                ))}
-            </div>
-        </DndProvider>
+        <div className={styles.chessboard}
+             ref={boardRef}
+             onMouseMove={imgRef ? (e) => move(e, imgRef) : null}>
+            {passedPawn && <PawnPassedMenu
+                currentFigure={currentFigure}
+                passedPawn={passedPawn}
+                setPassedPawn={setPassedPawn}
+                setCreatedFigure={setCreatedFigure}
+                setCurrentFigure={setCurrentFigure}
+            />}
+            {board.map((row, yIndex) => (
+                row.map((figure, xIndex) => {
+                    return (
+                        <Cell
+                            imgRefer={imgRef}
+                            boardRef={boardRef}
+                            currentPlayer={currentPlayer}
+                            setImgRef={setImgRef}
+                            handleClick={handleClick}
+                            figure = {figure}
+                            cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}>
+                        </Cell>
+                    )
+                })
+            ))}
+        </div>
     )
 }

@@ -1,33 +1,39 @@
 import styles from './cell.module.scss'
-import { useDrag, useDrop } from "react-dnd";
+import { useRef } from 'react'
 
-export default function Cell({cellColor, figure, currentFigure, handleClick}) {
+export default function Cell({cellColor, setImgRef, boardRef, imgRefer, figure, handleClick, currentPlayer}) {
 
-    const [, drag] = useDrag(() => ({
-        type: 'title',
-    }))
+    const imgRef = useRef();
 
-    const [{isOver}, drop] = useDrop(() => ({
-        accept: 'title',
-        canDrop: () => figure.canMove || figure.underAttack,
-        drop: () => handleClick(figure),
-        collect: monitor => ({
-            isOver: !!monitor.isOver()
-        })
-    }), [currentFigure])
+    const onMouseDown = () => {
+        if (figure.color !== currentPlayer || !figure.color) return
+        setImgRef(imgRef)
+        handleClick(figure);
+    }
+
+    const onMouseUp = () => {
+        boardRef.current.style.cursor = 'default';
+        handleClick(figure);
+        setImgRef(null);
+    }
+
+    const style = (imgRefer ? styles.grabbing : figure.color === currentPlayer ? styles.draggable : '')
 
     return (
         <div key={Math.random()}
-             className={`${styles.title} ${cellColor === 'black' ? styles.black : styles.white} ${isOver ? styles.isOver : null}`}
-             ref={drop}
-             onMouseDown={() => handleClick(figure)}>
+             className={`${cellColor === 'black' ? styles.black : styles.white} ${style}`}
+             onMouseUp={onMouseUp}
+             onMouseDown={onMouseDown}>
             {figure.canMove && <div className={styles.canMove}></div>}
             {figure.underAttack && <div className = {styles.underAttack}></div>}
-            {figure.src && <img
-                ref={drag}
-                className={styles.img}
-                src={require('.' + figure.src)}
-                alt="piece"/>}
+            {figure.src &&
+                <img ref={imgRef}
+                     width='70px'
+                     height='70px'
+                     className={`${styles.img}`}
+                     src={require('.' + figure.src)}
+                     alt="piece"/>
+            }
         </div>
     )
 }
