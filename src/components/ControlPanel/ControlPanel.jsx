@@ -21,12 +21,12 @@ const ControlPanel = ({data, setBoard}) => {
     }, [data]);
 
     const handleNext = () => {
-        if (index + 1 > data.length - 2) return
+        if (index + 1 > data.length - 1) return
 
         let board = FEN.createBoardFromFen(data[index + 1].FEN)
         if (currentPlayer === 'black') board = Board.makeOpposite(board)
 
-        if (index + 1 !== data.length - 2   ) board.showable = true;
+        if (index + 1 !== data.length - 1   ) board.showable = true;
         setIndex(index + 1);
         setBoard(board)
     }
@@ -43,7 +43,7 @@ const ControlPanel = ({data, setBoard}) => {
         setBoard(board)
     }
     const handleEnd = () => {
-        if (!data[0] || index === data.length - 2) return
+        if (!data[0] || index === data.length - 1) return
 
         let board = FEN.createBoardFromFen(data[data.length - 2].FEN)
 

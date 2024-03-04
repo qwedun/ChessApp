@@ -8,7 +8,7 @@ const SessionState = ({board, setBoard, data, messages, chatRefs}) => {
             <div className={styles.header}>
 
             </div>
-            <History data={data}/>
+            <History data={data} setBoard={setBoard}/>
             <ControlPanel data={data} board={board} setBoard={setBoard}/>
             <SessionChat messages={messages} chatRef={chatRefs}/>
         </div>

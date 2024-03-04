@@ -1,11 +1,11 @@
 import styles from './history.module.scss'
 import HistoryString from "./HistoryString";
 import HistoryTime from "./HistoryTime";
-import { useCurrentPlayer } from "../../hooks/hooks";
+import { FEN } from "../../board/FEN";
 
-const History = ({data}) => {
+const History = ({data, setBoard}) => {
     const history = [];
-    const currentPlayer = useCurrentPlayer();
+
     for (let i = 0; i < data.length; i += 2) {
         history.push(data.slice(i, i + 2))
     }
@@ -20,15 +20,9 @@ const History = ({data}) => {
                             if (index !== 0 || i === 1)
                                 prevData = array[i - 1] || history[index - 1][1];
                             return (<>
-                                <div className={styles.flex}>
-                                    <HistoryString
-                                        data={value}
-                                        prevData={prevData}
-                                        currentPlayer={currentPlayer}/>
-                                </div>
-                                <HistoryTime
-                                    data={value}
-                                    prevData={prevData}/>
+                                <HistoryString data={value}
+                                               onClick={() => setBoard(FEN.createBoardFromFen(value.FEN))}/>
+                                <HistoryTime data={value} prevData={prevData}/>
                             </>)
                         })}
                     </div>

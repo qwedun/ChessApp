@@ -10,11 +10,11 @@ export const LayoutRouter = () => {
 
     const location = useLocation()
     const path = location.pathname
-    /*if (user.isAuthLoading)
-        return <Preloader/>*/
+    if (user.isAuthLoading)
+        return <Preloader/>
 
     if (path === '/login' || path === '/register') {
-        //if (user.isAuth) return <Navigate to='/home' replace={true}/>
+        if (user.isAuth) return <Navigate to='/home' replace={true}/>
         if (user.canConfirmLogin) return <Navigate to='/login/confirm' replace={true}/>
         return <WelcomeLayout/>
     } else if (path === '/login/confirm') {
@@ -22,7 +22,7 @@ export const LayoutRouter = () => {
         if (!user.canConfirmLogin) return <Navigate to='/login' replace={true}/>
         return <WelcomeLayout/>
     } else {
-            //if (!user.isAuth) return <Navigate to='/login' replace={true}/>
+            if (!user.isAuth) return <Navigate to='/login' replace={true}/>
         return <MainPageLayout/>
     }
 };

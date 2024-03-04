@@ -1,7 +1,7 @@
 import search from '../../assets/search.svg'
 import styles from './games.module.scss';
 import ArchivePreview from "../ArchivePreview/ArchivePreview";
-import React, {useState} from "react";
+import {useState} from "react";
 import CurrentGames from "../CurrentGames/CurrentGames";
 
 const Games = () => {

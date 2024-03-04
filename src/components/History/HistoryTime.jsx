@@ -7,7 +7,7 @@ const HistoryTime = ({data, prevData}) => {
     let milliseconds, seconds, minutes, time, ratio
     const rapid = 180000;
     const figureColor = JSON.parse(data.currentFigure).color
-    const color = (figureColor === 'white' ? '#d4d3d3' : '#555451')
+    const color = (figureColor === 'white' ? '#d4d3d3' : 'black')
     let style;
 
     const {turn} = FEN.getDataFromFen(data.FEN);

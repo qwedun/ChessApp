@@ -11,6 +11,11 @@
   grid-template-columns: repeat(3, 33.33%);
   justify-items: center;
 }
+.altHead {
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  justify-items: center;
+}
 .flex{
   display: flex;
   flex-direction: column;

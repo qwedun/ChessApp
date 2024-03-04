@@ -153,7 +153,7 @@ const SessionPage = ({isOnline}) => {
                     <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>
-            {showGameSearch && <GameSearch/>}
+            {showGameSearch && <GameSearch data={data} setBoard={setBoard} sessionState={sessionState.partyResult.result}/>}
             {!showGameSearch && <SessionState board={board} setBoard={setBoard}
                                               data={data} messages={messages}
                                               chatRefs={chatRefs}/>}

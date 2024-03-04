@@ -23,6 +23,8 @@ import { colors } from "../../constants/constants";
 import GameSearch from "../../components/GameSearch/GameSearch";
 import LinkCreateModal from "../../components/LinkCreateModal/LinkCreateModal";
 import {Link} from "react-router-dom";
+import gameAnalysis from "../../components/GameAnalysis/GameAnalysis";
+import GameAnalysis from "../../components/GameAnalysis/GameAnalysis";
 const SessionPage = ({isOnline}) => {
     const dispatch = useDispatch();
     const login = useSelector(state => state.user.login)
@@ -153,7 +155,7 @@ const SessionPage = ({isOnline}) => {
                     <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>
-            {showGameSearch && <GameSearch/>}
+            {showGameSearch && <GameSearch data={data} setBoard={setBoard} sessionState={sessionState.partyResult.result}/>}
             {!showGameSearch && <SessionState board={board} setBoard={setBoard}
                           data={data} messages={messages}
                           chatRefs={chatRefs}/>}

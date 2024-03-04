@@ -1,7 +1,7 @@
 import { chessNotationString } from "../../helpers/helpers";
 import styles from './historyString.module.scss'
 
-const HistoryString = ({data}) => {
+const HistoryString = ({data, ...props}) => {
     if (!data.currentFigure) return
     const figure = JSON.parse(data.currentFigure)
     const name = figure.name.charAt(0).toUpperCase() + figure.name.slice(1)
@@ -10,7 +10,7 @@ const HistoryString = ({data}) => {
     const previewName = (name === 'Pawn' ? '' : (name === 'Knight' ? 'N' : name[0]))
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} {...props}>
             <img className={styles.img} src={src} width='20px' height='20px'/>
             <span className={styles.text}>{previewName + pos}</span>
         </div>
