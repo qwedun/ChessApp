@@ -29,7 +29,7 @@ const RegisterForm = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        await setRegister({password: password.value, email: email.value});
+        await setRegister({password: password, email: email});
     }
 
     const handleEmailChange = (e) => {
