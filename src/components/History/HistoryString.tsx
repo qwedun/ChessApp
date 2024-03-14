@@ -9,7 +9,8 @@ interface HistoryStringProps {
 }
 
 const HistoryString: FC<HistoryStringProps> = ({data, handleClick}) => {
-    if (!data.currentFigure) return
+    if (!data.currentFigure) return <div></div>
+
     const figure = JSON.parse(data.currentFigure)
     const name = figure.name.charAt(0).toUpperCase() + figure.name.slice(1)
     const src = require(`../../board/assets/${figure.color}${name}.svg`)

@@ -9,7 +9,7 @@ interface HistoryTimeProps {
 }
 
 const HistoryTime: FC<HistoryTimeProps> = ({data, prevData}) => {
-    if (!prevData || !data.currentFigure) return
+    if (!prevData || !data.currentFigure) return <div></div>
 
     let milliseconds, seconds, minutes, time, ratio
     const rapid = 180000;
