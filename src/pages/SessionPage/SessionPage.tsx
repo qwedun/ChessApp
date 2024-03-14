@@ -1,14 +1,14 @@
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState, FC } from 'react';
 import Chessboard from "../../board/chessboard";
 import Board from "../../board/board";
 import styles from './sessionPage.module.scss'
 import Timer from '../../components/Timer/Timer'
 import PlayerInfo from '../../components/UI/InGamePlayerInfo/InGamePlayerInfo'
-import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
-import {db} from "../../server/firestore";
-import {FEN} from "../../board/FEN";
-import {GameRules} from "../../board/gameRules";
-import {playSound} from "../../helpers/helpers";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../../server/firestore";
+import { FEN } from "../../board/FEN";
+import { GameRules } from "../../board/gameRules";
+import { playSound } from "../../helpers/helpers";
 import check from "../../assets/sounds/move-check.mp3";
 import move from "../../assets/sounds/move-self.mp3";
 import castle from "../../assets/sounds/castle.mp3";
@@ -16,43 +16,40 @@ import capture from "../../assets/sounds/capture.mp3";
 import notify from '../../assets/sounds/notify.mp3'
 import GameResult from "../../components/GameResult/GameResult";
 import SessionState from "../../components/SessionState/SessionState";
-import { useSelector, useDispatch } from "react-redux";
 import { setResult, setCurrentPlayer } from "../../store/slices/sessionSlice";
 import King from "../../board/figures/king";
 import { COLORS } from "../../constants/constants";
 import GameSearch from "../../components/GameSearch/GameSearch";
-import LinkCreateModal from "../../components/LinkCreateModal/LinkCreateModal";
-import {Link} from "react-router-dom";
-import {useAppDispatch, useCurrentPlayer} from "../../hooks/hooks";
-const SessionPage = ({isOnline}) => {
-    const dispatch = useAppDispatch()
-    const login = useSelector(state => state.user.login)
+import {useAppDispatch, useAppSelector, useCurrentPlayer} from "../../hooks/hooks";
+import { IFirestoreData } from "../../types/types";
 
-    const [board, setBoard] = useState(Board.createBoard('black'));
+const SessionPage: FC<{isOnline: boolean}> = ({isOnline}) => {
+    const dispatch = useAppDispatch();
+    dispatch(setCurrentPlayer('white'))
+
+    const login = useAppSelector(state => state.user.login)
+    const sessionState = useAppSelector(state => state.session);
+
+    const [board, setBoard] = useState(Board.createBoard('white'));
     const [currentTurn, setCurrentTurn] = useState('white');
-    const [data, setData] = useState([]);
-    const [messages, setMessages] = useState([]);
-    const [type, setType] = useState();
+    const [data, setData] = useState<IFirestoreData[]>([]);
+    const [type, setType] = useState('');
     const [showGameSearch, setShowGameSearch] = useState(true);
 
-    dispatch(setCurrentPlayer('black'));
-    const sessionState = useSelector(state => state.session);
     const currentPlayer = useCurrentPlayer();
 
     let posRefs
     if (isOnline) posRefs = collection(db, 'session')
 
     else posRefs = collection(db, 'single')
-    const chatRefs = collection(db, 'chat');
 
     const queryPos = query(posRefs, orderBy('server_timestamp'));
-    const queryChat = query(chatRefs, orderBy('timestamp'));
 
     useEffect(() => {
         onSnapshot(queryPos, snapshot => {
-            const data = [];
+            const data: IFirestoreData[] = [];
             snapshot.forEach(doc => {
-                data.push({...doc.data()})
+                data.push({...doc.data()} as IFirestoreData)
             })
 
             setData(data);
@@ -65,19 +62,10 @@ const SessionPage = ({isOnline}) => {
             const {turn} = FEN.getDataFromFen(state.FEN);
             let board = FEN.createBoardFromFen(state.FEN);
             if (currentPlayer === 'black') board = Board.makeOpposite(board);
-            setBoard(Board.updateBoard(board, currentPlayer, true))
+            setBoard(Board.updateBoard(board, currentPlayer))
 
             setCurrentTurn(COLORS[turn])
         })
-
-        onSnapshot(queryChat, snapshot => {
-            const data = [];
-            snapshot.forEach(doc => {
-                data.push({...doc.data()})
-            })
-            setMessages(data);
-        })
-
     }, []);
 
     const oppositeKing = useRef(Board.findKing(board, COLORS[currentTurn]))
@@ -86,13 +74,13 @@ const SessionPage = ({isOnline}) => {
     useEffect(() => {
         if (!data[data.length - 1]?.server_timestamp) return
         king.current = Board.findKing(board, currentPlayer);
-        oppositeKing.current = Board.findKing(board, COLORS[currentPlayer]);
+            oppositeKing.current = Board.findKing(board, COLORS[currentPlayer]);
 
         if (data.length === 0) return
         const oppositeBoard = Board.makeOpposite(board);
 
         if (GameRules.isStalemate(board, currentTurn) ||
-            GameRules.isStalemate(Board.updateBoard(oppositeBoard, COLORS[currentPlayer], true), currentTurn)) {
+            GameRules.isStalemate(Board.updateBoard(oppositeBoard, COLORS[currentPlayer]), currentTurn)) {
             dispatch(setResult({
                 result: 'Stalemate',
                 reason: '',
@@ -115,7 +103,7 @@ const SessionPage = ({isOnline}) => {
             playSound(check)
             const local = Board.makeOpposite(board);
             oppositeKing.current = Board.findKing(local, COLORS[currentPlayer]);
-            if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, COLORS[currentPlayer], isOnline))) {
+            if (GameRules.isCheckMate(oppositeKing.current, Board.updateBoard(local, COLORS[currentPlayer]))) {
                 dispatch(setResult({
                     result: 'Win',
                     reason: 'by checkmate',
@@ -140,7 +128,7 @@ const SessionPage = ({isOnline}) => {
                     <PlayerInfo username='enemy' elo='810' board={board} color={COLORS[currentPlayer]}/>
                     <Timer currentTurn={currentTurn} color={COLORS[currentPlayer]} data={data}/>
                 </div>
-                {sessionState.partyResult.show && <GameResult/>}
+                {sessionState.partyResult.result && <GameResult/>}
                 <Chessboard
                     setShowGameSearch={setShowGameSearch}
                     board={board}
@@ -150,14 +138,12 @@ const SessionPage = ({isOnline}) => {
                     data={data}
                 />
                 <div className={`${styles.flexContainer} ${styles.flexBottom}`}>
-                    <PlayerInfo username={login} elo='800' board={board} color={currentPlayer}/>
+                    <PlayerInfo username={login!} elo='800' board={board} color={currentPlayer}/>
                     <Timer currentTurn={currentTurn} color={currentPlayer} data={data}/>
                 </div>
             </div>
             {showGameSearch && <GameSearch data={data} setBoard={setBoard} sessionState={sessionState.partyResult.result}/>}
-            {!showGameSearch && <SessionState board={board} setBoard={setBoard}
-                                              data={data} messages={messages}
-                                              chatRefs={chatRefs}/>}
+            {!showGameSearch && <SessionState setBoard={setBoard} data={data}/>}
         </div>
     );
 };
