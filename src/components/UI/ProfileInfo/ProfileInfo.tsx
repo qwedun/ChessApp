@@ -1,4 +1,4 @@
-import { useState, FC } from 'react';
+    import { useState, FC } from 'react';
 import styles from './profileInfo.module.scss'
 
 interface ProfileInfoProps {
