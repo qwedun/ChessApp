@@ -108,8 +108,8 @@ const Chessboard: FC<IChessboardProps> = ({setShowGameSearch, board, isOnline, c
                             setImgRef={setImgRef}
                             handleClick={handleClick}
                             figure = {figure}
-                            cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}>
-                        </Cell>
+                            cellColor = {((xIndex + yIndex) % 2) ? 'black' : 'white'}
+                        />
                     )
                 })
             ))}
