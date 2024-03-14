@@ -10,7 +10,7 @@ interface EatenPiecesProps {
 }
 
 const EatenPieces: FC<EatenPiecesProps> = ({board, currentPlayer}) => {
-    if (!board) return
+    if (!board) return <div></div>
 
     const {evaluation , figures} = figuresEvaluation(board, currentPlayer);
 
