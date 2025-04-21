@@ -4,7 +4,7 @@ import Board from "../../board/board";
 import styles from './sessionPage.module.scss'
 import Timer from '../../components/Timer/Timer'
 import PlayerInfo from '../../components/UI/InGamePlayerInfo/InGamePlayerInfo'
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, deleteDoc, doc, writeBatch, getDocs } from "firebase/firestore";
 import { db } from "../../server/firestore";
 import { FEN } from "../../board/FEN";
 import { GameRules } from "../../board/gameRules";
@@ -22,6 +22,7 @@ import { COLORS } from "../../constants/constants";
 import GameSearch from "../../components/GameSearch/GameSearch";
 import {useAppDispatch, useAppSelector, useCurrentPlayer} from "../../hooks/hooks";
 import { IFirestoreData } from "../../types/types";
+import {write} from "fs";
 
 const SessionPage: FC<{isOnline: boolean}> = ({isOnline}) => {
     const dispatch = useAppDispatch();
@@ -38,23 +39,25 @@ const SessionPage: FC<{isOnline: boolean}> = ({isOnline}) => {
 
     const currentPlayer = useCurrentPlayer();
 
-    let posRefs
-    if (isOnline) posRefs = collection(db, 'session')
-
-    else posRefs = collection(db, 'single')
+    const posRefs = collection(db, 'session');
 
     const queryPos = query(posRefs, orderBy('server_timestamp'));
+
 
     useEffect(() => {
         onSnapshot(queryPos, snapshot => {
             const data: IFirestoreData[] = [];
+
             snapshot.forEach(doc => {
                 data.push({...doc.data()} as IFirestoreData)
             })
 
             setData(data);
 
-            if (data.length === 0) return
+            if (data.length === 0){
+                setBoard(Board.createBoard(currentPlayer))
+                return
+            }
             setType(data[data.length - 1].type);
 
             const state = data[data.length - 1];
@@ -121,13 +124,29 @@ const SessionPage: FC<{isOnline: boolean}> = ({isOnline}) => {
 
     }, [data]);
 
+    async function resetBoard() {
+        try {
+            const snapshot = await getDocs(posRefs);
+            const batch = writeBatch(db);
+            snapshot.forEach(doc => {
+                batch.delete(doc.ref);
+            })
+            await batch.commit();
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.relative}>
+                <button onClick={resetBoard}>Сбросить доску</button>
                 <div className={`${styles.flexContainer} ${styles.flexTop}`}>
                     <PlayerInfo username='enemy' elo='810' board={board} color={COLORS[currentPlayer]}/>
                     <Timer currentTurn={currentTurn} color={COLORS[currentPlayer]} data={data}/>
+
                 </div>
+
                 {sessionState.partyResult.result && <GameResult/>}
                 <Chessboard
                     setShowGameSearch={setShowGameSearch}

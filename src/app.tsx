@@ -34,8 +34,8 @@ export default function App () {
                 <Route path='archive' element={<MainPage/>}/>
                 <Route path='news' element={<MainPage/>}/>
                 <Route path='play' element={<SessionPage isOnline={true}/>}/>
-                <Route path='play/1' element={<SessionPage isOnline={true}/>}/>
-                <Route path='play/2' element={<SessionPage2 isOnline={true}/>}/>
+                <Route path='play/white' element={<SessionPage isOnline={true}/>}/>
+                <Route path='play/black' element={<SessionPage2 isOnline={true}/>}/>
                 <Route path='profile/:login' element={<ProfilePage/>}/>
             </Route>
         </Routes>

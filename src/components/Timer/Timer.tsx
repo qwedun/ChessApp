@@ -26,21 +26,29 @@ const Timer: FC<TimerProps> = ({currentTurn, color, data}) => {
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
     useEffect(() => {
-        if (!data[data.length - 2]) return
+        if (!data[data.length - 2]) {
+            setWhiteTime(180);
+            setBlackTime(180);
+            return
+        }
 
-        let blackTimer = 18000011111111, whiteTimer = 180000111111111;
+
+        let blackTimer = 180000, whiteTimer = 180000;
 
         data.forEach((value, index) => {
             const {turn} = FEN.getDataFromFen(value.FEN);
             if (!data[index - 1]) return
 
-            if (turn === 'b') whiteTimer -= value.timestamp - data[index - 1].timestamp;
-            else blackTimer -= value.timestamp - data[index - 1].timestamp;
+
+            if (turn === 'black') blackTimer -= value.timestamp - data[index - 1].timestamp;
+            else whiteTimer -= value.timestamp - data[index - 1].timestamp;
         })
 
-
-        if (currentTurn === 'black' && !sessionState.result) blackTimer -= Date.now() - data[data.length - 1].timestamp;
-        else if (!sessionState.result) whiteTimer -= Date.now() - data[data.length - 1].timestamp;
+        if (currentTurn === 'black' && !sessionState.result){
+            blackTimer -= Date.now() - data[data.length - 1].timestamp;
+        } else if (!sessionState.result) {
+            whiteTimer -= Date.now() - data[data.length - 1].timestamp;
+        }
 
         setBlackTime(Math.floor(blackTimer / 1000));
         setWhiteTime(Math.floor(whiteTimer / 1000));
